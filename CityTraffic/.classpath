@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/home/rita/Transferências/LIbs/jade/lib/jade.jar"/>
-	<classpathentry kind="lib" path="/home/rita/Transferências/LIbs/SAJaS-v0.92b/lib/SAJaS.jar"/>
-	<classpathentry kind="lib" path="/home/rita/Transferências/LIbs/Repast-3.1/RepastJ/repast.jar"/>
+	<classpathentry kind="lib" path="/usr/users2/mieic2014/up201406093/Downloads/jade.jar"/>
+	<classpathentry kind="lib" path="/usr/users2/mieic2014/up201406093/Downloads/repast.jar"/>
+	<classpathentry kind="lib" path="/usr/users2/mieic2014/up201406093/Downloads/SAJaS.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
