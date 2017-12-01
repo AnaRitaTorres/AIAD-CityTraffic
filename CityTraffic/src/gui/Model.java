@@ -3,11 +3,11 @@ package gui;
 import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.engine.SimpleModel;
 
-public class MyHelloWorldModel extends SimpleModel {
+public class Model extends SimpleModel {
 
 	private int numberOfAgents;
 
-	public MyHelloWorldModel() {
+	public Model() {
 		name = "My Hello World Model";
 	}
 
@@ -20,7 +20,7 @@ public class MyHelloWorldModel extends SimpleModel {
 
 	public void buildModel() {
 		for(int i=0; i<numberOfAgents; i++)
-			agentList.add(new MyHelloWorldAgent(i));
+			agentList.add(new Agent(i));
 	}
 
 	protected void preStep() {
@@ -34,7 +34,7 @@ public class MyHelloWorldModel extends SimpleModel {
 
 	public static void main(String[] args) {
 		SimInit init = new SimInit();
-		MyHelloWorldModel model = new MyHelloWorldModel();
+		Model model = new Model();
 		init.loadModel(model, null, true);
 	}
 

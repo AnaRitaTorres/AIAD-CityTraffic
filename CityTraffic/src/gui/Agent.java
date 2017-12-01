@@ -2,10 +2,10 @@ package gui;
 
 import uchicago.src.sim.engine.Stepable;
 
-public class MyHelloWorldAgent implements Stepable {
+public class Agent implements Stepable {
 	private int id;
 
-	public MyHelloWorldAgent(int id) {
+	public Agent(int id) {
 		this.id = id;
 	}
 
