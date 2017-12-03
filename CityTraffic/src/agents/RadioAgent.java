@@ -2,14 +2,28 @@ package agents;
 
 import javax.swing.JOptionPane;
 
-import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
+import sajas.core.Agent;
+import sajas.core.behaviours.CyclicBehaviour;
+
 import jade.lang.acl.ACLMessage;
+
 
 
 @SuppressWarnings("serial")
 public class RadioAgent extends Agent{
 	
+	private static int IDNumber=0;
+	private int ID;
+		
+	public RadioAgent() {
+		IDNumber++;
+		ID=IDNumber;
+	}
+	
+	public int getID() {
+		return ID;
+	}
+			
 	protected void setup() {
 		
 		System.out.println("Hello! Radio-Agent "+getAID().getName()+" is ready.");

@@ -1,12 +1,26 @@
 package agents;
 
-import jade.core.Agent;
+import sajas.core.Agent;
+import sajas.core.behaviours.*;
+
 import jade.core.AID;
-import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
 
 @SuppressWarnings("serial")
 public class TrafficLightAgent extends Agent{
+	
+	private static int IDNumber=0;
+	private int ID;
+	
+	
+	public TrafficLightAgent() {
+		IDNumber++;
+		ID=IDNumber;
+	}
+	
+	public int getID() {
+		return ID;
+	}
 	
 	protected void setup() {
 		System.out.println("Hello! Traffic-Agent "+getAID().getName()+" is ready.");
