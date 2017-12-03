@@ -9,13 +9,13 @@ import sajas.wrapper.ContainerController;
 
 import jade.core.Profile;
 import jade.core.ProfileImpl;
-import jade.core.AID;
 import jade.wrapper.StaleProxyException;
 
 import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.gui.ColorMap;
 import uchicago.src.sim.gui.Value2DDisplay;
 import uchicago.src.sim.gui.DisplaySurface;
+import uchicago.src.sim.gui.SimGraphics;
 
 import agents.*;
 
@@ -130,8 +130,7 @@ public class RepastLauncher extends Repast3Launcher {
 				
 				RadioAgent radio = new RadioAgent();
 				radioAgents.add(radio);
-				AID aid = radio.getAID();
-				mainContainer.acceptNewAgent("Radio" + aid, radio);
+				mainContainer.acceptNewAgent("Radio" + i, radio);
 			}
 			
 			//create vehicles
@@ -139,8 +138,7 @@ public class RepastLauncher extends Repast3Launcher {
 				
 				VehicleAgent vehicle = new VehicleAgent();
 				vehicleAgents.add(vehicle);
-				AID aid = vehicle.getAID();
-				mainContainer.acceptNewAgent("Vehicle" + aid, vehicle);
+				mainContainer.acceptNewAgent("Vehicle" + i, vehicle);
 			}
 			
 			//create traffic lights
@@ -148,8 +146,7 @@ public class RepastLauncher extends Repast3Launcher {
 				
 				TrafficLightAgent tLight = new TrafficLightAgent();
 				lightAgents.add(tLight);
-				AID aid = tLight.getAID();
-				mainContainer.acceptNewAgent("Light" + aid, tLight);
+				mainContainer.acceptNewAgent("Light" + i, tLight);
 			}
 		}catch (StaleProxyException e) {
 			e.printStackTrace();
