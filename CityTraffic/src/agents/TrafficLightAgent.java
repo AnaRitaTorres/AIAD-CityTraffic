@@ -1,12 +1,34 @@
 package agents;
 
-import jade.core.Agent;
+
+import java.util.ArrayList;
+
+import sajas.core.Agent;
+import sajas.core.behaviours.*;
+
 import jade.core.AID;
-import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
 
 @SuppressWarnings("serial")
 public class TrafficLightAgent extends Agent{
+	
+	private static int IDNumber=0;
+	private int ID;
+	private ArrayList<AID> receiverAgents;
+	private AID receiverCar = null;
+	private AID receiverRadio = null;
+	
+	
+	public TrafficLightAgent(AID receiverCar, AID receiverRadio) {
+		IDNumber++;
+		ID=IDNumber;
+		this.receiverCar = receiverCar;
+		this.receiverRadio = receiverRadio;
+	}
+	
+	public int getID() {
+		return ID;
+	}
 	
 	protected void setup() {
 		System.out.println("Hello! Traffic-Agent "+getAID().getName()+" is ready.");
@@ -19,14 +41,14 @@ public class TrafficLightAgent extends Agent{
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 				msg.setContent("send");
 				
-				AID[] receiverAgents = new AID[2];
-				receiverAgents[0]= new AID("carro",AID.ISLOCALNAME);
-				receiverAgents[1]= new AID("radio", AID.ISLOCALNAME);
-				
-				for(int i=0; i < receiverAgents.length; i++) {
-					msg.addReceiver(receiverAgents[i]);
-					send(msg);
-				}
+				/*System.out.println("size" + receiverAgents.size());		
+				for(int i=0; i < receiverAgents.size(); i++) {
+					
+				}*/
+			
+				msg.addReceiver(receiverCar);
+				msg.addReceiver(receiverRadio);
+				send(msg);
 				
 			}
 			

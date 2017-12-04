@@ -2,14 +2,26 @@ package agents;
 
 import javax.swing.JOptionPane;
 
-import jade.core.Agent;
-import jade.core.behaviours.*;
+import sajas.core.Agent;
+import sajas.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
 
 @SuppressWarnings("serial")
 public class VehicleAgent extends Agent{
 	
 	//variavel percepcao visual - tem carros á frente ou não
+	
+	private static int IDNumber=0;
+	private int ID;
+	
+	public VehicleAgent() {
+		IDNumber++;
+		ID=IDNumber;
+	}
+	
+	public int getID() {
+		return ID;
+	}
 	
 	protected void setup() {
 		System.out.println("Hello! Vehicle-Agent "+getAID().getName()+ "is ready.");
