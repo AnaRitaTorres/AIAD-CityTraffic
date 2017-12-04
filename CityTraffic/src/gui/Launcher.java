@@ -1,12 +1,11 @@
 package gui;
 
-import java.awt.Color;
 import java.util.ArrayList;
+import java.awt.Color;
 
 import sajas.sim.repast3.Repast3Launcher;
 import sajas.core.Runtime;
 import sajas.wrapper.ContainerController;
-import sajas.core.Agent;
 
 import jade.core.AID;
 import jade.core.Profile;
@@ -22,6 +21,7 @@ import uchicago.src.sim.gui.SimGraphics;
 import uchicago.src.sim.space.Object2DGrid;
 
 import agents.*;
+import model.*;
 
 public class Launcher extends Repast3Launcher {
 	
@@ -32,7 +32,7 @@ public class Launcher extends Repast3Launcher {
 	private static final int N_VEHICLES = 5;
 	private static final int N_LIGHTS = 5;
 	
-	public static Object2DGrid space;
+	private City city;
 	private ContainerController mainContainer;
 	private boolean runInBatchMode;
 	private DisplaySurface displaySurf;
@@ -114,7 +114,7 @@ public class Launcher extends Repast3Launcher {
 	public void buildModel() {
 		System.out.println("Running BuildModel");
 		
-		space = new Object2DGrid(HEIGHT,WIDTH);
+		city = new City(WIDTH,HEIGHT);
 	}
 	
 	public void buildSchedule() {
@@ -125,11 +125,21 @@ public class Launcher extends Repast3Launcher {
 	public void buildDisplay() {
 		System.out.println("Running BuildDisplay");
 		
+		//background colour-not working!!!
+		ColorMap map = new ColorMap();
+		
+		for (int i=0; i < 16; i++) {
+			map.mapColor(i, new Color((int)(i*8+127), 0, 0));
+		}
+		
+		map.mapColor(0, Color.gray);
 		
 		displaySurf.display();
 		
 		
 	}
+	
+	
 	
 	@Override
 	public String getName() { 
