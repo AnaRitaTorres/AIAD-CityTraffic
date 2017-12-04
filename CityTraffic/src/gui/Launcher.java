@@ -19,29 +19,72 @@ import uchicago.src.sim.gui.ColorMap;
 import uchicago.src.sim.gui.Value2DDisplay;
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.SimGraphics;
+import uchicago.src.sim.space.Object2DGrid;
 
 import agents.*;
 
-public class RepastLauncher extends Repast3Launcher {
+public class Launcher extends Repast3Launcher {
 	
 	private static final boolean BATCH_MODE = true;
+	private static final int HEIGHT = 50;
+	private static final int WIDTH = 70;
 	private static final int N_RADIOS = 5;
 	private static final int N_VEHICLES = 5;
 	private static final int N_LIGHTS = 5;
 	
-	
+	public static Object2DGrid space;
 	private ContainerController mainContainer;
 	private boolean runInBatchMode;
 	private DisplaySurface displaySurf;
+	private int numRadios = N_RADIOS;
+	private int numVehicles = N_VEHICLES;
+	private int numLights = N_LIGHTS;
 	private ArrayList<RadioAgent> radioAgents;
 	private ArrayList<VehicleAgent> vehicleAgents;
 	private ArrayList<TrafficLightAgent> lightAgents;
 		
-	public RepastLauncher(boolean runInBatchMode) {
+	public Launcher(boolean runInBatchMode) {
 		super();
 		this.runInBatchMode = runInBatchMode;
 	}
 	
+	
+	
+	public int getNumRadios() {
+		return numRadios;
+	}
+
+
+
+	public void setNumRadios(int numRadios) {
+		this.numRadios = numRadios;
+	}
+
+
+
+	public int getNumVehicles() {
+		return numVehicles;
+	}
+
+
+
+	public void setNumVehicles(int numVehicles) {
+		this.numVehicles = numVehicles;
+	}
+
+
+
+	public int getNumLights() {
+		return numLights;
+	}
+
+
+
+	public void setNumLights(int numLights) {
+		this.numLights = numLights;
+	}
+
+
 	@Override
 	public void setup() {
 		super.setup();
@@ -71,7 +114,7 @@ public class RepastLauncher extends Repast3Launcher {
 	public void buildModel() {
 		System.out.println("Running BuildModel");
 		
-		
+		space = new Object2DGrid(HEIGHT,WIDTH);
 	}
 	
 	public void buildSchedule() {
@@ -81,6 +124,7 @@ public class RepastLauncher extends Repast3Launcher {
 	
 	public void buildDisplay() {
 		System.out.println("Running BuildDisplay");
+		
 		
 		displaySurf.display();
 		
@@ -94,7 +138,7 @@ public class RepastLauncher extends Repast3Launcher {
 	
 	@Override
 	public String[] getInitParam() {
-		String[] initParams = { };
+		String[] initParams = {"NumRadios", "NumVehicles", "NumLights"};
 		return initParams;
 	}
 	
@@ -113,35 +157,31 @@ public class RepastLauncher extends Repast3Launcher {
 		radioAgents= new ArrayList<RadioAgent>();
 		vehicleAgents= new ArrayList<VehicleAgent>();
 		lightAgents= new ArrayList<TrafficLightAgent>();
-		ArrayList<AID> receivers = new ArrayList<AID>();
 		AID receiverCar = null;
 		AID receiverRadio = null;
 		
 		try {
+			
 			//create radios
-			
-			
-			for(int i=0; i < N_RADIOS;i++) {
+			for(int i=0; i < numRadios;i++) {
 				
 				RadioAgent radio = new RadioAgent();
 				radioAgents.add(radio);
 				mainContainer.acceptNewAgent("Radio" + i, radio).start();
-				//receivers.add(radio.getAID());
 				receiverRadio = radio.getAID();
 			}
 			
 			//create vehicles
-			for(int i=0; i < N_VEHICLES;i++) {
+			for(int i=0; i < numVehicles;i++) {
 				
 				VehicleAgent vehicle = new VehicleAgent();
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
-				//receivers.add(vehicle.getAID());
 				receiverCar = vehicle.getAID();
 			}
 			
 			//create traffic lights
-			for(int i=0; i < N_LIGHTS;i++) {
+			for(int i=0; i < numLights;i++) {
 				
 				TrafficLightAgent tLight = new TrafficLightAgent(receiverCar, receiverRadio);
 				lightAgents.add(tLight);
@@ -157,6 +197,6 @@ public class RepastLauncher extends Repast3Launcher {
 		
 		SimInit init = new SimInit();
 		init.setNumRuns(1);   // works only in batch mode
-		init.loadModel(new RepastLauncher(runMode), null, runMode);
+		init.loadModel(new Launcher(runMode), null, runMode);
 	}
 }
