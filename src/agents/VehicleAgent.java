@@ -30,11 +30,11 @@ public class VehicleAgent extends Agent{
 	protected void setup() {
 		System.out.println("Hello! Vehicle-Agent "+getAID().getName()+ "is ready.");
 		
-		addBehaviour(new CyclicBehaviour(){
+		addBehaviour(new OneShotBehaviour(){
 
 			@Override
 			public void action() {
-				//System.out.println("Cor?");
+				System.out.println("Cor?");
 				ACLMessage cfp= new ACLMessage(ACLMessage.CFP);
 				cfp.addReceiver(tLight);
 				cfp.setContent("Cor?");

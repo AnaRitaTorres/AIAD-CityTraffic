@@ -27,9 +27,9 @@ public class Launcher extends Repast3Launcher {
 	private static final boolean BATCH_MODE = true;
 	private static final int HEIGHT = 50;
 	private static final int WIDTH = 70;
-	private static final int N_RADIOS = 5;
-	private static final int N_VEHICLES = 5;
-	private static final int N_LIGHTS = 5;
+	private static final int N_RADIOS = 1;
+	private static final int N_VEHICLES = 1;
+	private static final int N_LIGHTS = 1;
 	
 	private ContainerController mainContainer;
 	private boolean runInBatchMode;
@@ -170,6 +170,15 @@ public class Launcher extends Repast3Launcher {
 				
 			}
 			
+			//create traffic lights
+			for(int i=0; i < numLights;i++) {
+				
+				TrafficLightAgent tLight = new TrafficLightAgent();
+				lightAgents.add(tLight);
+				mainContainer.acceptNewAgent("Light" + i, tLight).start();
+				receiverLight = tLight.getAID();
+			}
+			
 			//create vehicles
 			for(int i=0; i < numVehicles;i++) {
 				
@@ -179,14 +188,7 @@ public class Launcher extends Repast3Launcher {
 				
 			}
 			
-			//create traffic lights
-			for(int i=0; i < numLights;i++) {
-				
-				TrafficLightAgent tLight = new TrafficLightAgent();
-				lightAgents.add(tLight);
-				mainContainer.acceptNewAgent("Light" + i, tLight).start();
-				receiverLight = tLight.getAID();
-			}
+			
 		}catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
