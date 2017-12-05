@@ -1,6 +1,6 @@
 package gui;
 
-import java.util.ArrayList;
+import java.util.Vector;
 import java.awt.Color;
 
 import sajas.sim.repast3.Repast3Launcher;
@@ -37,51 +37,38 @@ public class Launcher extends Repast3Launcher {
 	private int numRadios = N_RADIOS;
 	private int numVehicles = N_VEHICLES;
 	private int numLights = N_LIGHTS;
-	private ArrayList<RadioAgent> radioAgents;
-	private ArrayList<VehicleAgent> vehicleAgents;
-	private ArrayList<TrafficLightAgent> lightAgents;
+	public Vector<RadioAgent> radioAgents;
+	public Vector<VehicleAgent> vehicleAgents;
+	public Vector<TrafficLightAgent> lightAgents;
 		
 	public Launcher(boolean runInBatchMode) {
 		super();
 		this.runInBatchMode = runInBatchMode;
 	}
 	
-	
-	
 	public int getNumRadios() {
 		return numRadios;
 	}
-
-
 
 	public void setNumRadios(int numRadios) {
 		this.numRadios = numRadios;
 	}
 
-
-
 	public int getNumVehicles() {
 		return numVehicles;
 	}
-
-
 
 	public void setNumVehicles(int numVehicles) {
 		this.numVehicles = numVehicles;
 	}
 
-
-
 	public int getNumLights() {
 		return numLights;
 	}
 
-
-
 	public void setNumLights(int numLights) {
 		this.numLights = numLights;
 	}
-
 
 	@Override
 	public void setup() {
@@ -104,31 +91,20 @@ public class Launcher extends Repast3Launcher {
 			buildModel();
 			//buildSchedule();
 			buildDisplay();
-		}
-		
-		
+		}		
 	}
 	
 	public void buildModel() {
 		System.out.println("Running BuildModel");
-		
-		
 	}
 	
 	public void buildSchedule() {
 		System.out.println("Running BuildSchedule");
-		
 	}
 	
 	public void buildDisplay() {
 		System.out.println("Running BuildDisplay");
-		
-		
-		
-		
 	}
-	
-	
 	
 	@Override
 	public String getName() { 
@@ -153,42 +129,36 @@ public class Launcher extends Repast3Launcher {
 	
 	private void launchAgents() {
 		
-		radioAgents= new ArrayList<RadioAgent>();
-		vehicleAgents= new ArrayList<VehicleAgent>();
-		lightAgents= new ArrayList<TrafficLightAgent>();
-		AID receiverLight = null;
+		radioAgents= new Vector<RadioAgent>();
+		vehicleAgents= new Vector<VehicleAgent>();
+		lightAgents= new Vector<TrafficLightAgent>();
+		//AID receiverLight = null;
 		AID receiverRadio = null;
 		
 		try {
 			
 			//create radios
 			for(int i=0; i < numRadios;i++) {
-				
 				RadioAgent radio = new RadioAgent();
 				radioAgents.add(radio);
-				mainContainer.acceptNewAgent("Radio" + i, radio).start();
-				
+				mainContainer.acceptNewAgent("Radio" + i, radio).start();			
 			}
 			
 			//create traffic lights
 			for(int i=0; i < numLights;i++) {
-				
 				TrafficLightAgent tLight = new TrafficLightAgent();
 				lightAgents.add(tLight);
 				mainContainer.acceptNewAgent("Light" + i, tLight).start();
-				receiverLight = tLight.getAID();
+				//receiverLight = tLight.getAID();
 			}
 			
 			//create vehicles
 			for(int i=0; i < numVehicles;i++) {
-				
-				VehicleAgent vehicle = new VehicleAgent(receiverLight);
+				VehicleAgent vehicle = new VehicleAgent(lightAgents);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
-				
 			}
-			
-			
+						
 		}catch (StaleProxyException e) {
 			e.printStackTrace();
 		}

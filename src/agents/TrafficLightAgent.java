@@ -18,11 +18,14 @@ public class TrafficLightAgent extends Agent{
 	private static int IDNumber=0;
 	private int ID;
 	public String currentColor;
+	public int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
 	
 	
 	public TrafficLightAgent() {
 		IDNumber++;
 		ID=IDNumber;
+		position[0] = 3;
+		position[1] = 3;
 	}
 	
 	public int getID() {
