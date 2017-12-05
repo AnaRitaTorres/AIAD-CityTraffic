@@ -31,9 +31,9 @@ public class EncounterTrafficLight extends Behaviour{
 		car.send(cfp);
 	}
 	
-	if(resposta vermelho??){
+	/*if(resposta vermelho??){
 		
-	}
+	}*/
 
 	
 		
