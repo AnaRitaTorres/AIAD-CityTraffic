@@ -9,7 +9,7 @@ import uchicago.src.sim.network.Node;
 
 public class MyEdge extends DefaultEdge implements DrawableEdge {
 	
-	private Color color = Color.pink;
+	private Color color;
 	
 	public MyEdge() { }
 
