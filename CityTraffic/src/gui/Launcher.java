@@ -156,7 +156,7 @@ public class Launcher extends Repast3Launcher {
 		radioAgents= new ArrayList<RadioAgent>();
 		vehicleAgents= new ArrayList<VehicleAgent>();
 		lightAgents= new ArrayList<TrafficLightAgent>();
-		AID receiverCar = null;
+		AID receiverLight = null;
 		AID receiverRadio = null;
 		
 		try {
@@ -167,24 +167,25 @@ public class Launcher extends Repast3Launcher {
 				RadioAgent radio = new RadioAgent();
 				radioAgents.add(radio);
 				mainContainer.acceptNewAgent("Radio" + i, radio).start();
-				receiverRadio = radio.getAID();
+				
 			}
 			
 			//create vehicles
 			for(int i=0; i < numVehicles;i++) {
 				
-				VehicleAgent vehicle = new VehicleAgent();
+				VehicleAgent vehicle = new VehicleAgent(receiverLight);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
-				receiverCar = vehicle.getAID();
+				
 			}
 			
 			//create traffic lights
 			for(int i=0; i < numLights;i++) {
 				
-				TrafficLightAgent tLight = new TrafficLightAgent(receiverCar, receiverRadio);
+				TrafficLightAgent tLight = new TrafficLightAgent();
 				lightAgents.add(tLight);
 				mainContainer.acceptNewAgent("Light" + i, tLight).start();
+				receiverLight = tLight.getAID();
 			}
 		}catch (StaleProxyException e) {
 			e.printStackTrace();

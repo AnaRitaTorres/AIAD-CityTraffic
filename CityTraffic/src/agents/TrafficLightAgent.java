@@ -2,6 +2,9 @@ package agents;
 
 
 import java.util.ArrayList;
+import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.swing.JOptionPane;
 
 import sajas.core.Agent;
 import sajas.core.behaviours.*;
@@ -14,16 +17,12 @@ public class TrafficLightAgent extends Agent{
 	
 	private static int IDNumber=0;
 	private int ID;
-	private ArrayList<AID> receiverAgents;
-	private AID receiverCar = null;
-	private AID receiverRadio = null;
+	public String currentColor;
 	
 	
-	public TrafficLightAgent(AID receiverCar, AID receiverRadio) {
+	public TrafficLightAgent() {
 		IDNumber++;
 		ID=IDNumber;
-		this.receiverCar = receiverCar;
-		this.receiverRadio = receiverRadio;
 	}
 	
 	public int getID() {
@@ -33,28 +32,51 @@ public class TrafficLightAgent extends Agent{
 	protected void setup() {
 		System.out.println("Hello! Traffic-Agent "+getAID().getName()+" is ready.");
 		
-		addBehaviour(new OneShotBehaviour(){
+		AtomicInteger i = new AtomicInteger(0);
+
+		Vector<String> color = new Vector<String>(3);
+		color.addElement("red");
+		color.addElement("orange");
+		color.addElement("green");
+		currentColor = color.elementAt(i.get());	
+
+		addBehaviour(new TickerBehaviour(this, 10000){
+
+			protected void onTick() {         
+				JOptionPane.showMessageDialog(null,"changed color " + color.elementAt(i.get()));
+				if(i.get() == 2){
+					i.set(0);
+					currentColor = color.elementAt(i.get());
+				}
+				else{
+					i.set(i.get() + 1);
+					currentColor = color.elementAt(i.get());
+				}
+			}
+		});
+		
+		addBehaviour(new CyclicBehaviour(){
 
 			@Override
 			public void action() {
-				//Send msg to the other agent
-				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-				msg.setContent("send");
-				
-				/*System.out.println("size" + receiverAgents.size());		
-				for(int i=0; i < receiverAgents.size(); i++) {
-					
-				}*/
-			
-				msg.addReceiver(receiverCar);
-				msg.addReceiver(receiverRadio);
-				send(msg);
-				
+				ACLMessage msg = receive();
+				if(msg != null){
+					ACLMessage reply = msg.createReply();
+					if(msg.getPerformative() == ACLMessage.CFP){
+						String content = msg.getContent();
+						if (content.equals("Cor?")){
+							reply.setPerformative(ACLMessage.INFORM);
+							reply.setContent(currentColor);
+							System.out.println(reply.getContent());
+						}
+					}
+				}
 			}
-			
+
 		});
+		
 	}
-	
+		
 	protected void takeDown(){
 		// Printout a dismissal	message
 		System.out.println("Traffic-Agent "+getAID().getName()+ "terminating.");
