@@ -21,7 +21,6 @@ import uchicago.src.sim.gui.SimGraphics;
 import uchicago.src.sim.space.Object2DGrid;
 
 import agents.*;
-import model.*;
 
 public class Launcher extends Repast3Launcher {
 	
@@ -32,7 +31,6 @@ public class Launcher extends Repast3Launcher {
 	private static final int N_VEHICLES = 5;
 	private static final int N_LIGHTS = 5;
 	
-	private City city;
 	private ContainerController mainContainer;
 	private boolean runInBatchMode;
 	private DisplaySurface displaySurf;
@@ -103,7 +101,7 @@ public class Launcher extends Repast3Launcher {
 		super.begin();
 		
 		if(!runInBatchMode) {
-			//buildModel();
+			buildModel();
 			//buildSchedule();
 			buildDisplay();
 		}
@@ -114,7 +112,7 @@ public class Launcher extends Repast3Launcher {
 	public void buildModel() {
 		System.out.println("Running BuildModel");
 		
-		city = new City(WIDTH,HEIGHT);
+		
 	}
 	
 	public void buildSchedule() {
@@ -125,16 +123,7 @@ public class Launcher extends Repast3Launcher {
 	public void buildDisplay() {
 		System.out.println("Running BuildDisplay");
 		
-		//background colour-not working!!!
-		ColorMap map = new ColorMap();
 		
-		for (int i=0; i < 16; i++) {
-			map.mapColor(i, new Color((int)(i*8+127), 0, 0));
-		}
-		
-		map.mapColor(0, Color.gray);
-		
-		displaySurf.display();
 		
 		
 	}
