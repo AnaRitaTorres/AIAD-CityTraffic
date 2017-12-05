@@ -4,6 +4,10 @@ import java.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 import sajas.sim.repast3.Repast3Launcher;
 import sajas.core.Runtime;
@@ -42,6 +46,7 @@ public class Launcher extends Repast3Launcher {
 	private int numRadios = N_RADIOS;
 	private int numVehicles = N_VEHICLES;
 	private int numLights = N_LIGHTS;
+	private String file = "map1.txt";
 	public Vector<RadioAgent> radioAgents;
 	public Vector<VehicleAgent> vehicleAgents;
 	public Vector<TrafficLightAgent> lightAgents;
@@ -58,7 +63,6 @@ public class Launcher extends Repast3Launcher {
 	public void setNumNodes(int numNodes) {
 		this.numNodes = numNodes;
 	}
-
 
 	public int getNumRadios() {
 		return numRadios;
@@ -88,6 +92,41 @@ public class Launcher extends Repast3Launcher {
 	    return "City Traffic";
 	}
 
+	public void readFromFile() {
+		
+		
+		
+		try{
+			
+			FileInputStream fstream = new FileInputStream(file);
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+			
+			strLine = br.readLine();
+			
+			String[] nNodes = strLine.split("!");
+				
+			
+			int num = Integer.valueOf(nNodes[0]);
+			
+			System.out.println(num);
+			
+			for(int i=0; i < num; i++) {
+				strLine = br.readLine();
+				String[] nodes = strLine.split(";");
+
+				System.out.println(Integer.valueOf(nodes[0]));
+				System.out.println(Integer.valueOf(nodes[1]));
+			}
+			
+			
+			in.close();
+		}catch (Exception e){
+			System.err.println("FILE STREAM ERROR: " + e.getMessage());
+		}
+	}
+	
 	@Override
 	public void setup() {
 		super.setup();
@@ -105,7 +144,7 @@ public class Launcher extends Repast3Launcher {
 	@Override
 	public void begin() {
 		super.begin();
-		
+		readFromFile();
 		if(!runInBatchMode) {
 			buildModel();
 			//buildSchedule();
@@ -202,6 +241,8 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public static void main(String[] args) {
+		
+		
 		boolean runMode = !BATCH_MODE; 
 		
 		SimInit init = new SimInit();
