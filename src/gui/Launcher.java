@@ -93,9 +93,7 @@ public class Launcher extends Repast3Launcher {
 	}
 
 	public void readFromFile() {
-		
-		
-		
+			
 		try{
 			
 			FileInputStream fstream = new FileInputStream(file);
@@ -106,20 +104,21 @@ public class Launcher extends Repast3Launcher {
 			strLine = br.readLine();
 			
 			String[] nNodes = strLine.split("!");
-				
-			
+						
 			int num = Integer.valueOf(nNodes[0]);
-			
-			System.out.println(num);
 			
 			for(int i=0; i < num; i++) {
 				strLine = br.readLine();
-				String[] nodes = strLine.split(";");
+				String[] nodesRead = strLine.split(";");
 
-				System.out.println(Integer.valueOf(nodes[0]));
-				System.out.println(Integer.valueOf(nodes[1]));
+				int x = Integer.valueOf(nodesRead[0]);
+				int y= Integer.valueOf(nodesRead[1]);
+				
+				OvalNetworkItem drawable = new OvalNetworkItem (x, y);
+				MyNode node = new MyNode(x,y,drawable,Color.blue);
+				nodes.add(node);
 			}
-			
+	
 			
 			in.close();
 		}catch (Exception e){
@@ -156,22 +155,12 @@ public class Launcher extends Repast3Launcher {
 	
 	public void buildModel() {
 		
-		for(int n = 0; n < numNodes; n++) {
-			int x = Random.uniform.nextIntFromTo(0, WIDTH - 1);
-		    int y = Random.uniform.nextIntFromTo(0, HEIGHT- 1);
-		    OvalNetworkItem drawable = new OvalNetworkItem (x, y);
-		    MyNode node1 = new MyNode(x, y,drawable, Color.blue);
-		    nodes.add(node1);
-		}
-		
 		for(int i = 0; i < nodes.size(); i++) {
 			int r = Random.uniform.nextIntFromTo(0, nodes.size()-1);
 			MyNode node = (MyNode) nodes.get (i);
 			MyNode node1 = (MyNode)nodes.get(r);
 			node.makeEdgeToFrom(node1, r, Color.orange);
 		}
-		
-		
 	}
 		
 	public void buildSchedule() {
