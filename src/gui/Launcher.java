@@ -4,6 +4,10 @@ import java.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 import sajas.sim.repast3.Repast3Launcher;
 import sajas.core.Runtime;
@@ -27,8 +31,8 @@ import graph.*;
 public class Launcher extends Repast3Launcher {
 	
 	private static final boolean BATCH_MODE = true;
-	private static final int HEIGHT = 400;
-	private static final int WIDTH = 400;
+	private static final int HEIGHT = 500;
+	private static final int WIDTH = 500;
 	private static final int N_RADIOS = 1;
 	private static final int N_VEHICLES = 1;
 	private static final int N_LIGHTS = 1;
@@ -42,6 +46,7 @@ public class Launcher extends Repast3Launcher {
 	private int numRadios = N_RADIOS;
 	private int numVehicles = N_VEHICLES;
 	private int numLights = N_LIGHTS;
+	private String file = "map1.txt";
 	public Vector<RadioAgent> radioAgents;
 	public Vector<VehicleAgent> vehicleAgents;
 	public Vector<TrafficLightAgent> lightAgents;
@@ -58,7 +63,6 @@ public class Launcher extends Repast3Launcher {
 	public void setNumNodes(int numNodes) {
 		this.numNodes = numNodes;
 	}
-
 
 	public int getNumRadios() {
 		return numRadios;
@@ -88,6 +92,40 @@ public class Launcher extends Repast3Launcher {
 	    return "City Traffic";
 	}
 
+	public void readFromFile() {
+			
+		try{
+			
+			FileInputStream fstream = new FileInputStream(file);
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+			
+			strLine = br.readLine();
+			
+			String[] nNodes = strLine.split("!");
+						
+			int num = Integer.valueOf(nNodes[0]);
+			
+			for(int i=0; i < num; i++) {
+				strLine = br.readLine();
+				String[] nodesRead = strLine.split(";");
+
+				int x = Integer.valueOf(nodesRead[0]);
+				int y= Integer.valueOf(nodesRead[1]);
+				
+				OvalNetworkItem drawable = new OvalNetworkItem (x, y);
+				MyNode node = new MyNode(x,y,drawable,Color.blue);
+				nodes.add(node);
+			}
+	
+			
+			in.close();
+		}catch (Exception e){
+			System.err.println("FILE STREAM ERROR: " + e.getMessage());
+		}
+	}
+	
 	@Override
 	public void setup() {
 		super.setup();
@@ -105,7 +143,7 @@ public class Launcher extends Repast3Launcher {
 	@Override
 	public void begin() {
 		super.begin();
-		
+		readFromFile();
 		if(!runInBatchMode) {
 			buildModel();
 			//buildSchedule();
@@ -117,18 +155,11 @@ public class Launcher extends Repast3Launcher {
 	
 	public void buildModel() {
 		
-		for(int n = 0; n < numNodes; n++) {
-			int x = Random.uniform.nextIntFromTo(0, WIDTH - 1);
-		    int y = Random.uniform.nextIntFromTo(0, HEIGHT - 1);
-		    OvalNetworkItem drawable = new OvalNetworkItem (x, y);
-		    MyNode node1 = new MyNode(x, y,drawable);
-		    nodes.add(node1);
-		}
-		
-		for(int i = 1; i < nodes.size()/2; i++) {
+		for(int i = 0; i < nodes.size(); i++) {
+			int r = Random.uniform.nextIntFromTo(0, nodes.size()-1);
 			MyNode node = (MyNode) nodes.get (i);
-			MyNode node1 = (MyNode)nodes.get(i+ 30);
-		    node.makeEdgeToFrom(node1, 40, Color.cyan);
+			MyNode node1 = (MyNode)nodes.get(r);
+			node.makeEdgeToFrom(node1, r, Color.orange);
 		}
 	}
 		
@@ -199,6 +230,8 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public static void main(String[] args) {
+		
+		
 		boolean runMode = !BATCH_MODE; 
 		
 		SimInit init = new SimInit();
