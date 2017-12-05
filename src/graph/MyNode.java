@@ -19,18 +19,18 @@ public class MyNode extends DefaultDrawableNode {
 		this.ySize = ySize;
 	}
 	
-	public void makeEdgeToFrom(DefaultNode node, int xSize, int ySize, Color color) {
-		
-		if(!hasEdgeTo(node)) {
-			
-			Edge edge = new MyEdge(this,node,color);
-			addOutEdge(edge);
-			node.addInEdge(edge);
-			Edge otherEdge = new MyEdge(node,this,color);
-			node.addOutEdge(otherEdge);
-			addInEdge(otherEdge);
-		}
-	}
+	public void makeEdgeToFrom(DefaultNode node, int maxDegree, Color color) {
+	    if ((! hasEdgeTo(node)) && getOutDegree() < maxDegree &&
+		node.getOutDegree() < maxDegree) {
+	      
+	      Edge edge = new MyEdge(this, node, color);
+	      addOutEdge(edge);
+	      node.addInEdge(edge);
+	      Edge otherEdge = new MyEdge(node, this, color);
+	      node.addOutEdge(otherEdge);
+	      addInEdge(otherEdge);
+	    }
+	  }
 	
 	public void removeConnection(MyNode node) {
 	    
