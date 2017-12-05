@@ -4,7 +4,9 @@ import javax.swing.JOptionPane;
 
 import sajas.core.Agent;
 import sajas.core.behaviours.*;
+
 import jade.lang.acl.ACLMessage;
+import jade.core.AID;
 
 @SuppressWarnings("serial")
 public class VehicleAgent extends Agent{
@@ -13,10 +15,12 @@ public class VehicleAgent extends Agent{
 	
 	private static int IDNumber=0;
 	private int ID;
+	private AID tLight;
 	
-	public VehicleAgent() {
+	public VehicleAgent(AID tLight) {
 		IDNumber++;
 		ID=IDNumber;
+		this.tLight = tLight;
 	}
 	
 	public int getID() {
@@ -30,13 +34,11 @@ public class VehicleAgent extends Agent{
 
 			@Override
 			public void action() {
-				//Receive msg from other agent
-				ACLMessage msg = receive();
-				if(msg != null) {
-					JOptionPane.showMessageDialog(null,"car msg " +msg.getContent());
-				}
-				else
-					block();
+				//System.out.println("Cor?");
+				ACLMessage cfp= new ACLMessage(ACLMessage.CFP);
+				cfp.addReceiver(tLight);
+				cfp.setContent("Cor?");
+				send(cfp);
 				
 			}
 			
