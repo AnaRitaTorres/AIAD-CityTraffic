@@ -36,7 +36,7 @@ public class Launcher extends Repast3Launcher {
 	private static final int WIDTH = 400;
 	private static final int N_RADIOS = 0;
 	private static final int N_VEHICLES = 2;
-	private static final int N_LIGHTS = 1;
+	private static final int N_LIGHTS = 2;
 	private static final int N_NODES = 100;
 	
 	private int numNodes = N_NODES;
@@ -241,7 +241,7 @@ public class Launcher extends Repast3Launcher {
 	public void buildDisplay() {
 
 		Network2DDisplay display = new Network2DDisplay (nodes,WIDTH,HEIGHT);
-		display.setNodesVisible(true);
+		display.setNodesVisible(false);
 		Network2DDisplay display2 = new Network2DDisplay (agents,WIDTH,HEIGHT);
 		displaySurf.addDisplayableProbeable (display, "City Traffic");
 		displaySurf.addDisplayableProbeable (display2, "City");
@@ -283,17 +283,24 @@ public class Launcher extends Repast3Launcher {
 			}
 			
 			//create traffic lights
-			for(int i=0; i < numLights;i++) {
-				TrafficLightAgent tLight = new TrafficLightAgent(25,50,obj);
+			//for(int i=0; i < numLights;i++) {
+				TrafficLightAgent tLight1 = new TrafficLightAgent(160,50);
+				TrafficLightAgent tLight = new TrafficLightAgent(100,110);
 				lightAgents.add(tLight);
-				mainContainer.acceptNewAgent("Light" + i, tLight).start();
-				OvalNetworkItem light = new OvalNetworkItem(25,50);
-				light.setColor(Color.black);
-				MyNode n = new MyNode(25,50,light);
+				lightAgents.add(tLight1);
+				mainContainer.acceptNewAgent("Light" + 0, tLight).start();
+				mainContainer.acceptNewAgent("Light" + 1, tLight1).start();
+				
+				tLight.getS().setColor(Color.green);
+				tLight1.getS().setColor(Color.ORANGE);
+				MyNode n = new MyNode(tLight.getX(),tLight.getY(),tLight.getS());
+				MyNode n1 = new MyNode(tLight1.getX(),tLight1.getY(),tLight1.getS());
+				
 				agents.add(n);
+				agents.add(n1);
 				
 				//receiverLight = tLight.getAID();
-			}
+			//}
 			
 			//create vehicles
 			int velocity = 1000;//só para testar

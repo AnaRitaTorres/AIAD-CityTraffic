@@ -10,10 +10,7 @@ import java.awt.Color;
 import sajas.core.Agent;
 import sajas.core.behaviours.*;
 
-import uchicago.src.sim.gui.Drawable;
-import uchicago.src.sim.gui.SimGraphics;
-import uchicago.src.sim.space.Object2DGrid;
-import jade.core.AID;
+import uchicago.src.sim.gui.OvalNetworkItem;
 import jade.lang.acl.ACLMessage;
 
 @SuppressWarnings("serial")
@@ -26,22 +23,32 @@ public class TrafficLightAgent extends Agent{
 	private String currentColor;
 	private int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
 	private TrafficLightAgent light;
+	private OvalNetworkItem s;
 		
-	public TrafficLightAgent(int x, int y,Object2DGrid s) {
+	public TrafficLightAgent(int x, int y) {
 		IDNumber++;
 		ID=IDNumber;
 		position[0] = x;
 		position[1] = y;
 		light = this;
+		this.s= new OvalNetworkItem(x,y);
 	}
 	
+	public OvalNetworkItem getS() {
+		return s;
+	}
+
+	public void setS(OvalNetworkItem s) {
+		this.s = s;
+	}
+
 	public int getID() {
 		return ID;
 	}
 	
 	
-	public void draw() {
-		
+	public void networkRep() {
+		s = new OvalNetworkItem(position[0],position[1]);
 	}
 	
 	public int getX() {
