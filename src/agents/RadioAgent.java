@@ -13,7 +13,7 @@ import jade.lang.acl.ACLMessage;
 public class RadioAgent extends Agent{
 	
 	
-	//TODO vai ser necessario
+	//TODO vai ser necessario??
 	
 	private static int IDNumber=0;
 	private int ID;
