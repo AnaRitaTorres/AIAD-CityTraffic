@@ -12,12 +12,12 @@ import sajas.core.behaviours.*;
 
 import uchicago.src.sim.gui.Drawable;
 import uchicago.src.sim.gui.SimGraphics;
-
+import uchicago.src.sim.space.Object2DGrid;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
 @SuppressWarnings("serial")
-public class TrafficLightAgent extends Agent {
+public class TrafficLightAgent extends Agent{
 	
 	//TODO por semafors em cruzamentos e po los a comunicar para saberem qual vai estar verde para nao causar acidentes(como jp disse)
 	
@@ -26,12 +26,12 @@ public class TrafficLightAgent extends Agent {
 	private String currentColor;
 	private int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
 	private TrafficLightAgent light;
-	
-	public TrafficLightAgent() {
+		
+	public TrafficLightAgent(int x, int y,Object2DGrid s) {
 		IDNumber++;
 		ID=IDNumber;
-		position[0] = 3;
-		position[1] = 3;
+		position[0] = x;
+		position[1] = y;
 		light = this;
 	}
 	
@@ -39,6 +39,18 @@ public class TrafficLightAgent extends Agent {
 		return ID;
 	}
 	
+	
+	public void draw() {
+		
+	}
+	
+	public int getX() {
+		return position[0];
+	}
+	
+	public int getY() {
+		return position[1];
+	}
 	protected void setup() {
 		System.out.println("Hello! Traffic-Agent "+getAID().getName()+" is ready.");
 		
