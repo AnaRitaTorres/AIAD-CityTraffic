@@ -24,7 +24,7 @@ public class TrafficLightAgent extends Agent {
 	private static int IDNumber=0;
 	private int ID;
 	private String currentColor;
-	public int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
+	private int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
 	private TrafficLightAgent light;
 	
 	public TrafficLightAgent() {
@@ -53,8 +53,6 @@ public class TrafficLightAgent extends Agent {
 		addBehaviour(new TickerBehaviour(this, 10000){
 
 			protected void onTick() {  
-				//estas janemas bloqueiam os ticks do programa nao podemos usar a nao ser que o objetivo seja mesmo parar tudo ate carregarmos ok
-				JOptionPane.showMessageDialog(null,"changed color " + color.elementAt(i.get()));
 				if(i.get() == 2){
 					i.set(0);
 					currentColor = color.elementAt(i.get());
@@ -80,6 +78,13 @@ public class TrafficLightAgent extends Agent {
 							reply.setConversationId("cor");
 							light.send(reply);
 							System.out.println(reply.getContent());
+						}
+						else if(msg.getConversationId().equals("position")){
+							reply.setPerformative(ACLMessage.INFORM);
+							String pos = "" + position[0] + position[1] + "";
+							reply.setContent(pos);
+							reply.setConversationId("position");
+							light.send(reply);
 						}
 					}
 				}
