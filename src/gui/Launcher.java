@@ -39,6 +39,7 @@ public class Launcher extends Repast3Launcher {
 	private static final int N_NODES = 100;
 	
 	private int numNodes = N_NODES;
+	private Connection c = new Connection();
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
 	private ContainerController mainContainer;
 	private boolean runInBatchMode;
@@ -154,15 +155,32 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public void buildModel() {
-		
-		/*for(int i = 0; i < nodes.size(); i++) {
-			int r = Random.uniform.nextIntFromTo(0, nodes.size()-1);
-			MyNode node = (MyNode) nodes.get (i);
-			MyNode node1 = (MyNode)nodes.get(r);
-			node.makeEdgeToFrom(node1, r, Color.orange);
-		}*/
+		c.connectVertical(nodes);
+		c.connectStreetY(nodes,110);
+		c.connectStreetY(nodes, 50);
+		c.connectStreetY(nodes,360);
+		c.connectToFrom(nodes,55, 25, 350);
+		c.connectToFrom(nodes,150, 90,130);
+		c.connectStreetY(nodes, 240);
+		c.connectToFrom(nodes,350, 295,130);
+		c.connect2Nodes(nodes, 70, 55, 360, 350);
+		c.connect2Nodes(nodes,160, 145, 350, 360);
+		c.connect2Nodes(nodes, 175, 160, 340, 350);
+		c.connectToFrom(nodes, 265, 175, 340);
+		c.connect2Nodes(nodes, 265, 245, 310, 340);
+		c.connect2Nodes(nodes,280,265,300,310);
+		c.connect2Nodes(nodes, 295, 280, 260, 300);
+		c.connectToFrom(nodes,330 , 295, 250);
+		c.connect2Nodes(nodes,350, 330, 210 ,250);
+		c.connect2Nodes(nodes, 190, 175, 160, 170);
+		c.connect2Nodes(nodes, 205, 190,210 , 160);
 	}
-		
+	
+	
+	
+	
+	
+
 	public void buildSchedule() {
 		System.out.println("Running BuildSchedule");
 	}

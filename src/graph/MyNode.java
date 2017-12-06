@@ -11,19 +11,9 @@ import graph.MyEdge;
 
 public class MyNode extends DefaultDrawableNode {
 	
-	private int xSize,ySize;
-	private Color color;
-	
+	public MyNode() {}	
 	public MyNode(int xSize, int ySize,NetworkDrawable drawable, Color color) {
 		super(drawable);
-	}
-	
-	public int getx() {
-		return xSize;
-	}
-	
-	public int gety() {
-		return ySize;
 	}
 	
 	public void makeEdgeToFrom(DefaultNode node, int maxDegree, Color color) {
