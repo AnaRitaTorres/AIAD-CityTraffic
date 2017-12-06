@@ -11,10 +11,20 @@ import graph.MyEdge;
 
 public class MyNode extends DefaultDrawableNode {
 	
+	private Color color;
 	public MyNode() {}	
-	public MyNode(int xSize, int ySize,NetworkDrawable drawable, Color color) {
+	public MyNode(int xSize, int ySize,NetworkDrawable drawable) {
 		super(drawable);
 	}
+	
+
+    public void setColor(Color c) {
+        color = c;
+    }
+
+    public Color getColor() {
+        return color;
+    }
 	
 	public void makeEdgeToFrom(DefaultNode node, int maxDegree, Color color) {
 	    if ((! hasEdgeTo(node)) && getOutDegree() < maxDegree &&
