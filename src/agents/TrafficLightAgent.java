@@ -19,16 +19,20 @@ import jade.lang.acl.ACLMessage;
 @SuppressWarnings("serial")
 public class TrafficLightAgent extends Agent {
 	
+	//TODO por semafors em cruzamentos e po los a comunicar para saberem qual vai estar verde para nao causar acidentes(como jp disse)
+	
 	private static int IDNumber=0;
 	private int ID;
-	public String currentColor;
+	private String currentColor;
 	public int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
+	private TrafficLightAgent light;
 	
 	public TrafficLightAgent() {
 		IDNumber++;
 		ID=IDNumber;
 		position[0] = 3;
 		position[1] = 3;
+		light = this;
 	}
 	
 	public int getID() {
@@ -42,13 +46,14 @@ public class TrafficLightAgent extends Agent {
 
 		Vector<String> color = new Vector<String>(3);
 		color.addElement("red");
-		color.addElement("orange");
 		color.addElement("green");
+		color.addElement("orange");
 		currentColor = color.elementAt(i.get());	
 
 		addBehaviour(new TickerBehaviour(this, 10000){
 
-			protected void onTick() {         
+			protected void onTick() {  
+				//estas janemas bloqueiam os ticks do programa nao podemos usar a nao ser que o objetivo seja mesmo parar tudo ate carregarmos ok
 				JOptionPane.showMessageDialog(null,"changed color " + color.elementAt(i.get()));
 				if(i.get() == 2){
 					i.set(0);
@@ -69,10 +74,11 @@ public class TrafficLightAgent extends Agent {
 				if(msg != null){
 					ACLMessage reply = msg.createReply();
 					if(msg.getPerformative() == ACLMessage.CFP){
-						String content = msg.getContent();
-						if (content.equals("Cor?")){
+						if (msg.getConversationId().equals("cor")){
 							reply.setPerformative(ACLMessage.INFORM);
 							reply.setContent(currentColor);
+							reply.setConversationId("cor");
+							light.send(reply);
 							System.out.println(reply.getContent());
 						}
 					}

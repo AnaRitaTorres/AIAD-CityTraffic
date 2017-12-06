@@ -7,9 +7,9 @@ import javax.swing.JOptionPane;
 import sajas.core.Agent;
 import sajas.core.behaviours.*;
 import agents.TrafficLightAgent;
+import behaviours.EncounterTrafficLight;
 import jade.lang.acl.ACLMessage;
 import jade.core.AID;
-import Behaviors.EncounterTrafficLight;
 
 @SuppressWarnings("serial")
 public class VehicleAgent extends Agent{
@@ -44,17 +44,22 @@ public class VehicleAgent extends Agent{
 			@Override
 			protected void onTick() {    
 				//carro anda				
-				JOptionPane.showMessageDialog(null,"car position: " + position[0] + position [1]);
-				position[0] = position[0] + 1;
-				position[1] = position[1] + 1;//TODO eventualmente faze lo andar pelos pontos do grafo
+				System.out.println("car position: " + position[0] + position [1]);
+				
 				
 				//carro ve se tem semaforo
 				int i;
+				boolean found = false;
 				for(i = 0; i < trafficLights.size(); i++){
 					if(trafficLights.elementAt(i).position[0] == position[0] && trafficLights.elementAt(i).position[1] == position[1]){
+						found = true;
 						final int index = i;
-						addBehaviour(new EncounterTrafficLight(car, trafficLights.elementAt(index)));
+						car.addBehaviour(new EncounterTrafficLight(car, trafficLights.elementAt(index)));
 					}
+				}
+				if(found == false){
+					position[0] = position[0] + 1;
+					position[1] = position[1] + 1;//TODO eventualmente faze lo andar pelos pontos do grafo
 				}
 				
 				//TODO carro ver se tem carros
