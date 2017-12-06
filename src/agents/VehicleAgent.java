@@ -23,14 +23,15 @@ public class VehicleAgent extends Agent{
 	public VehicleAgent car = this;
 	private AID lightAtCarPos;
 	private int step;
+	private int velocity;
 	Behaviour searchLight, dealLight;
 
-	public VehicleAgent(Vector<TrafficLightAgent> trafficLights) {
+	public VehicleAgent(int[]position, int velocity, Vector<TrafficLightAgent> trafficLights) {
 		IDNumber++;
 		ID=IDNumber;
 		this.trafficLights = trafficLights;
-		position[0] = 0;//TODO (4)por posiçoes do grafo
-		position[1] = 0;
+		this.position = position;
+		this.velocity = velocity;
 	}
 
 	public void setLightAtCarPos(AID light){
@@ -45,7 +46,7 @@ public class VehicleAgent extends Agent{
 
 		System.out.println("Hello! Vehicle-Agent "+getAID().getName()+ "is ready.");
 
-		addBehaviour(new TickerBehaviour(this, 1000){	//TODO (2)o valor dos ticks é a velocidade do carro uns andam de 1 em 1 seg outros meio em meio outros 2 em 2  etc
+		addBehaviour(new TickerBehaviour(this, velocity){
 
 			@Override
 			protected void onTick() {  
@@ -62,6 +63,10 @@ public class VehicleAgent extends Agent{
 
 					@Override
 					public void action() {
+						
+						//TODO (3)carro ver se tem carros dentro da maquina de estados em baixo? antes de ver semaforo? criar outro behaviour (ja tenho dois carros com velocidades e posiçoes diferentes
+						
+						
 						//carro ve se tem semaforo
 						switch (step){
 						case 0:
@@ -92,21 +97,7 @@ public class VehicleAgent extends Agent{
 				});
 
 
-
-				/*int i;
-				boolean found = false;
-				for(i = 0; i < trafficLights.size(); i++){
-					if(trafficLights.elementAt(i).position[0] == position[0] && trafficLights.elementAt(i).position[1] == position[1]){
-						found = true;
-						final int index = i;
-					}
-				}
-				if(found == false){
-
-				}*/
-
-				//TODO (3)carro ver se tem carros 
-				//TODO (5)carro para o tick behavior se tiver chegado ao destino
+				//TODO (5)carro para o tick behavior se tiver chegado ao destino (ou seja implica criar posiçoes iniciais e finas e faze lo percorrer o caminha, implica implementar djkistra
 			}
 		});
 	}

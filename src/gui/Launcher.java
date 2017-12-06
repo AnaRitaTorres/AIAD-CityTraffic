@@ -35,7 +35,7 @@ public class Launcher extends Repast3Launcher {
 	private static final int HEIGHT = 400;
 	private static final int WIDTH = 400;
 	private static final int N_RADIOS = 0;
-	private static final int N_VEHICLES = 1;
+	private static final int N_VEHICLES = 2;
 	private static final int N_LIGHTS = 1;
 	private static final int N_NODES = 100;
 	
@@ -249,11 +249,19 @@ public class Launcher extends Repast3Launcher {
 			}
 			
 			//create vehicles
+			int velocity = 1000;//só para testar
+			int[] position = new int[2];;//so para testar
 			for(int i=0; i < numVehicles;i++) {
-				VehicleAgent vehicle = new VehicleAgent(lightAgents);
+				java.util.Random r = new java.util.Random();
+				//int velocity = r.nextInt(1500) + 500;	DESCOMENTAR
+				position[0] = 0;//TODO (4)por posiçoes do grafo
+				position[1] = 0;
+				VehicleAgent vehicle = new VehicleAgent(position, velocity, lightAgents);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
-				
+				velocity += 1000;	//só para testar
+				position[0] = 2;//só para testar
+				position[1] = 2;//so para testar
 			}
 						
 		}catch (StaleProxyException e) {
