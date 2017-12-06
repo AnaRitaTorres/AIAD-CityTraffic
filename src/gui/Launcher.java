@@ -31,8 +31,8 @@ import graph.*;
 public class Launcher extends Repast3Launcher {
 	
 	private static final boolean BATCH_MODE = true;
-	private static final int HEIGHT = 500;
-	private static final int WIDTH = 500;
+	private static final int HEIGHT = 400;
+	private static final int WIDTH = 400;
 	private static final int N_RADIOS = 1;
 	private static final int N_VEHICLES = 1;
 	private static final int N_LIGHTS = 1;
@@ -155,12 +155,12 @@ public class Launcher extends Repast3Launcher {
 	
 	public void buildModel() {
 		
-		for(int i = 0; i < nodes.size(); i++) {
+		/*for(int i = 0; i < nodes.size(); i++) {
 			int r = Random.uniform.nextIntFromTo(0, nodes.size()-1);
 			MyNode node = (MyNode) nodes.get (i);
 			MyNode node1 = (MyNode)nodes.get(r);
 			node.makeEdgeToFrom(node1, r, Color.orange);
-		}
+		}*/
 	}
 		
 	public void buildSchedule() {
