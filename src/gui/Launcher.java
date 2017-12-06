@@ -33,7 +33,7 @@ public class Launcher extends Repast3Launcher {
 	private static final boolean BATCH_MODE = true;
 	private static final int HEIGHT = 500;
 	private static final int WIDTH = 500;
-	private static final int N_RADIOS = 1;
+	private static final int N_RADIOS = 0;//nao será necessario?
 	private static final int N_VEHICLES = 1;
 	private static final int N_LIGHTS = 1;
 	private static final int N_NODES = 100;

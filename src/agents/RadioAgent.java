@@ -12,6 +12,9 @@ import jade.lang.acl.ACLMessage;
 @SuppressWarnings("serial")
 public class RadioAgent extends Agent{
 	
+	
+	//TODO vai ser necessario
+	
 	private static int IDNumber=0;
 	private int ID;
 		
