@@ -20,11 +20,12 @@ import jade.wrapper.StaleProxyException;
 
 import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.gui.DisplaySurface;
-import uchicago.src.sim.util.Random;
-import uchicago.src.sim.gui.AbstractGraphLayout;
+import uchicago.src.sim.space.Object2DGrid;
 import uchicago.src.sim.gui.Network2DDisplay;
+import uchicago.src.sim.gui.Object2DDisplay;
 import uchicago.src.sim.gui.OvalNetworkItem;
-
+import uchicago.src.sim.gui.RectNetworkItem;
+import uchicago.src.sim.gui.SimGraphics;
 import agents.*;
 import graph.*;
 
@@ -33,7 +34,7 @@ public class Launcher extends Repast3Launcher {
 	private static final boolean BATCH_MODE = true;
 	private static final int HEIGHT = 400;
 	private static final int WIDTH = 400;
-	private static final int N_RADIOS = 1;
+	private static final int N_RADIOS = 0;
 	private static final int N_VEHICLES = 1;
 	private static final int N_LIGHTS = 1;
 	private static final int N_NODES = 100;
@@ -41,9 +42,12 @@ public class Launcher extends Repast3Launcher {
 	private int numNodes = N_NODES;
 	private Connection c = new Connection();
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
+	private ArrayList<MyNode> agents = new ArrayList<MyNode>();
 	private ContainerController mainContainer;
+	private Object2DGrid obj;
 	private boolean runInBatchMode;
 	private DisplaySurface displaySurf;
+	private SimGraphics g;
 	private int numRadios = N_RADIOS;
 	private int numVehicles = N_VEHICLES;
 	private int numLights = N_LIGHTS;
@@ -116,7 +120,7 @@ public class Launcher extends Repast3Launcher {
 				int y= Integer.valueOf(nodesRead[1]);
 				
 				OvalNetworkItem drawable = new OvalNetworkItem (x, y);
-				MyNode node = new MyNode(x,y,drawable,Color.blue);
+				MyNode node = new MyNode(x,y,drawable);
 				nodes.add(node);
 			}
 	
@@ -154,7 +158,7 @@ public class Launcher extends Repast3Launcher {
 		displaySurf.display();
 	}
 	
-	public void buildModel() {
+	public void buildGraph() {
 		c.connectVertical(nodes);
 		c.connectStreetY(nodes,110);
 		c.connectStreetY(nodes, 50);
@@ -176,11 +180,11 @@ public class Launcher extends Repast3Launcher {
 		c.connect2Nodes(nodes, 205, 190,210 , 160);
 	}
 	
+	public void buildModel() {
+		
+		buildGraph();
+	}
 	
-	
-	
-	
-
 	public void buildSchedule() {
 		System.out.println("Running BuildSchedule");
 	}
@@ -188,9 +192,13 @@ public class Launcher extends Repast3Launcher {
 	public void buildDisplay() {
 
 		Network2DDisplay display = new Network2DDisplay (nodes,WIDTH,HEIGHT);
+		display.setNodesVisible(false);
+		Network2DDisplay display2 = new Network2DDisplay (agents,WIDTH,HEIGHT);
 		displaySurf.addDisplayableProbeable (display, "City Traffic");
+		displaySurf.addDisplayableProbeable (display2, "City");
 		displaySurf.addZoomable (display);
 		displaySurf.setBackground (java.awt.Color.white);
+		
 		
 	}
 	
@@ -229,9 +237,14 @@ public class Launcher extends Repast3Launcher {
 			
 			//create traffic lights
 			for(int i=0; i < numLights;i++) {
-				TrafficLightAgent tLight = new TrafficLightAgent();
+				TrafficLightAgent tLight = new TrafficLightAgent(25,50,obj);
 				lightAgents.add(tLight);
 				mainContainer.acceptNewAgent("Light" + i, tLight).start();
+				OvalNetworkItem light = new OvalNetworkItem(25,50);
+				light.setColor(Color.black);
+				MyNode n = new MyNode(25,50,light);
+				agents.add(n);
+				
 				//receiverLight = tLight.getAID();
 			}
 			
@@ -240,6 +253,7 @@ public class Launcher extends Repast3Launcher {
 				VehicleAgent vehicle = new VehicleAgent(lightAgents);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
+				
 			}
 						
 		}catch (StaleProxyException e) {
