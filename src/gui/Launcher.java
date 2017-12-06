@@ -40,6 +40,8 @@ public class Launcher extends Repast3Launcher {
 	private static final int N_NODES = 100;
 	
 	private int numNodes = N_NODES;
+	private Graph grafo;
+	private ArrayList<GraphNode> nos = new ArrayList<GraphNode>();
 	private Connection c = new Connection();
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
 	private ArrayList<MyNode> agents = new ArrayList<MyNode>();
@@ -97,7 +99,9 @@ public class Launcher extends Repast3Launcher {
 	    return "City Traffic";
 	}
 
-	public void readFromFile() {
+	public void readFromFile(String file) {
+		
+		ArrayList<GraphNode> adj = new ArrayList<GraphNode>();
 			
 		try{
 			
@@ -119,17 +123,19 @@ public class Launcher extends Repast3Launcher {
 				int x = Integer.valueOf(nodesRead[0]);
 				int y= Integer.valueOf(nodesRead[1]);
 				
-				OvalNetworkItem drawable = new OvalNetworkItem (x, y);
-				MyNode node = new MyNode(x,y,drawable);
-				nodes.add(node);
+				GraphNode n = new GraphNode(x,y,adj);
+				nos.add(n);
 			}
-	
-			
+				
 			in.close();
-		}catch (Exception e){
-			System.err.println("FILE STREAM ERROR: " + e.getMessage());
-		}
+			}catch (Exception e){
+				System.err.println("FILE STREAM ERROR: " + e.getMessage());
+			}
+		
+		grafo = new Graph(nos);
+		
 	}
+
 	
 	@Override
 	public void setup() {
@@ -148,7 +154,7 @@ public class Launcher extends Repast3Launcher {
 	@Override
 	public void begin() {
 		super.begin();
-		readFromFile();
+		readFromFile(file);
 		if(!runInBatchMode) {
 			buildModel();
 			//buildSchedule();
@@ -159,22 +165,65 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public void buildGraph() {
+		
+		ConnectNodes();
+		TransformNodes(nos);
+		ConnectNodesVisual();
+		
+	}
+	
+	
+	public void TransformNodes( ArrayList<GraphNode> nos) {
+		
+		for(int i=0; i < nos.size(); i++) {
+			OvalNetworkItem o = new OvalNetworkItem(nos.get(i).getX(),nos.get(i).getY());
+			MyNode n = new MyNode(nos.get(i).getX(),nos.get(i).getY(),o);
+			nodes.add(n);
+		}
+	}
+	
+	public void ConnectNodes() {
+		grafo.connectVertical(nos);
+		grafo.connectStreetY(nos, 110);
+		grafo.connectStreetY(nos, 50);
+		grafo.connectStreetY(nos,360);
+		grafo.connectStreetY(nos, 240);
+		grafo.connectToFrom(nos,55, 25, 350);
+		grafo.connectToFrom(nos,150, 90,130);
+		grafo.connectToFrom(nos,350, 295,130);
+		grafo.connectToFrom(nos, 265, 175, 340);
+		grafo.connectToFrom(nos,330 , 295, 250);
+		grafo.connect2Nodes(nos,350, 330, 210 ,250);
+		grafo.connect2Nodes(nos, 190, 175, 160, 170);
+		grafo.connect2Nodes(nos, 205, 190,210 , 160);
+		grafo.connect2Nodes(nos, 265, 245, 310, 340);
+		grafo.connect2Nodes(nos,280,265,300,310);
+		grafo.connect2Nodes(nos, 295, 280, 260, 300);
+		grafo.connect2Nodes(nos, 70, 55, 360, 350);
+		grafo.connect2Nodes(nos,160, 145, 350, 360);
+		grafo.connect2Nodes(nos, 175, 160, 340, 350);
+	}
+	
+	public void ConnectNodesVisual() {
 		c.connectVertical(nodes);
+		
 		c.connectStreetY(nodes,110);
 		c.connectStreetY(nodes, 50);
 		c.connectStreetY(nodes,360);
+		c.connectStreetY(nodes, 240);
+		
+		c.connectToFrom(nodes, 265, 175, 340);
 		c.connectToFrom(nodes,55, 25, 350);
 		c.connectToFrom(nodes,150, 90,130);
-		c.connectStreetY(nodes, 240);
 		c.connectToFrom(nodes,350, 295,130);
+		c.connectToFrom(nodes,330 , 295, 250);
+		
 		c.connect2Nodes(nodes, 70, 55, 360, 350);
 		c.connect2Nodes(nodes,160, 145, 350, 360);
 		c.connect2Nodes(nodes, 175, 160, 340, 350);
-		c.connectToFrom(nodes, 265, 175, 340);
 		c.connect2Nodes(nodes, 265, 245, 310, 340);
 		c.connect2Nodes(nodes,280,265,300,310);
 		c.connect2Nodes(nodes, 295, 280, 260, 300);
-		c.connectToFrom(nodes,330 , 295, 250);
 		c.connect2Nodes(nodes,350, 330, 210 ,250);
 		c.connect2Nodes(nodes, 190, 175, 160, 170);
 		c.connect2Nodes(nodes, 205, 190,210 , 160);
@@ -192,14 +241,12 @@ public class Launcher extends Repast3Launcher {
 	public void buildDisplay() {
 
 		Network2DDisplay display = new Network2DDisplay (nodes,WIDTH,HEIGHT);
-		display.setNodesVisible(false);
+		display.setNodesVisible(true);
 		Network2DDisplay display2 = new Network2DDisplay (agents,WIDTH,HEIGHT);
 		displaySurf.addDisplayableProbeable (display, "City Traffic");
 		displaySurf.addDisplayableProbeable (display2, "City");
 		displaySurf.addZoomable (display);
 		displaySurf.setBackground (java.awt.Color.white);
-		
-		
 	}
 	
 	@Override

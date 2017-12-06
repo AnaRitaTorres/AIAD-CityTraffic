@@ -2,16 +2,34 @@ package graph;
 
 import java.util.ArrayList;
 
-public class GraphNode {
-	private int data;
-	private ArrayList<GraphNode> adjacent;
+public class GraphNode{
+		
+	int x;
+	int y;
+	private ArrayList<GraphNode> adj = new ArrayList<GraphNode>();
 	
-	public GraphNode(int data) {
-		this.data = data;
-		adjacent = new ArrayList<>();
+	public GraphNode() {}
+	public GraphNode(int x, int y, ArrayList<GraphNode> adj) {
+		this.x=x;
+		this.y=y;
+		this.adj=adj;
 	}
 	
-	public void addAdjacent(GraphNode node) {
-		adjacent.add(node);
+	public void addAdj(GraphNode node) {
+		adj.add(node);
 	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public ArrayList<GraphNode> getAdj() {
+		return adj;
+	}
+	
+	
 }
