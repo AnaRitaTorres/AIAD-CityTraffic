@@ -53,8 +53,6 @@ public class TrafficLightAgent extends Agent {
 		addBehaviour(new TickerBehaviour(this, 10000){
 
 			protected void onTick() {  
-				//estas janemas bloqueiam os ticks do programa nao podemos usar a nao ser que o objetivo seja mesmo parar tudo ate carregarmos ok
-				JOptionPane.showMessageDialog(null,"changed color " + color.elementAt(i.get()));
 				if(i.get() == 2){
 					i.set(0);
 					currentColor = color.elementAt(i.get());

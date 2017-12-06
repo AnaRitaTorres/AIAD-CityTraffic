@@ -17,7 +17,6 @@ public class EncounterTrafficLight extends Behaviour{
 	private VehicleAgent car;
 	private int step = 0;
 	private ACLMessage reply;
-	private MessageTemplate mt;
 	
 	public EncounterTrafficLight(VehicleAgent car, TrafficLightAgent light){
 		this.car = car;
@@ -35,29 +34,19 @@ public class EncounterTrafficLight extends Behaviour{
 			cfp.setContent("Cor?");
 			cfp.setConversationId("cor");
 			car.send(cfp);
-			mt = MessageTemplate.and(MessageTemplate.MatchConversationId("cor"),MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
 	
 			step = 1;
 			break;
 		case 1:
 			//wait for response by traffic light
-			System.out.println("content: " + reply);	//TODO REPLY DÁ SEMPRE NULL!!! COMO RECEBER RESPOSTA??
-			reply= car.receive(mt);
+			reply= car.receive();
 			if(reply != null){
 				step = 2;
 			}
-			else{
-				step = 0;
-			}
 			break;
 		case 2:
-			
 			//handle traffic light color
-			
-			if(reply.getContent().equals("red")){
-				step = 0;
-			}
-			else{
+			if(! reply.getContent().equals("red")){
 				step = 4;
 				car.position[0] = car.position[0] + 1;
 				car.position[1] = car.position[1] + 1;//TODO eventualmente faze lo andar pelos pontos do grafo
@@ -66,7 +55,6 @@ public class EncounterTrafficLight extends Behaviour{
 		}
 	}
 
-	
 	public boolean done(){
 		return step == 4;
 	}

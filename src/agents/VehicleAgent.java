@@ -43,9 +43,8 @@ public class VehicleAgent extends Agent{
 			
 			@Override
 			protected void onTick() {    
-				//carro anda				
+								
 				System.out.println("car position: " + position[0] + position [1]);
-				
 				
 				//carro ve se tem semaforo
 				int i;
