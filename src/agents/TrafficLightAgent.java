@@ -24,7 +24,7 @@ public class TrafficLightAgent extends Agent {
 	private static int IDNumber=0;
 	private int ID;
 	private String currentColor;
-	public int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
+	private int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
 	private TrafficLightAgent light;
 	
 	public TrafficLightAgent() {
@@ -78,6 +78,13 @@ public class TrafficLightAgent extends Agent {
 							reply.setConversationId("cor");
 							light.send(reply);
 							System.out.println(reply.getContent());
+						}
+						else if(msg.getConversationId().equals("position")){
+							reply.setPerformative(ACLMessage.INFORM);
+							String pos = "" + position[0] + position[1] + "";
+							reply.setContent(pos);
+							reply.setConversationId("position");
+							light.send(reply);
 						}
 					}
 				}

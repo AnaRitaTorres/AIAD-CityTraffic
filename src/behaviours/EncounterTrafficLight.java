@@ -5,7 +5,6 @@ import javax.swing.JOptionPane;
 
 import sajas.core.Agent;
 import sajas.core.behaviours.*;
-import agents.TrafficLightAgent;
 import agents.VehicleAgent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -13,12 +12,12 @@ import jade.core.AID;
 
 public class EncounterTrafficLight extends Behaviour{
 
-	private TrafficLightAgent light;
+	private AID light;
 	private VehicleAgent car;
 	private int step = 0;
 	private ACLMessage reply;
 	
-	public EncounterTrafficLight(VehicleAgent car, TrafficLightAgent light){
+	public EncounterTrafficLight(VehicleAgent car, AID light){
 		this.car = car;
 		this.light = light;
 	}
@@ -30,7 +29,7 @@ public class EncounterTrafficLight extends Behaviour{
 		case 0:
 			//send request for color to traffic light encountered by the car
 			System.out.println("Cor?");
-			cfp.addReceiver(light.getAID());
+			cfp.addReceiver(light);
 			cfp.setContent("Cor?");
 			cfp.setConversationId("cor");
 			car.send(cfp);
@@ -55,6 +54,7 @@ public class EncounterTrafficLight extends Behaviour{
 		}
 	}
 
+	@Override//ver se continua a funcionar
 	public boolean done(){
 		return step == 4;
 	}
