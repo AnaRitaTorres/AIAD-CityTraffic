@@ -47,7 +47,7 @@ public class FindTrafficLights extends Behaviour{
 					foundLight = true;
 				}
 				repliesCnt++;
-				if(foundLight == true){
+				if(foundLight == true || repliesCnt == lights.size()){
 					step = 2;
 				}
 			}

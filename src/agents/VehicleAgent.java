@@ -14,7 +14,7 @@ import jade.core.AID;
 
 @SuppressWarnings("serial")
 public class VehicleAgent extends Agent{
-	
+
 	private static int IDNumber=0;
 	private int ID;
 	private AID tLight;
@@ -22,7 +22,9 @@ public class VehicleAgent extends Agent{
 	private Vector<TrafficLightAgent> trafficLights;
 	public VehicleAgent car = this;
 	private AID lightAtCarPos;
-	
+	private int step;
+	Behaviour searchLight, dealLight;
+
 	public VehicleAgent(Vector<TrafficLightAgent> trafficLights) {
 		IDNumber++;
 		ID=IDNumber;
@@ -30,44 +32,67 @@ public class VehicleAgent extends Agent{
 		position[0] = 0;//TODO (4)por posiçoes do grafo
 		position[1] = 0;
 	}
-	
+
 	public void setLightAtCarPos(AID light){
 		lightAtCarPos = light;
 	}
-	
+
 	public int getID() {
 		return ID;
 	}
-	
-	protected void setup() {
-		
-		System.out.println("Hello! Vehicle-Agent "+getAID().getName()+ "is ready.");
-		
-		addBehaviour(new TickerBehaviour(this, 1000){	//TODO (2)o valor dos ticks é a velocidade do carro uns andam de 1 em 1 seg outros meio em meio outros 2 em 2  etc
-			
-			@Override
-			protected void onTick() {    
-								
-				System.out.println("car position: " + position[0] + position [1]);
-				
-				//carro ve se tem semaforo
-				lightAtCarPos = null;
-				//perguntar a todos os semaforos a posiçao
-				addBehaviour(new FindTrafficLights(car, trafficLights));
-				//perguntar cor do semaforo que encontrou
-				
-				System.out.println("light" + lightAtCarPos);
-				//TODO lighATCarPor dá semre null deste nado mas do lado do behavior nao
-				
-				if(lightAtCarPos != null){
-					car.addBehaviour(new EncounterTrafficLight(car, lightAtCarPos));
-				}
-				else{
-					position[0] = position[0] + 1;
-					position[1] = position[1] + 1;//TODO (1) eventualmente faze lo andar pelos pontos do grafo
-				}
 
-				
+	protected void setup() {
+
+		System.out.println("Hello! Vehicle-Agent "+getAID().getName()+ "is ready.");
+
+		addBehaviour(new TickerBehaviour(this, 1000){	//TODO (2)o valor dos ticks é a velocidade do carro uns andam de 1 em 1 seg outros meio em meio outros 2 em 2  etc
+
+			@Override
+			protected void onTick() {  
+				step = 0;
+				lightAtCarPos = null;
+
+				System.out.println("car position: " + position[0] + position [1]);
+				car.addBehaviour(new Behaviour() {
+
+					@Override
+					public boolean done() {
+						return step == 3;
+					}
+
+					@Override
+					public void action() {
+						//carro ve se tem semaforo
+						switch (step){
+						case 0:
+							//perguntar a todos os semaforos a posiçao
+							searchLight = new FindTrafficLights(car, trafficLights);
+							addBehaviour(searchLight);
+							step = 1;
+							break;
+						case 1:
+							if (searchLight.done()){
+								step = 2;
+							}
+							break;
+						case 2:
+							//perguntar cor do semaforo que encontrou
+							if(lightAtCarPos != null){
+								dealLight = new EncounterTrafficLight(car, lightAtCarPos);
+								addBehaviour(dealLight);
+								step = 3;
+							} else{
+								position[0] = position[0] + 1;
+								position[1] = position[1] + 1;//TODO (1) eventualmente faze lo andar pelos pontos do grafo
+								step = 3;
+							}
+							break;
+						}
+					}
+				});
+
+
+
 				/*int i;
 				boolean found = false;
 				for(i = 0; i < trafficLights.size(); i++){
@@ -77,15 +102,15 @@ public class VehicleAgent extends Agent{
 					}
 				}
 				if(found == false){
-					
+
 				}*/
-				
+
 				//TODO (3)carro ver se tem carros 
 				//TODO (5)carro para o tick behavior se tiver chegado ao destino
 			}
 		});
 	}
-	
+
 	protected void takeDown(){
 		// Printout a dismissal	message
 		System.out.println("Vehicle-Agent "+getAID().getName()+ "terminating.");
