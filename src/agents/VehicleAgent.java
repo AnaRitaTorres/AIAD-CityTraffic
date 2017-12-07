@@ -44,6 +44,8 @@ public class VehicleAgent extends Agent{
 
 	protected void setup() {
 		
+		//TODO (7) tratar de colisões
+		
 		//para testar
 				if(getAID().getName().equals("Vehicle1@City Traffic")){
 					this.position[0] = 2;
@@ -102,7 +104,7 @@ public class VehicleAgent extends Agent{
 						case 4:
 							//TODO(1) falar com carros VER SE TEM CAAROS À FRENTE criar outro behaviour
 							position[0] = position[0] + 1;
-							position[1] = position[1] + 1;//TODO (0) eventualmente faze lo andar pelos pontos do grafo
+							position[1] = position[1] + 1;//TODO (0) eventualmente faze lo andar pelos pontos do grafo (e testar carro vs light para depois fazer carro vs carro)
 							step = 5;
 							break;
 						}
