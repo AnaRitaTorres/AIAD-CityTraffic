@@ -374,8 +374,6 @@ public class Launcher extends Repast3Launcher {
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
 				velocity += 1000;	//só para testar
-				position[0] = 2;//só para testar
-				position[1] = 2;//so para testar
 			}
 						
 		}catch (StaleProxyException e) {
