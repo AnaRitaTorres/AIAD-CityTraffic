@@ -43,8 +43,14 @@ public class VehicleAgent extends Agent{
 	}
 
 	protected void setup() {
+		
+		//para testar
+				if(getAID().getName().equals("Vehicle1@City Traffic")){
+					this.position[0] = 2;
+					this.position[1] = 2;
+				}
 
-		System.out.println("Hello! Vehicle-Agent "+getAID().getName()+ "is ready.");
+		System.out.println("Hello! Vehicle-Agent "+ getAID().getName() + " is ready.");
 
 		addBehaviour(new TickerBehaviour(this, velocity){
 
@@ -53,19 +59,16 @@ public class VehicleAgent extends Agent{
 				step = 0;
 				lightAtCarPos = null;
 
-				System.out.println("car position: " + position[0] + position [1]);
+				System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
 				car.addBehaviour(new Behaviour() {
 
 					@Override
 					public boolean done() {
-						return step == 3;
+						return step == 5;
 					}
 
 					@Override
 					public void action() {
-						
-						//TODO (3)carro ver se tem carros dentro da maquina de estados em baixo? antes de ver semaforo? criar outro behaviour (ja tenho dois carros com velocidades e posiçoes diferentes
-						
 						
 						//carro ve se tem semaforo
 						switch (step){
@@ -86,11 +89,21 @@ public class VehicleAgent extends Agent{
 								dealLight = new EncounterTrafficLight(car, lightAtCarPos);
 								addBehaviour(dealLight);
 								step = 3;
+								
 							} else{
-								position[0] = position[0] + 1;
-								position[1] = position[1] + 1;//TODO (1) eventualmente faze lo andar pelos pontos do grafo
-								step = 3;
+								step = 4;
 							}
+							break;
+						case 3:
+							if(dealLight.done()){
+								step = 4;
+							}
+							break;
+						case 4:
+							//TODO(1) falar com carros VER SE TEM CAAROS À FRENTE criar outro behaviour
+							position[0] = position[0] + 1;
+							position[1] = position[1] + 1;//TODO (0) eventualmente faze lo andar pelos pontos do grafo
+							step = 5;
 							break;
 						}
 					}
