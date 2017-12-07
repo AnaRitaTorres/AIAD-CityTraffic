@@ -241,24 +241,38 @@ public class Launcher extends Repast3Launcher {
 	
 	public void buildSchedule() {
 		
-		schedule.scheduleActionAtInterval(10000, new BasicAction() {
+		schedule.scheduleActionBeginning(1, new BasicAction() {
 			public void execute() {
 				
 		    	if(color==0) {
 		    		lightAgents.get(0).changeColor(semColor.get(color));  
 		    		color++;
 		    	 }
-		    	 else if(color==1) {
-		    		 lightAgents.get(0).changeColor(semColor.get(color)); 
-		    		 color++; 
-		    	 }else {
-		    		 lightAgents.get(0).changeColor(semColor.get(color));
-		    		 color=0;
-		    	 }
-		    	 
 		    	 displaySurf.updateDisplay(); 
 			 }
-		});
+		},10);
+		
+		schedule.scheduleActionBeginning(1, new BasicAction() {
+			public void execute() {
+				
+		    	if(color==1) {
+		    		lightAgents.get(0).changeColor(semColor.get(color));  
+		    		color++;
+		    	 }
+		    	 displaySurf.updateDisplay(); 
+			 }
+		},10);
+		
+		schedule.scheduleActionBeginning(1, new BasicAction() {
+			public void execute() {
+				
+		    	if(color==2) {
+		    		lightAgents.get(0).changeColor(semColor.get(color));  
+		    		color=0;
+		    	 }
+		    	 displaySurf.updateDisplay(); 
+			 }
+		},10);
 	}
 	
 	public void buildDisplay() {
