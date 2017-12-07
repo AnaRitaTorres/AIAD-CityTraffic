@@ -46,8 +46,19 @@ public class TrafficLightAgent extends Agent{
 		this.s = s;
 	}
 	
-	public void changeColor(Color color) {
-		s.setColor(color);
+	public void changeColor(String color) {
+		
+		if(color=="red") {
+			s.setColor(Color.red);
+		}
+		else if(color=="green") {
+			s.setColor(Color.green);
+		}
+		else {
+			s.setColor(Color.orange);
+		}
+			
+		
 	}
 	public int getID() {
 		return ID;
@@ -71,7 +82,7 @@ public class TrafficLightAgent extends Agent{
 		color.addElement("orange");
 		currentColor = color.elementAt(i.get());	
 		
-		changeColor(Color.red);
+		changeColor(currentColor);
 
 		addBehaviour(new TickerBehaviour(this, 10000){
 
@@ -79,14 +90,13 @@ public class TrafficLightAgent extends Agent{
 				if(i.get() == 2){
 					i.set(0);
 					currentColor = color.elementAt(i.get());
-					changeColor(Color.orange);
+					changeColor(currentColor);
 					System.out.println(s.getColor());
 				}
 				else{
 					i.set(i.get() + 1);
 					currentColor = color.elementAt(i.get());
-					
-					changeColor(Color.green);
+					changeColor(currentColor);
 					System.out.println(s.getColor());
 				}
 				
