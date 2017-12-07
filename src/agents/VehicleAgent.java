@@ -6,6 +6,9 @@ import javax.swing.JOptionPane;
 
 import sajas.core.Agent;
 import sajas.core.behaviours.*;
+import uchicago.src.sim.gui.DisplaySurface;
+import uchicago.src.sim.gui.OvalNetworkItem;
+import uchicago.src.sim.gui.RectNetworkItem;
 import agents.TrafficLightAgent;
 import behaviours.EncounterTrafficLight;
 import behaviours.FindTrafficLights;
@@ -24,14 +27,18 @@ public class VehicleAgent extends Agent{
 	private AID lightAtCarPos;
 	private int step;
 	private int velocity;
+	private RectNetworkItem r;
 	Behaviour searchLight, dealLight;
+	private DisplaySurface disp;
 
-	public VehicleAgent(int[]position, int velocity, Vector<TrafficLightAgent> trafficLights) {
+	public VehicleAgent(int[]position, int velocity, Vector<TrafficLightAgent> trafficLights, DisplaySurface disp) {
 		IDNumber++;
 		ID=IDNumber;
 		this.trafficLights = trafficLights;
 		this.position = position;
 		this.velocity = velocity;
+		this.r = new RectNetworkItem(position[0],position[1]);
+		this.disp=disp;
 	}
 
 	public void setLightAtCarPos(AID light){
@@ -41,7 +48,22 @@ public class VehicleAgent extends Agent{
 	public int getID() {
 		return ID;
 	}
+	
+	public RectNetworkItem getS() {
+		return r;
+	}
 
+	public void setS(RectNetworkItem r) {
+		this.r = r;
+	}
+	
+	public int getX() {
+		return position[0];
+	}
+	
+	public int getY() {
+		return position[1];
+	}
 	protected void setup() {
 
 		System.out.println("Hello! Vehicle-Agent "+getAID().getName()+ "is ready.");

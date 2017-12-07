@@ -370,9 +370,12 @@ public class Launcher extends Repast3Launcher {
 				//int velocity = r.nextInt(1500) + 500;	DESCOMENTAR
 				position[0] = 0;//TODO (4)por posiçoes do grafo
 				position[1] = 0;
-				VehicleAgent vehicle = new VehicleAgent(position, velocity, lightAgents);
+				VehicleAgent vehicle = new VehicleAgent(position, velocity, lightAgents,displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
+				
+				MyNode n1 = new MyNode(vehicle.getX(),vehicle.getY(),vehicle.getS());
+				agents.add(n1);
 				velocity += 1000;	//só para testar
 				position[0] = 2;//só para testar
 				position[1] = 2;//so para testar
