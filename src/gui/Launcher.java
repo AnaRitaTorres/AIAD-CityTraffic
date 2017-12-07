@@ -1,4 +1,5 @@
-//TODO(final) fazer experiencias com numero diferente de carros (e semaforos?) e tirar estatisticas do numero de colisoes, distancia percorrida, tempo demorado, tempo de espera em semaforos
+//TODO(4) fazer experiencias com numero diferente de carros (e semaforos?) e 
+//tirar estatisticas do numero de colisoes, distancia percorrida, tempo demorado, tempo de espera em semaforos, tempo total que os carros estao parados durante o percurso(semaforos+transito)
 
 package gui;
 
@@ -39,14 +40,15 @@ public class Launcher extends Repast3Launcher {
 	private static final int N_NODES = 100;
 	
 	private int numNodes = N_NODES;
-	private Graph grafo;
+	private Graph graph;
 	private int color=0;
 	private int time = 2000;
 	private Schedule schedule;
-	private ArrayList<GraphNode> nos = new ArrayList<GraphNode>();
+	private ArrayList<GraphNode> graphNodes = new ArrayList<GraphNode>();
 	private Connection c = new Connection();
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
-	private ArrayList<MyNode> agents = new ArrayList<MyNode>();
+	private ArrayList<MyNode> lightsNodes = new ArrayList<MyNode>();
+	private ArrayList<MyNode> carsNodes = new ArrayList<MyNode>();
 	private ContainerController mainContainer;
 	private boolean runInBatchMode;
 	private DisplaySurface displaySurf;
@@ -129,7 +131,7 @@ public class Launcher extends Repast3Launcher {
 				int y= Integer.valueOf(nodesRead[1]);
 				
 				GraphNode n = new GraphNode(x,y,adj);
-				nos.add(n);
+				graphNodes.add(n);
 			}
 				
 			in.close();
@@ -137,7 +139,7 @@ public class Launcher extends Repast3Launcher {
 				System.err.println("FILE STREAM ERROR: " + e.getMessage());
 			}
 		
-		grafo = new Graph(nos);
+		graph = new Graph(graphNodes);
 		
 	}
 	
@@ -172,40 +174,40 @@ public class Launcher extends Repast3Launcher {
 	public void buildGraph() {
 		
 		ConnectNodes();
-		TransformNodes(nos);
+		TransformNodes(graphNodes);
 		ConnectNodesVisual();
 		
 	}
 	
-	public void TransformNodes( ArrayList<GraphNode> nos) {
+	public void TransformNodes( ArrayList<GraphNode> graphNodes) {
 		
-		for(int i=0; i < nos.size(); i++) {
-			OvalNetworkItem o = new OvalNetworkItem(nos.get(i).getX(),nos.get(i).getY());
-			MyNode n = new MyNode(nos.get(i).getX(),nos.get(i).getY(),o);
+		for(int i=0; i < graphNodes.size(); i++) {
+			OvalNetworkItem o = new OvalNetworkItem(graphNodes.get(i).getX(),graphNodes.get(i).getY());
+			MyNode n = new MyNode(o, graphNodes.get(i).getX(),graphNodes.get(i).getY());
 			nodes.add(n);
 		}
 	}
 	
 	public void ConnectNodes() {
-		grafo.connectVertical(nos);
-		grafo.connectStreetY(nos, 110);
-		grafo.connectStreetY(nos, 50);
-		grafo.connectStreetY(nos,360);
-		grafo.connectStreetY(nos, 240);
-		grafo.connectToFrom(nos,55, 25, 350);
-		grafo.connectToFrom(nos,150, 90,130);
-		grafo.connectToFrom(nos,350, 295,130);
-		grafo.connectToFrom(nos, 265, 175, 340);
-		grafo.connectToFrom(nos,330 , 295, 250);
-		grafo.connect2Nodes(nos,350, 330, 210 ,250);
-		grafo.connect2Nodes(nos, 190, 175, 160, 170);
-		grafo.connect2Nodes(nos, 205, 190,210 , 160);
-		grafo.connect2Nodes(nos, 265, 245, 310, 340);
-		grafo.connect2Nodes(nos,280,265,300,310);
-		grafo.connect2Nodes(nos, 295, 280, 260, 300);
-		grafo.connect2Nodes(nos, 70, 55, 360, 350);
-		grafo.connect2Nodes(nos,160, 145, 350, 360);
-		grafo.connect2Nodes(nos, 175, 160, 340, 350);
+		graph.connectVertical(graphNodes);
+		graph.connectStreetY(graphNodes, 110);
+		graph.connectStreetY(graphNodes, 50);
+		graph.connectStreetY(graphNodes,360);
+		graph.connectStreetY(graphNodes, 240);
+		graph.connectToFrom(graphNodes,55, 25, 350);
+		graph.connectToFrom(graphNodes,150, 90,130);
+		graph.connectToFrom(graphNodes,350, 295,130);
+		graph.connectToFrom(graphNodes, 265, 175, 340);
+		graph.connectToFrom(graphNodes,330 , 295, 250);
+		graph.connect2Nodes(graphNodes,350, 330, 210 ,250);
+		graph.connect2Nodes(graphNodes, 190, 175, 160, 170);
+		graph.connect2Nodes(graphNodes, 205, 190,210 , 160);
+		graph.connect2Nodes(graphNodes, 265, 245, 310, 340);
+		graph.connect2Nodes(graphNodes,280,265,300,310);
+		graph.connect2Nodes(graphNodes, 295, 280, 260, 300);
+		graph.connect2Nodes(graphNodes, 70, 55, 360, 350);
+		graph.connect2Nodes(graphNodes,160, 145, 350, 360);
+		graph.connect2Nodes(graphNodes, 175, 160, 340, 350);
 	}
 	
 	public void ConnectNodesVisual() {
@@ -301,11 +303,15 @@ public class Launcher extends Repast3Launcher {
 	
 	public void buildDisplay() {
 
+		//TODO(10) na janela das settings pro para dar para alterar numero de agentes
+		
 		Network2DDisplay display = new Network2DDisplay (nodes,WIDTH,HEIGHT);
 		display.setNodesVisible(false);
-		Network2DDisplay display2 = new Network2DDisplay (agents, WIDTH,HEIGHT);
+		Network2DDisplay display1 = new Network2DDisplay (lightsNodes, WIDTH,HEIGHT);
+		Network2DDisplay display2 = new Network2DDisplay (carsNodes, WIDTH,HEIGHT);
 		displaySurf.addDisplayableProbeable (display, "City Traffic");
-		displaySurf.addDisplayableProbeable (display2, "City");
+		displaySurf.addDisplayableProbeable (display2, "CityTraffic");
+		displaySurf.addDisplayableProbeable (display1, "City");
 		displaySurf.addZoomable (display);
 		displaySurf.setBackground (java.awt.Color.white);
 		
@@ -355,10 +361,10 @@ public class Launcher extends Repast3Launcher {
 				//mainContainer.acceptNewAgent("Light" + 1, tLight1).start();
 				
 				
-				MyNode n = new MyNode(tLight.getX(),tLight.getY(),tLight.getS());
+				MyNode n = new MyNode(tLight.getS(), tLight.getX(),tLight.getY());
 				//MyNode n1 = new MyNode(tLight1.getX(),tLight1.getY(),tLight1.getS());
 				
-				agents.add(n);
+				lightsNodes.add(n);
 				//agents.add(n1);
 				
 				//receiverLight = tLight.getAID();
@@ -371,16 +377,14 @@ public class Launcher extends Repast3Launcher {
 			//for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
 				//int velocity = r.nextInt(1500) + 500;	DESCOMENTAR
-				VehicleAgent vehicle = new VehicleAgent(55, 110, 1000, lightAgents, displaySurf);
+				VehicleAgent vehicle = new VehicleAgent(55, 110, 1000, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 1, vehicle).start();
-				MyNode n2 = new MyNode(vehicle.getX(),vehicle.getY(),vehicle.getS());
-				agents.add(n2);
-				vehicle = new VehicleAgent(100, 60, 2000, lightAgents, displaySurf);
+				
+				vehicle = new VehicleAgent(100, 60, 2000, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 2, vehicle).start();
-				MyNode n3 = new MyNode(vehicle.getX(),vehicle.getY(),vehicle.getS());
-				agents.add(n3);
+				
 			//}
 						
 		}catch (StaleProxyException e) {
