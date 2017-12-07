@@ -1,11 +1,14 @@
 package agents;
 
+import java.awt.Color;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
 import sajas.core.Agent;
 import sajas.core.behaviours.*;
+import uchicago.src.sim.gui.DisplaySurface;
+import uchicago.src.sim.gui.OvalNetworkItem;
 import agents.TrafficLightAgent;
 import behaviours.EncounterTrafficLight;
 import behaviours.FindTrafficLights;
@@ -24,14 +27,28 @@ public class VehicleAgent extends Agent{
 	private AID lightAtCarPos;
 	private int step;
 	private int velocity;
+	private OvalNetworkItem s;
+	private DisplaySurface disp;
 	Behaviour searchLight, dealLight;
 
-	public VehicleAgent(int[]position, int velocity, Vector<TrafficLightAgent> trafficLights) {
+	public VehicleAgent(int x, int y, int velocity, Vector<TrafficLightAgent> trafficLights, DisplaySurface disp) {
 		IDNumber++;
 		ID=IDNumber;
 		this.trafficLights = trafficLights;
-		this.position = position;
+		position[0] = x;
+		position[1] = y;
 		this.velocity = velocity;
+		this.s= new OvalNetworkItem(x,y);
+		this.disp=disp;
+		s.setColor(Color.BLACK);
+	}
+	
+	public OvalNetworkItem getS() {
+		return s;
+	}
+
+	public void setS(OvalNetworkItem s) {
+		this.s = s;
 	}
 
 	public void setLightAtCarPos(AID light){
@@ -41,17 +58,17 @@ public class VehicleAgent extends Agent{
 	public int getID() {
 		return ID;
 	}
+	
+	public int getX() {
+		return position[0];
+	}
+	
+	public int getY() {
+		return position[1];
+	}
 
 	protected void setup() {
 		
-		//TODO (7) tratar de colisões
-		
-		//para testar
-				if(getAID().getName().equals("Vehicle1@City Traffic")){
-					this.position[0] = 2;
-					this.position[1] = 2;
-				}
-
 		System.out.println("Hello! Vehicle-Agent "+ getAID().getName() + " is ready.");
 
 		addBehaviour(new TickerBehaviour(this, velocity){
@@ -108,9 +125,11 @@ public class VehicleAgent extends Agent{
 							step = 5;
 							break;
 						}
+						
+						disp.updateDisplay();
 					}
 				});
-
+				//TODO (7) tratar de colisões (colisoes - light - carro) - ver se ha outro carro na posiçao em que estou, se houver guardar o numero de carros(nºde colisoes deste carro) e o carro morre(fica parado aí para sempre
 
 				//TODO (5)carro para o tick behavior se tiver chegado ao destino (ou seja implica criar posiçoes iniciais e finas e faze lo percorrer o caminha, implica implementar djkistra
 			}

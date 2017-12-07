@@ -1,3 +1,5 @@
+//TODO(final) fazer experiencias com numero diferente de carros (e semaforos?) e tirar estatisticas do numero de colisoes, distancia percorrida, tempo demorado, tempo de espera em semaforos
+
 package gui;
 
 import java.util.Vector;
@@ -301,7 +303,7 @@ public class Launcher extends Repast3Launcher {
 
 		Network2DDisplay display = new Network2DDisplay (nodes,WIDTH,HEIGHT);
 		display.setNodesVisible(false);
-		Network2DDisplay display2 = new Network2DDisplay (agents,WIDTH,HEIGHT);
+		Network2DDisplay display2 = new Network2DDisplay (agents, WIDTH,HEIGHT);
 		displaySurf.addDisplayableProbeable (display, "City Traffic");
 		displaySurf.addDisplayableProbeable (display2, "City");
 		displaySurf.addZoomable (display);
@@ -361,20 +363,25 @@ public class Launcher extends Repast3Launcher {
 				
 				//receiverLight = tLight.getAID();
 			//}
+				
+				
+				//55,110 / 100,60
 			
 			//create vehicles
-			int velocity = 1000;//só para testar
-			int[] position = new int[2];;//so para testar
-			for(int i=0; i < numVehicles;i++) {
+			//for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
 				//int velocity = r.nextInt(1500) + 500;	DESCOMENTAR
-				position[0] = 0;//TODO (4)por posiçoes do grafo
-				position[1] = 0;
-				VehicleAgent vehicle = new VehicleAgent(position, velocity, lightAgents);
+				VehicleAgent vehicle = new VehicleAgent(55, 110, 1000, lightAgents, displaySurf);
 				vehicleAgents.add(vehicle);
-				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
-				velocity += 1000;	//só para testar
-			}
+				mainContainer.acceptNewAgent("Vehicle" + 1, vehicle).start();
+				MyNode n2 = new MyNode(vehicle.getX(),vehicle.getY(),vehicle.getS());
+				agents.add(n2);
+				vehicle = new VehicleAgent(100, 60, 2000, lightAgents, displaySurf);
+				vehicleAgents.add(vehicle);
+				mainContainer.acceptNewAgent("Vehicle" + 2, vehicle).start();
+				MyNode n3 = new MyNode(vehicle.getX(),vehicle.getY(),vehicle.getS());
+				agents.add(n3);
+			//}
 						
 		}catch (StaleProxyException e) {
 			e.printStackTrace();
