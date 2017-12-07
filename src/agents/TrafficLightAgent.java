@@ -10,10 +10,9 @@ import java.awt.Color;
 import sajas.core.Agent;
 import sajas.core.behaviours.*;
 
-import uchicago.src.sim.gui.Drawable;
-import uchicago.src.sim.gui.SimGraphics;
-import uchicago.src.sim.space.Object2DGrid;
-import jade.core.AID;
+import uchicago.src.sim.gui.OvalNetworkItem;
+import uchicago.src.sim.gui.DisplaySurface;
+
 import jade.lang.acl.ACLMessage;
 
 @SuppressWarnings("serial")
@@ -26,22 +25,43 @@ public class TrafficLightAgent extends Agent{
 	private String currentColor;
 	private int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
 	private TrafficLightAgent light;
+	private OvalNetworkItem s;
+	private DisplaySurface disp;
 		
-	public TrafficLightAgent(int x, int y,Object2DGrid s) {
+	public TrafficLightAgent(int x, int y, DisplaySurface disp) {
 		IDNumber++;
 		ID=IDNumber;
 		position[0] = x;
 		position[1] = y;
 		light = this;
+		this.s= new OvalNetworkItem(x,y);
+		this.disp=disp;
 	}
 	
+	public OvalNetworkItem getS() {
+		return s;
+	}
+
+	public void setS(OvalNetworkItem s) {
+		this.s = s;
+	}
+	
+	public void changeColor(String color) {
+		
+		if(color=="red") {
+			s.setColor(Color.red);
+		}
+		else if(color=="green") {
+			s.setColor(Color.green);
+		}
+		else {
+			s.setColor(Color.orange);
+		}
+			
+		
+	}
 	public int getID() {
 		return ID;
-	}
-	
-	
-	public void draw() {
-		
 	}
 	
 	public int getX() {
@@ -61,6 +81,8 @@ public class TrafficLightAgent extends Agent{
 		color.addElement("green");
 		color.addElement("orange");
 		currentColor = color.elementAt(i.get());	
+		
+		changeColor(currentColor);
 
 		addBehaviour(new TickerBehaviour(this, 10000){
 
@@ -68,12 +90,20 @@ public class TrafficLightAgent extends Agent{
 				if(i.get() == 2){
 					i.set(0);
 					currentColor = color.elementAt(i.get());
+					changeColor(currentColor);
+					System.out.println(s.getColor());
 				}
 				else{
 					i.set(i.get() + 1);
 					currentColor = color.elementAt(i.get());
+					changeColor(currentColor);
+					System.out.println(s.getColor());
 				}
+				
+				disp.updateDisplay();
 			}
+			
+		
 		});
 		
 		addBehaviour(new CyclicBehaviour(){

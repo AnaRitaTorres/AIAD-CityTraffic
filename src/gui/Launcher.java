@@ -2,7 +2,6 @@ package gui;
 
 import java.util.Vector;
 import java.util.ArrayList;
-import java.util.List;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -13,19 +12,17 @@ import sajas.sim.repast3.Repast3Launcher;
 import sajas.core.Runtime;
 import sajas.wrapper.ContainerController;
 
-import jade.core.AID;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
 
+import uchicago.src.sim.engine.BasicAction;
+import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.gui.DisplaySurface;
-import uchicago.src.sim.space.Object2DGrid;
 import uchicago.src.sim.gui.Network2DDisplay;
-import uchicago.src.sim.gui.Object2DDisplay;
 import uchicago.src.sim.gui.OvalNetworkItem;
-import uchicago.src.sim.gui.RectNetworkItem;
-import uchicago.src.sim.gui.SimGraphics;
+
 import agents.*;
 import graph.*;
 
@@ -36,20 +33,21 @@ public class Launcher extends Repast3Launcher {
 	private static final int WIDTH = 400;
 	private static final int N_RADIOS = 0;
 	private static final int N_VEHICLES = 2;
-	private static final int N_LIGHTS = 1;
+	private static final int N_LIGHTS = 2;
 	private static final int N_NODES = 100;
 	
 	private int numNodes = N_NODES;
 	private Graph grafo;
+	private int color=0;
+	private int time = 2000;
+	private Schedule schedule;
 	private ArrayList<GraphNode> nos = new ArrayList<GraphNode>();
 	private Connection c = new Connection();
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
 	private ArrayList<MyNode> agents = new ArrayList<MyNode>();
 	private ContainerController mainContainer;
-	private Object2DGrid obj;
 	private boolean runInBatchMode;
 	private DisplaySurface displaySurf;
-	private SimGraphics g;
 	private int numRadios = N_RADIOS;
 	private int numVehicles = N_VEHICLES;
 	private int numLights = N_LIGHTS;
@@ -57,6 +55,7 @@ public class Launcher extends Repast3Launcher {
 	public Vector<RadioAgent> radioAgents;
 	public Vector<VehicleAgent> vehicleAgents;
 	public Vector<TrafficLightAgent> lightAgents;
+	Vector<Color> semColor = new Vector<Color>(3);
 		
 	public Launcher(boolean runInBatchMode) {
 		super();
@@ -98,7 +97,11 @@ public class Launcher extends Repast3Launcher {
 	public String getName () {
 	    return "City Traffic";
 	}
-
+	
+	/*public Schedule getSchedule() {
+	    return schedule;
+	}*/
+	
 	public void readFromFile(String file) {
 		
 		ArrayList<GraphNode> adj = new ArrayList<GraphNode>();
@@ -135,12 +138,12 @@ public class Launcher extends Repast3Launcher {
 		grafo = new Graph(nos);
 		
 	}
-
 	
 	@Override
 	public void setup() {
 		super.setup();
-						
+		
+		//schedule = null;
 		if(displaySurf != null) {
 			displaySurf.dispose();
 		}
@@ -148,7 +151,7 @@ public class Launcher extends Repast3Launcher {
 				
 		displaySurf = new DisplaySurface(this,"City Traffic Window 1");
 		registerDisplaySurface("City Traffic Window 1",displaySurf);
-		
+		//schedule = new Schedule ();
 	}
 	
 	@Override
@@ -157,8 +160,8 @@ public class Launcher extends Repast3Launcher {
 		readFromFile(file);
 		if(!runInBatchMode) {
 			buildModel();
-			//buildSchedule();
 			buildDisplay();
+			buildSchedule();
 		}
 		
 		displaySurf.display();
@@ -171,7 +174,6 @@ public class Launcher extends Repast3Launcher {
 		ConnectNodesVisual();
 		
 	}
-	
 	
 	public void TransformNodes( ArrayList<GraphNode> nos) {
 		
@@ -231,22 +233,81 @@ public class Launcher extends Repast3Launcher {
 	
 	public void buildModel() {
 		
+		semColor.addElement(Color.red);
+		semColor.addElement(Color.green);
+		semColor.addElement(Color.orange);
 		buildGraph();
+		
 	}
 	
 	public void buildSchedule() {
-		System.out.println("Running BuildSchedule");
+		
+		/*class ChangeLight extends BasicAction {
+			public void execute() {
+				if(color==2) {
+					lightAgents.get(0).changeColor(semColor.get(color));
+					color=0;
+				}
+				else {
+					lightAgents.get(0).changeColor(semColor.get(color));
+					color++;
+				}
+				displaySurf.updateDisplay(); 
+			}
+			
+		}*/
+		
+		//ChangeLight run = new ChangeLight();
+		//schedule.scheduleActionBeginning(1000,run,500.0);
+		
+		/*schedule.scheduleActionAtInterval(time, new BasicAction() {
+			public void execute() {
+				
+		    	if(color==0) {
+		    		lightAgents.get(0).changeColor(semColor.get(color));  
+		    		color++;
+		    		time = time +2000;
+		    	 }
+		    	displaySurf.updateDisplay(); 
+		     }
+		},2000);
+		
+		schedule.scheduleActionBeginning(time, new BasicAction() {
+			public void execute() {
+				
+		    	if(color==1) {
+		    		lightAgents.get(0).changeColor(semColor.get(color));  
+		    		color++;
+		    		time= time+2000;
+		    	 }
+		    	 displaySurf.updateDisplay(); 
+			 }
+		},2000);
+		
+		schedule.scheduleActionBeginning(time, new BasicAction() {
+			public void execute() {
+				
+		    	if(color==2) {
+		    		lightAgents.get(0).changeColor(semColor.get(color));  
+		    		color=0;
+		    		time=time+2000;
+		    	 }
+		    	 displaySurf.updateDisplay(); 
+			 }
+		},2000);*/
 	}
 	
 	public void buildDisplay() {
 
 		Network2DDisplay display = new Network2DDisplay (nodes,WIDTH,HEIGHT);
-		display.setNodesVisible(true);
+		display.setNodesVisible(false);
 		Network2DDisplay display2 = new Network2DDisplay (agents,WIDTH,HEIGHT);
 		displaySurf.addDisplayableProbeable (display, "City Traffic");
 		displaySurf.addDisplayableProbeable (display2, "City");
 		displaySurf.addZoomable (display);
 		displaySurf.setBackground (java.awt.Color.white);
+		
+		
 	}
 	
 	@Override
@@ -271,7 +332,7 @@ public class Launcher extends Repast3Launcher {
 		vehicleAgents= new Vector<VehicleAgent>();
 		lightAgents= new Vector<TrafficLightAgent>();
 		//AID receiverLight = null;
-		AID receiverRadio = null;
+		//AID receiverRadio = null;
 		
 		try {
 			
@@ -283,17 +344,23 @@ public class Launcher extends Repast3Launcher {
 			}
 			
 			//create traffic lights
-			for(int i=0; i < numLights;i++) {
-				TrafficLightAgent tLight = new TrafficLightAgent(25,50,obj);
+			//for(int i=0; i < numLights;i++) {
+				//TrafficLightAgent tLight1 = new TrafficLightAgent(160,50);
+				TrafficLightAgent tLight = new TrafficLightAgent(100,110,displaySurf);
 				lightAgents.add(tLight);
-				mainContainer.acceptNewAgent("Light" + i, tLight).start();
-				OvalNetworkItem light = new OvalNetworkItem(25,50);
-				light.setColor(Color.black);
-				MyNode n = new MyNode(25,50,light);
+				//lightAgents.add(tLight1);
+				mainContainer.acceptNewAgent("Light" + 0, tLight).start();
+				//mainContainer.acceptNewAgent("Light" + 1, tLight1).start();
+				
+				
+				MyNode n = new MyNode(tLight.getX(),tLight.getY(),tLight.getS());
+				//MyNode n1 = new MyNode(tLight1.getX(),tLight1.getY(),tLight1.getS());
+				
 				agents.add(n);
+				//agents.add(n1);
 				
 				//receiverLight = tLight.getAID();
-			}
+			//}
 			
 			//create vehicles
 			int velocity = 1000;//só para testar
