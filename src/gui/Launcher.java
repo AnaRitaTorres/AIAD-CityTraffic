@@ -172,6 +172,7 @@ public class Launcher extends Repast3Launcher {
 		ConnectNodes();
 		TransformNodes(nos);
 		ConnectNodesVisual();
+		crossRoads();
 		
 	}
 	
@@ -231,6 +232,35 @@ public class Launcher extends Repast3Launcher {
 		c.connect2Nodes(nodes, 205, 190,210 , 160);
 	}
 	
+	public void crossRoads() {
+		 
+		OvalNetworkItem o1 = new OvalNetworkItem(295,240);
+		OvalNetworkItem o2 = new OvalNetworkItem(265,110);
+		OvalNetworkItem o3 = new OvalNetworkItem(160,110);
+		OvalNetworkItem o4 = new OvalNetworkItem(190,240);
+		OvalNetworkItem o5 = new OvalNetworkItem(40,350);
+		
+		o1.setColor(Color.black);
+		o2.setColor(Color.black);
+		o3.setColor(Color.black);
+		o4.setColor(Color.black);
+		o5.setColor(Color.black);
+		
+		MyNode c1 = new MyNode(295,240,o1);
+		MyNode c2 = new MyNode(265,110,o2);
+		MyNode c3 = new MyNode(160,110,o3);
+		MyNode c4 = new MyNode(190,240,o4);
+		MyNode c5 = new MyNode(40,350,o5);
+		
+		agents.add(c1);
+		agents.add(c2);
+		agents.add(c3);
+		agents.add(c4);
+		agents.add(c5);
+		
+		
+	}
+	
 	public void buildModel() {
 		
 		semColor.addElement(Color.red);
@@ -242,59 +272,7 @@ public class Launcher extends Repast3Launcher {
 	
 	public void buildSchedule() {
 		
-		/*class ChangeLight extends BasicAction {
-			public void execute() {
-				if(color==2) {
-					lightAgents.get(0).changeColor(semColor.get(color));
-					color=0;
-				}
-				else {
-					lightAgents.get(0).changeColor(semColor.get(color));
-					color++;
-				}
-				displaySurf.updateDisplay(); 
-			}
-			
-		}*/
 		
-		//ChangeLight run = new ChangeLight();
-		//schedule.scheduleActionBeginning(1000,run,500.0);
-		
-		/*schedule.scheduleActionAtInterval(time, new BasicAction() {
-			public void execute() {
-				
-		    	if(color==0) {
-		    		lightAgents.get(0).changeColor(semColor.get(color));  
-		    		color++;
-		    		time = time +2000;
-		    	 }
-		    	displaySurf.updateDisplay(); 
-		     }
-		},2000);
-		
-		schedule.scheduleActionBeginning(time, new BasicAction() {
-			public void execute() {
-				
-		    	if(color==1) {
-		    		lightAgents.get(0).changeColor(semColor.get(color));  
-		    		color++;
-		    		time= time+2000;
-		    	 }
-		    	 displaySurf.updateDisplay(); 
-			 }
-		},2000);
-		
-		schedule.scheduleActionBeginning(time, new BasicAction() {
-			public void execute() {
-				
-		    	if(color==2) {
-		    		lightAgents.get(0).changeColor(semColor.get(color));  
-		    		color=0;
-		    		time=time+2000;
-		    	 }
-		    	 displaySurf.updateDisplay(); 
-			 }
-		},2000);*/
 	}
 	
 	public void buildDisplay() {

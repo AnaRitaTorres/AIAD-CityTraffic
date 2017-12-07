@@ -26,6 +26,7 @@ public class CrossRoadTrafficLights extends Behaviour{
 		//send msg to the other light to knows its color
 		switch(step){
 		case 0:
+			System.out.println("Cor?");
 			cfp.addReceiver(light2.getAID());
 			cfp.setContent("Cor?");
 			cfp.setConversationId("cor");
@@ -36,14 +37,15 @@ public class CrossRoadTrafficLights extends Behaviour{
 			//wait for response by traffic light
 			reply= light1.receive();
 			if(reply != null){
+				System.out.println(reply.getContent());
 				step = 2;
 			}
 			break;
 		case 2:
 			if(reply.getContent().equals("red"))
-				light1.changeColor("green");
+				light2.changeColor("green");
 			else 				
-				light1.changeColor("red");//TODO ver a situação do laranja
+				light2.changeColor("red");//TODO ver a situação do laranja
 			
 			step=4;
 			break;

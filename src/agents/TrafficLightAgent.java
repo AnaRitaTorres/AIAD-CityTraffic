@@ -15,6 +15,9 @@ import uchicago.src.sim.gui.DisplaySurface;
 
 import jade.lang.acl.ACLMessage;
 
+import behaviours.CrossRoadTrafficLights;
+import behaviours.FindOtherTrafficLights;
+
 @SuppressWarnings("serial")
 public class TrafficLightAgent extends Agent{
 	
@@ -59,11 +62,16 @@ public class TrafficLightAgent extends Agent{
 		else {
 			s.setColor(Color.orange);
 		}
-			
+		
 		
 	}
 	public int getID() {
 		return ID;
+	}
+	
+	public int[] getPosition() {
+		
+		return position;
 	}
 	
 	public int getX() {
@@ -93,13 +101,11 @@ public class TrafficLightAgent extends Agent{
 					i.set(0);
 					currentColor = color.elementAt(i.get());
 					changeColor(currentColor);
-					System.out.println(s.getColor());
 				}
 				else{
 					i.set(i.get() + 1);
 					currentColor = color.elementAt(i.get());
 					changeColor(currentColor);
-					System.out.println(s.getColor());
 				}
 				
 				disp.updateDisplay();
@@ -130,13 +136,21 @@ public class TrafficLightAgent extends Agent{
 							reply.setConversationId("position");
 							light.send(reply);
 						}
+						else if(msg.getConversationId().equals("position1")) {
+							reply.setPerformative(ACLMessage.INFORM);
+							String pos = "" + position[0] + ";" +position[1] +"";
+							reply.setContent(pos);
+							reply.setConversationId("position");
+							light.send(reply);
+						}
 					}
 				}
 			}
 
 		});
 		
-		//addBehaviour(CrossRoadTrafficLights(trafficLights.get(0),trafficLights.get(1)));
+		//addBehaviour(new CrossRoadTrafficLights(trafficLights.get(0),trafficLights.get(1)));
+		addBehaviour(new FindOtherTrafficLights(trafficLights.get(0),trafficLights));
 		
 	}
 		

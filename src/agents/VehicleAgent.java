@@ -25,7 +25,7 @@ public class VehicleAgent extends Agent{
 	private Vector<TrafficLightAgent> trafficLights;
 	public VehicleAgent car = this;
 	private AID lightAtCarPos;
-	private int step;
+	private int step;	
 	private int velocity;
 	private RectNetworkItem r;
 	Behaviour searchLight, dealLight;
@@ -75,7 +75,7 @@ public class VehicleAgent extends Agent{
 				step = 0;
 				lightAtCarPos = null;
 
-				System.out.println("car position: " + position[0] + position [1]);
+				//System.out.println("car position: " + position[0] + position [1]);
 				car.addBehaviour(new Behaviour() {
 
 					@Override
