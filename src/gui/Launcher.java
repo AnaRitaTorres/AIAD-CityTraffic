@@ -345,19 +345,19 @@ public class Launcher extends Repast3Launcher {
 			
 			//create traffic lights
 			//for(int i=0; i < numLights;i++) {
-				//TrafficLightAgent tLight1 = new TrafficLightAgent(160,50);
-				TrafficLightAgent tLight = new TrafficLightAgent(100,110,displaySurf);
+				TrafficLightAgent tLight1 = new TrafficLightAgent(160,50, lightAgents,displaySurf);
+				TrafficLightAgent tLight = new TrafficLightAgent(100,110,lightAgents,displaySurf);
 				lightAgents.add(tLight);
-				//lightAgents.add(tLight1);
+				lightAgents.add(tLight1);
 				mainContainer.acceptNewAgent("Light" + 0, tLight).start();
-				//mainContainer.acceptNewAgent("Light" + 1, tLight1).start();
+				mainContainer.acceptNewAgent("Light" + 1, tLight1).start();
 				
 				
 				MyNode n = new MyNode(tLight.getX(),tLight.getY(),tLight.getS());
-				//MyNode n1 = new MyNode(tLight1.getX(),tLight1.getY(),tLight1.getS());
+				MyNode n1 = new MyNode(tLight1.getX(),tLight1.getY(),tLight1.getS());
 				
 				agents.add(n);
-				//agents.add(n1);
+				agents.add(n1);
 				
 				//receiverLight = tLight.getAID();
 			//}
@@ -374,8 +374,9 @@ public class Launcher extends Repast3Launcher {
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
 				
-				MyNode n1 = new MyNode(vehicle.getX(),vehicle.getY(),vehicle.getS());
-				agents.add(n1);
+				//DESENHA O CARRO
+				//MyNode n1 = new MyNode(vehicle.getX(),vehicle.getY(),vehicle.getS());
+				//agents.add(n1);
 				velocity += 1000;	//só para testar
 				position[0] = 2;//só para testar
 				position[1] = 2;//so para testar

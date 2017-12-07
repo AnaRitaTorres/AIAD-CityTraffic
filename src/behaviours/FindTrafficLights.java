@@ -8,6 +8,7 @@ import agents.TrafficLightAgent;
 import agents.VehicleAgent;
 import jade.core.AID;
 
+@SuppressWarnings("serial")
 public class FindTrafficLights extends Behaviour{
 
 	private int step = 0;

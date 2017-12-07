@@ -27,8 +27,9 @@ public class TrafficLightAgent extends Agent{
 	private TrafficLightAgent light;
 	private OvalNetworkItem s;
 	private DisplaySurface disp;
+	private Vector<TrafficLightAgent> trafficLights;
 		
-	public TrafficLightAgent(int x, int y, DisplaySurface disp) {
+	public TrafficLightAgent(int x, int y, Vector<TrafficLightAgent> trafficLights,DisplaySurface disp) {
 		IDNumber++;
 		ID=IDNumber;
 		position[0] = x;
@@ -36,6 +37,7 @@ public class TrafficLightAgent extends Agent{
 		light = this;
 		this.s= new OvalNetworkItem(x,y);
 		this.disp=disp;
+		this.trafficLights = trafficLights;
 	}
 	
 	public OvalNetworkItem getS() {
@@ -133,6 +135,8 @@ public class TrafficLightAgent extends Agent{
 			}
 
 		});
+		
+		//addBehaviour(CrossRoadTrafficLights(trafficLights.get(0),trafficLights.get(1)));
 		
 	}
 		
