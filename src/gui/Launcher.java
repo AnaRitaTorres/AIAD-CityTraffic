@@ -205,6 +205,8 @@ public class Launcher extends Repast3Launcher {
 		grafo.connect2Nodes(nos, 70, 55, 360, 350);
 		grafo.connect2Nodes(nos,160, 145, 350, 360);
 		grafo.connect2Nodes(nos, 175, 160, 340, 350);
+		
+	
 	}
 	
 	public void ConnectNodesVisual() {
@@ -230,6 +232,9 @@ public class Launcher extends Repast3Launcher {
 		c.connect2Nodes(nodes,350, 330, 210 ,250);
 		c.connect2Nodes(nodes, 190, 175, 160, 170);
 		c.connect2Nodes(nodes, 205, 190,210 , 160);
+		
+		
+	
 	}
 	
 	public void crossRoads() {
