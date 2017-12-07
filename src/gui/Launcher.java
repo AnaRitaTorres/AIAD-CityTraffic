@@ -39,6 +39,7 @@ public class Launcher extends Repast3Launcher {
 	private int numNodes = N_NODES;
 	private Graph grafo;
 	private int color=0;
+	private int time = 2000;
 	private Schedule schedule;
 	private ArrayList<GraphNode> nos = new ArrayList<GraphNode>();
 	private Connection c = new Connection();
@@ -97,9 +98,9 @@ public class Launcher extends Repast3Launcher {
 	    return "City Traffic";
 	}
 	
-	public Schedule getSchedule() {
+	/*public Schedule getSchedule() {
 	    return schedule;
-	}
+	}*/
 	
 	public void readFromFile(String file) {
 		
@@ -142,7 +143,7 @@ public class Launcher extends Repast3Launcher {
 	public void setup() {
 		super.setup();
 		
-		schedule = null;
+		//schedule = null;
 		if(displaySurf != null) {
 			displaySurf.dispose();
 		}
@@ -150,7 +151,7 @@ public class Launcher extends Repast3Launcher {
 				
 		displaySurf = new DisplaySurface(this,"City Traffic Window 1");
 		registerDisplaySurface("City Traffic Window 1",displaySurf);
-		schedule = new Schedule (1);
+		//schedule = new Schedule ();
 	}
 	
 	@Override
@@ -241,38 +242,59 @@ public class Launcher extends Repast3Launcher {
 	
 	public void buildSchedule() {
 		
-		schedule.scheduleActionBeginning(1, new BasicAction() {
+		/*class ChangeLight extends BasicAction {
+			public void execute() {
+				if(color==2) {
+					lightAgents.get(0).changeColor(semColor.get(color));
+					color=0;
+				}
+				else {
+					lightAgents.get(0).changeColor(semColor.get(color));
+					color++;
+				}
+				displaySurf.updateDisplay(); 
+			}
+			
+		}*/
+		
+		//ChangeLight run = new ChangeLight();
+		//schedule.scheduleActionBeginning(1000,run,500.0);
+		
+		/*schedule.scheduleActionAtInterval(time, new BasicAction() {
 			public void execute() {
 				
 		    	if(color==0) {
 		    		lightAgents.get(0).changeColor(semColor.get(color));  
 		    		color++;
+		    		time = time +2000;
 		    	 }
-		    	 displaySurf.updateDisplay(); 
-			 }
-		},10);
+		    	displaySurf.updateDisplay(); 
+		     }
+		},2000);
 		
-		schedule.scheduleActionBeginning(1, new BasicAction() {
+		schedule.scheduleActionBeginning(time, new BasicAction() {
 			public void execute() {
 				
 		    	if(color==1) {
 		    		lightAgents.get(0).changeColor(semColor.get(color));  
 		    		color++;
+		    		time= time+2000;
 		    	 }
 		    	 displaySurf.updateDisplay(); 
 			 }
-		},10);
+		},2000);
 		
-		schedule.scheduleActionBeginning(1, new BasicAction() {
+		schedule.scheduleActionBeginning(time, new BasicAction() {
 			public void execute() {
 				
 		    	if(color==2) {
 		    		lightAgents.get(0).changeColor(semColor.get(color));  
 		    		color=0;
+		    		time=time+2000;
 		    	 }
 		    	 displaySurf.updateDisplay(); 
 			 }
-		},10);
+		},2000);*/
 	}
 	
 	public void buildDisplay() {
@@ -284,6 +306,7 @@ public class Launcher extends Repast3Launcher {
 		displaySurf.addDisplayableProbeable (display2, "City");
 		displaySurf.addZoomable (display);
 		displaySurf.setBackground (java.awt.Color.white);
+		
 		
 	}
 	
@@ -323,7 +346,7 @@ public class Launcher extends Repast3Launcher {
 			//create traffic lights
 			//for(int i=0; i < numLights;i++) {
 				//TrafficLightAgent tLight1 = new TrafficLightAgent(160,50);
-				TrafficLightAgent tLight = new TrafficLightAgent(100,110);
+				TrafficLightAgent tLight = new TrafficLightAgent(100,110,displaySurf);
 				lightAgents.add(tLight);
 				//lightAgents.add(tLight1);
 				mainContainer.acceptNewAgent("Light" + 0, tLight).start();

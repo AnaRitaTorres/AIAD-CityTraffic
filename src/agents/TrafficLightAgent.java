@@ -11,6 +11,8 @@ import sajas.core.Agent;
 import sajas.core.behaviours.*;
 
 import uchicago.src.sim.gui.OvalNetworkItem;
+import uchicago.src.sim.gui.DisplaySurface;
+
 import jade.lang.acl.ACLMessage;
 
 @SuppressWarnings("serial")
@@ -24,14 +26,16 @@ public class TrafficLightAgent extends Agent{
 	private int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
 	private TrafficLightAgent light;
 	private OvalNetworkItem s;
+	private DisplaySurface disp;
 		
-	public TrafficLightAgent(int x, int y) {
+	public TrafficLightAgent(int x, int y, DisplaySurface disp) {
 		IDNumber++;
 		ID=IDNumber;
 		position[0] = x;
 		position[1] = y;
 		light = this;
 		this.s= new OvalNetworkItem(x,y);
+		this.disp=disp;
 	}
 	
 	public OvalNetworkItem getS() {
@@ -85,7 +89,11 @@ public class TrafficLightAgent extends Agent{
 					changeColor(Color.green);
 					System.out.println(s.getColor());
 				}
+				
+				disp.updateDisplay();
 			}
+			
+		
 		});
 		
 		addBehaviour(new CyclicBehaviour(){
