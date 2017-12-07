@@ -31,10 +31,8 @@ public class TrafficLightAgent extends Agent{
 	public TrafficLightAgent(int x, int y, DisplaySurface disp) {
 		IDNumber++;
 		ID=IDNumber;
-		//position[0] = x;
-		//position[1] = y;
-		position[0] = 3;
-		position[1] = 3;
+		position[0] = x;
+		position[1] = y;
 		light = this;
 		this.s= new OvalNetworkItem(x,y);
 		this.disp=disp;
