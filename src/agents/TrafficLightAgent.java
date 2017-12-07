@@ -30,8 +30,10 @@ public class TrafficLightAgent extends Agent{
 	public TrafficLightAgent(int x, int y,Object2DGrid s) {
 		IDNumber++;
 		ID=IDNumber;
-		position[0] = x;
-		position[1] = y;
+		//position[0] = x;
+		//position[1] = y;
+		position[0] = 3;
+		position[1] = 3;
 		light = this;
 	}
 	
