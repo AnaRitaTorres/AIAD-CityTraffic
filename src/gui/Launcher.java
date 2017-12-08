@@ -41,7 +41,7 @@ public class Launcher extends Repast3Launcher {
 	private int color=0;
 	private int time = 2000;
 	private Schedule schedule;
-	private ArrayList<GraphNode> nos = new ArrayList<GraphNode>();
+	private ArrayList<GraphNode> graphNodes = new ArrayList<GraphNode>();
 	private Connection c = new Connection();
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
 	private ArrayList<MyNode> agents = new ArrayList<MyNode>();
@@ -127,7 +127,7 @@ public class Launcher extends Repast3Launcher {
 				int y= Integer.valueOf(nodesRead[1]);
 				
 				GraphNode n = new GraphNode(x,y,adj);
-				nos.add(n);
+				graphNodes.add(n);
 			}
 				
 			in.close();
@@ -135,7 +135,7 @@ public class Launcher extends Repast3Launcher {
 				System.err.println("FILE STREAM ERROR: " + e.getMessage());
 			}
 		
-		grafo = new Graph(nos);
+		grafo = new Graph(graphNodes);
 		
 	}
 	
@@ -170,149 +170,149 @@ public class Launcher extends Repast3Launcher {
 	public void buildGraph() {
 		
 		ConnectNodes();
-		TransformNodes(nos);
+		TransformNodes(graphNodes);
 		ConnectNodesVisual();
 		crossRoads();
 		
 	}
 	
-	public void TransformNodes( ArrayList<GraphNode> nos) {
+	public void TransformNodes( ArrayList<GraphNode> graphNodes) {
 		
-		for(int i=0; i < nos.size(); i++) {
-			OvalNetworkItem o = new OvalNetworkItem(nos.get(i).getX(),nos.get(i).getY());
-			MyNode n = new MyNode(nos.get(i).getX(),nos.get(i).getY(),o);
+		for(int i=0; i < graphNodes.size(); i++) {
+			OvalNetworkItem o = new OvalNetworkItem(graphNodes.get(i).getX(),graphNodes.get(i).getY());
+			MyNode n = new MyNode(graphNodes.get(i).getX(),graphNodes.get(i).getY(),o);
 			nodes.add(n);
 		}
 	}
 	
 	public void removeEgdeGraph() {
-		for(int i=0; i < nos.size(); i++) {
+		for(int i=0; i < graphNodes.size(); i++) {
 			
-			if(nos.get(i).getY()==240) {
-				if(nos.get(i).getX()==310) {
-					nos.get(i).removeAdj(310,250);
+			if(graphNodes.get(i).getY()==240) {
+				if(graphNodes.get(i).getX()==310) {
+					graphNodes.get(i).removeAdj(310,250);
 				}
-				else if(nos.get(i).getX()==320) {
-					nos.get(i).removeAdj(320,250);
+				else if(graphNodes.get(i).getX()==320) {
+					graphNodes.get(i).removeAdj(320,250);
 				}
-				else if(nos.get(i).getX()==330) {
-					nos.get(i).removeAdj(330, 250);
+				else if(graphNodes.get(i).getX()==330) {
+					graphNodes.get(i).removeAdj(330, 250);
 				}
 			}
-			else if(nos.get(i).getY()==50) {
-				if(nos.get(i).getX()==115) {
-					nos.get(i).removeAdj(115, 110);
+			else if(graphNodes.get(i).getY()==50) {
+				if(graphNodes.get(i).getX()==115) {
+					graphNodes.get(i).removeAdj(115, 110);
 				}
-				else if(nos.get(i).getX()==130) {
-					nos.get(i).removeAdj(130, 110);
+				else if(graphNodes.get(i).getX()==130) {
+					graphNodes.get(i).removeAdj(130, 110);
 					
 				}
-				else if(nos.get(i).getX()==145) {
-					nos.get(i).removeAdj(145, 110);
+				else if(graphNodes.get(i).getX()==145) {
+					graphNodes.get(i).removeAdj(145, 110);
 				}
-				else if(nos.get(i).getX()==175) {
-					nos.get(i).removeAdj(175, 240);
-					nos.get(i).removeAdj(175, 110);
+				else if(graphNodes.get(i).getX()==175) {
+					graphNodes.get(i).removeAdj(175, 240);
+					graphNodes.get(i).removeAdj(175, 110);
 					
 				}
-				else if(nos.get(i).getX()==190) {
-					nos.get(i).removeAdj(190, 160);
-					nos.get(i).removeAdj(190, 110);
+				else if(graphNodes.get(i).getX()==190) {
+					graphNodes.get(i).removeAdj(190, 160);
+					graphNodes.get(i).removeAdj(190, 110);
 				}
-				else if(nos.get(i).getX()==205) {
-					nos.get(i).removeAdj(205, 210);
-					nos.get(i).removeAdj(205, 50);
+				else if(graphNodes.get(i).getX()==205) {
+					graphNodes.get(i).removeAdj(205, 210);
+					graphNodes.get(i).removeAdj(205, 50);
 				}
-				else if(nos.get(i).getX()==40) {
-					nos.get(i).removeAdj(40, 110);
+				else if(graphNodes.get(i).getX()==40) {
+					graphNodes.get(i).removeAdj(40, 110);
 				}
-				else if(nos.get(i).getX()==55) {
-					nos.get(i).removeAdj(55, 110);
+				else if(graphNodes.get(i).getX()==55) {
+					graphNodes.get(i).removeAdj(55, 110);
 				}
-				else if(nos.get(i).getX()==70) {
-					nos.get(i).removeAdj(70, 110);
+				else if(graphNodes.get(i).getX()==70) {
+					graphNodes.get(i).removeAdj(70, 110);
 				}
-				else if(nos.get(i).getX()==85) {
-					nos.get(i).removeAdj(85, 110);
-				}
-			}
-			else if(nos.get(i).getY()==180){
-				if(nos.get(i).getX()==40) {
-					nos.get(i).removeAdj(40, 280);
-					nos.get(i).removeAdj(40, 240);
-				}
-				else if(nos.get(i).getX()==55) {
-					nos.get(i).removeAdj(55, 280);
-					nos.get(i).removeAdj(55, 240);
+				else if(graphNodes.get(i).getX()==85) {
+					graphNodes.get(i).removeAdj(85, 110);
 				}
 			}
-			else if(nos.get(i).getY()==210) {
-				if(nos.get(i).getX()==130){
-					nos.get(i).removeAdj(130,300);
+			else if(graphNodes.get(i).getY()==180){
+				if(graphNodes.get(i).getX()==40) {
+					graphNodes.get(i).removeAdj(40, 280);
+					graphNodes.get(i).removeAdj(40, 240);
 				}
-				else if(nos.get(i).getX()==145){
-					nos.get(i).removeAdj(145, 300);
+				else if(graphNodes.get(i).getX()==55) {
+					graphNodes.get(i).removeAdj(55, 280);
+					graphNodes.get(i).removeAdj(55, 240);
+				}
+			}
+			else if(graphNodes.get(i).getY()==210) {
+				if(graphNodes.get(i).getX()==130){
+					graphNodes.get(i).removeAdj(130,300);
+				}
+				else if(graphNodes.get(i).getX()==145){
+					graphNodes.get(i).removeAdj(145, 300);
 				}
 				
 			}
-			else if (nos.get(i).getY()==250 && nos.get(i).getX()==330){
-				nos.get(i).removeAdj(350, 210);
+			else if (graphNodes.get(i).getY()==250 && graphNodes.get(i).getX()==330){
+				graphNodes.get(i).removeAdj(350, 210);
 			}
-			else if(nos.get(i).getY()== 130 && nos.get(i).getX()==310) {
-				nos.get(i).removeAdj(310, 240);
+			else if(graphNodes.get(i).getY()== 130 && graphNodes.get(i).getX()==310) {
+				graphNodes.get(i).removeAdj(310, 240);
 			}
-			else if(nos.get(i).getY()==240) {
-				if(nos.get(i).getX()==115) {
-					nos.get(i).removeAdj(160, 240);
+			else if(graphNodes.get(i).getY()==240) {
+				if(graphNodes.get(i).getX()==115) {
+					graphNodes.get(i).removeAdj(160, 240);
 				}
-				else if (nos.get(i).getX()==130) {
-					nos.get(i).removeAdj(130, 300);
+				else if (graphNodes.get(i).getX()==130) {
+					graphNodes.get(i).removeAdj(130, 300);
 				}
-				else if (nos.get(i).getX()==145) {
-					nos.get(i).removeAdj(145, 300);
+				else if (graphNodes.get(i).getX()==145) {
+					graphNodes.get(i).removeAdj(145, 300);
 				}
-				else if (nos.get(i).getX()==130) {
-					nos.get(i).removeAdj(130, 210);
+				else if (graphNodes.get(i).getX()==130) {
+					graphNodes.get(i).removeAdj(130, 210);
 				}
-				else if (nos.get(i).getX()==145) {
-					nos.get(i).removeAdj(145, 210);
-				}
-			}
-			else if(nos.get(i).getY()==110) {
-				if(nos.get(i).getX()==175) {
-					nos.get(i).removeAdj(175, 240);
-				}
-				else if(nos.get(i).getX()==190) {
-					nos.get(i).removeAdj(190, 160);
-				}
-				else if(nos.get(i).getX()==205) {
-					nos.get(i).removeAdj(205,210);
-				}
-				else if(nos.get(i).getX()==205) {
-					nos.get(i).removeAdj(205,50);
+				else if (graphNodes.get(i).getX()==145) {
+					graphNodes.get(i).removeAdj(145, 210);
 				}
 			}
-			else if(nos.get(i).getY()==210) {
-				if(nos.get(i).getX()==130) {
-					nos.get(i).removeAdj(130, 240);
+			else if(graphNodes.get(i).getY()==110) {
+				if(graphNodes.get(i).getX()==175) {
+					graphNodes.get(i).removeAdj(175, 240);
 				}
-				else if(nos.get(i).getX()==145) {
-					nos.get(i).removeAdj(145, 240);
+				else if(graphNodes.get(i).getX()==190) {
+					graphNodes.get(i).removeAdj(190, 160);
+				}
+				else if(graphNodes.get(i).getX()==205) {
+					graphNodes.get(i).removeAdj(205,210);
+				}
+				else if(graphNodes.get(i).getX()==205) {
+					graphNodes.get(i).removeAdj(205,50);
+				}
+			}
+			else if(graphNodes.get(i).getY()==210) {
+				if(graphNodes.get(i).getX()==130) {
+					graphNodes.get(i).removeAdj(130, 240);
+				}
+				else if(graphNodes.get(i).getX()==145) {
+					graphNodes.get(i).removeAdj(145, 240);
 				}
 			}
 			
-			else if(nos.get(i).getY()==280) {
-				if(nos.get(i).getX()==40) {
-					nos.get(i).removeAdj(40, 240);
-				}else if(nos.get(i).getX()==55) {
-					nos.get(i).removeAdj(55, 240);
+			else if(graphNodes.get(i).getY()==280) {
+				if(graphNodes.get(i).getX()==40) {
+					graphNodes.get(i).removeAdj(40, 240);
+				}else if(graphNodes.get(i).getX()==55) {
+					graphNodes.get(i).removeAdj(55, 240);
 				}
 			}
-			else if(nos.get(i).getY()==300) {
-				if(nos.get(i).getX()==130) {
-					nos.get(i).removeAdj(130, 240);
-				}else if(nos.get(i).getX()==145) {
-					nos.get(i).removeAdj(145, 240);
+			else if(graphNodes.get(i).getY()==300) {
+				if(graphNodes.get(i).getX()==130) {
+					graphNodes.get(i).removeAdj(130, 240);
+				}else if(graphNodes.get(i).getX()==145) {
+					graphNodes.get(i).removeAdj(145, 240);
 				}
 				
 			}
@@ -322,29 +322,29 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public void ConnectNodes() {
-		grafo.connectVertical(nos);
-		grafo.connectStreetY(nos, 110);
-		grafo.connectStreetY(nos, 50);
-		grafo.connectStreetY(nos,360);
-		grafo.connectStreetY(nos, 240);
-		grafo.connectToFrom(nos,55, 25, 350);
-		grafo.connectToFrom(nos,150, 90,130);
-		grafo.connectToFrom(nos,350, 295,130);
-		grafo.connectToFrom(nos, 265, 175, 340);
-		grafo.connectToFrom(nos,330 , 295, 250);
-		grafo.connect2Nodes(nos,350, 330, 210 ,250);
-		grafo.connect2Nodes(nos, 190, 175, 160, 170);
-		grafo.connect2Nodes(nos, 205, 190,210 , 160);
-		grafo.connect2Nodes(nos, 265, 245, 310, 340);
-		grafo.connect2Nodes(nos,280,265,300,310);
-		grafo.connect2Nodes(nos, 295, 280, 260, 300);
-		grafo.connect2Nodes(nos, 70, 55, 360, 350);
-		grafo.connect2Nodes(nos,160, 145, 350, 360);
-		grafo.connect2Nodes(nos, 175, 160, 340, 350);
-		grafo.connect2Nodes(nos, 350, 330, 210, 210);
-		grafo.connect2Nodes(nos, 145, 130, 300, 300);
-		grafo.connect2Nodes(nos, 55, 40, 280, 280);
-		grafo.connect2Nodes(nos, 55, 40, 180, 180);
+		grafo.connectVertical(graphNodes);
+		grafo.connectStreetY(graphNodes, 110);
+		grafo.connectStreetY(graphNodes, 50);
+		grafo.connectStreetY(graphNodes,360);
+		grafo.connectStreetY(graphNodes, 240);
+		grafo.connectToFrom(graphNodes,55, 25, 350);
+		grafo.connectToFrom(graphNodes,150, 90,130);
+		grafo.connectToFrom(graphNodes,350, 295,130);
+		grafo.connectToFrom(graphNodes, 265, 175, 340);
+		grafo.connectToFrom(graphNodes,330 , 295, 250);
+		grafo.connect2Nodes(graphNodes,350, 330, 210 ,250);
+		grafo.connect2Nodes(graphNodes, 190, 175, 160, 170);
+		grafo.connect2Nodes(graphNodes, 205, 190,210 , 160);
+		grafo.connect2Nodes(graphNodes, 265, 245, 310, 340);
+		grafo.connect2Nodes(graphNodes,280,265,300,310);
+		grafo.connect2Nodes(graphNodes, 295, 280, 260, 300);
+		grafo.connect2Nodes(graphNodes, 70, 55, 360, 350);
+		grafo.connect2Nodes(graphNodes,160, 145, 350, 360);
+		grafo.connect2Nodes(graphNodes, 175, 160, 340, 350);
+		grafo.connect2Nodes(graphNodes, 350, 330, 210, 210);
+		grafo.connect2Nodes(graphNodes, 145, 130, 300, 300);
+		grafo.connect2Nodes(graphNodes, 55, 40, 280, 280);
+		grafo.connect2Nodes(graphNodes, 55, 40, 180, 180);
 		
 		removeEgdeGraph();
 		
