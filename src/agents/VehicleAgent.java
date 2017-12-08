@@ -164,7 +164,7 @@ public class VehicleAgent extends Agent{
 			@Override
 			protected void onTick() {  
 				
-				System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
+				//System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
 				/*car.addBehaviour(new Behaviour() {
 
 					@Override
@@ -209,7 +209,7 @@ public class VehicleAgent extends Agent{
 							break;
 						case 4:
 
-							System.out.println("TESTE");
+							//System.out.println("TESTE");
 
 							
 							//TODO hardcoded vai ser para mudar para mover no grafo

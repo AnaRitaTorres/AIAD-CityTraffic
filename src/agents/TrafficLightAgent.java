@@ -16,7 +16,6 @@ import uchicago.src.sim.gui.DisplaySurface;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import behaviours.CrossRoadTrafficLights;
-import behaviours.FindOtherTrafficLights;
 import graph.GraphNode;
 
 @SuppressWarnings("serial")
@@ -139,15 +138,14 @@ public class TrafficLightAgent extends Agent{
 							reply.setContent(pos);
 							reply.setConversationId("position");
 							myAgent.send(reply);
+							
 						}
 						//crossroad behaviour
 						else if(msg.getConversationId().equals("cor1")) {
 							reply.setPerformative(ACLMessage.INFORM);
-							String cor = currentColor;
-							reply.setContent(cor);
+							reply.setContent(currentColor);
 							reply.setConversationId("cor1");
 							myAgent.send(reply);
-							System.out.println(reply.getContent());
 						}
 					
 				}
@@ -155,8 +153,11 @@ public class TrafficLightAgent extends Agent{
 
 		});
 		
-		addBehaviour(new CrossRoadTrafficLights(trafficLights.get(0),trafficLights.get(1),crossroads,graphNodes));
-		//addBehaviour(new FindOtherTrafficLights(trafficLights.get(0),trafficLights));
+		
+		if(light.getAID().getName().equals("Light0@City Traffic")) {
+			addBehaviour(new CrossRoadTrafficLights(trafficLights.get(0),trafficLights.get(1),crossroads,graphNodes));
+
+		}
 		
 	}
 
