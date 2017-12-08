@@ -1,3 +1,6 @@
+//TODO(4) fazer experiencias com numero diferente de carros (e semaforos?) e 
+//tirar estatisticas do numero de colisoes, distancia percorrida, tempo demorado, tempo de espera em semaforos, tempo total que os carros estao parados durante o percurso(semaforos+transito)
+
 package gui;
 
 import java.util.Vector;
@@ -44,7 +47,8 @@ public class Launcher extends Repast3Launcher {
 	private ArrayList<GraphNode> graphNodes = new ArrayList<GraphNode>();
 	private Connection c = new Connection();
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
-	private ArrayList<MyNode> agents = new ArrayList<MyNode>();
+	private ArrayList<MyNode> lightsNodes = new ArrayList<MyNode>();
+	private ArrayList<MyNode> carsNodes = new ArrayList<MyNode>();
 	private ContainerController mainContainer;
 	private boolean runInBatchMode;
 	private DisplaySurface displaySurf;
@@ -180,7 +184,7 @@ public class Launcher extends Repast3Launcher {
 		
 		for(int i=0; i < graphNodes.size(); i++) {
 			OvalNetworkItem o = new OvalNetworkItem(graphNodes.get(i).getX(),graphNodes.get(i).getY());
-			MyNode n = new MyNode(o,graphNodes.get(i).getX(),graphNodes.get(i).getY());
+			MyNode n = new MyNode(o, graphNodes.get(i).getX(),graphNodes.get(i).getY());
 			nodes.add(n);
 		}
 	}
@@ -565,11 +569,15 @@ public class Launcher extends Repast3Launcher {
 	
 	public void buildDisplay() {
 
+		//TODO(10) na janela das settings pro para dar para alterar numero de agentes
+		
 		Network2DDisplay display = new Network2DDisplay (nodes,WIDTH,HEIGHT);
 		display.setNodesVisible(false);
-		Network2DDisplay display2 = new Network2DDisplay (agents,WIDTH,HEIGHT);
+		Network2DDisplay display1 = new Network2DDisplay (lightsNodes, WIDTH,HEIGHT);
+		Network2DDisplay display2 = new Network2DDisplay (carsNodes, WIDTH,HEIGHT);
 		displaySurf.addDisplayableProbeable (display, "City Traffic");
-		displaySurf.addDisplayableProbeable (display2, "City");
+		displaySurf.addDisplayableProbeable (display2, "CityTraffic");
+		displaySurf.addDisplayableProbeable (display1, "City");
 		displaySurf.addZoomable (display);
 		displaySurf.setBackground (java.awt.Color.white);
 		
@@ -619,34 +627,31 @@ public class Launcher extends Repast3Launcher {
 				mainContainer.acceptNewAgent("Light" + 1, tLight1).start();
 				
 				
-				MyNode n = new MyNode(tLight.getS(),tLight.getX(),tLight.getY());
-				MyNode n1 = new MyNode(tLight1.getS(),tLight1.getX(),tLight1.getY());
+				MyNode n = new MyNode(tLight.getS(), tLight.getX(),tLight.getY());
+				//MyNode n1 = new MyNode(tLight1.getX(),tLight1.getY(),tLight1.getS());
 				
-				agents.add(n);
-				agents.add(n1);
+				lightsNodes.add(n);
+				//agents.add(n1);
 				
 				//receiverLight = tLight.getAID();
 			//}
+				
+				
+				//55,110 / 100,60
 			
 			//create vehicles
-			int velocity = 1000;//só para testar
-			int[] position = new int[2];;//so para testar
-			for(int i=0; i < numVehicles;i++) {
+			//for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
 				//int velocity = r.nextInt(1500) + 500;	DESCOMENTAR
-				position[0] = 0;//TODO (4)por posiçoes do graph
-				position[1] = 0;
-				VehicleAgent vehicle = new VehicleAgent(position, velocity, lightAgents,displaySurf);
+				VehicleAgent vehicle = new VehicleAgent(55, 110, 1000, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
-				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
+				mainContainer.acceptNewAgent("Vehicle" + 1, vehicle).start();
 				
-				//DESENHA O CARRO
-				//MyNode n1 = new MyNode(vehicle.getX(),vehicle.getY(),vehicle.getS());
-				//agents.add(n1);
-				velocity += 1000;	//só para testar
-				position[0] = 2;//só para testar
-				position[1] = 2;//so para testar
-			}
+				vehicle = new VehicleAgent(100, 60, 2000, lightAgents, graph, carsNodes, displaySurf);
+				vehicleAgents.add(vehicle);
+				mainContainer.acceptNewAgent("Vehicle" + 2, vehicle).start();
+				
+			//}
 						
 		}catch (StaleProxyException e) {
 			e.printStackTrace();

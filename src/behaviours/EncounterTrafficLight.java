@@ -48,8 +48,6 @@ public class EncounterTrafficLight extends Behaviour{
 			//handle traffic light color
 			if(! reply.getContent().equals("red")){
 				step = 4;
-				car.position[0] = car.position[0] + 1;
-				car.position[1] = car.position[1] + 1;//TODO eventualmente faze lo andar pelos pontos do grafo
 			}
 			break;
 		}

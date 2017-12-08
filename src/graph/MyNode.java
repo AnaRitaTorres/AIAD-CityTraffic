@@ -14,9 +14,13 @@ import javafx.scene.Node;
 public class MyNode extends DefaultDrawableNode {
 	
 	private Color color;
+	private int x;
+	private int y;
 	public MyNode() {}	
-	public MyNode(NetworkDrawable drawable,int xSize, int ySize) {
+	public MyNode(NetworkDrawable drawable, int xSize, int ySize) {
 		super(drawable);
+		this.x = xSize;
+		this.y = ySize;
 	}
 	
 
@@ -54,7 +58,13 @@ public class MyNode extends DefaultDrawableNode {
 	   
 	 }
 	
+	public boolean equals(MyNode n){
+		if(n.x == this.x && n.y == this.y){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	
-	
-	  
 }
