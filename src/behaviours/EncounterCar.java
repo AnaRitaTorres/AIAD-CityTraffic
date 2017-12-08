@@ -33,6 +33,7 @@ public class EncounterCar extends Behaviour{
 			for(int i = 0; i < cars.size(); i++){
 				if(cars.elementAt(i).getAID() != car.getAID()){
 					cfp.addReceiver(cars.elementAt(i).getAID());
+					System.out.println("AQUIIIIIIIIIII");
 				}
 			}
 			cfp.setContent("position");

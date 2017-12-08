@@ -58,7 +58,15 @@ public class VehicleAgent extends Agent{
 		this.velocity = velocity;
 		this.s= new RectNetworkItem(x,y);
 		this.disp=disp;
-		s.setColor(Color.BLACK);
+		Color[] cores = new Color[5];
+		cores[0] = Color.BLACK;
+		cores[1] = Color.BLUE;
+		cores[2] = Color.CYAN;
+		cores[3] = Color.PINK;
+		cores[4] = Color.YELLOW;
+		java.util.Random r = new java.util.Random();
+		int iCor = r.nextInt(5);
+		s.setColor(cores[iCor]);
 		this.carsNodes = carsNodes;
 		this.graph = graph;
 		n = new MyNode(getS(),getX(),getY());
@@ -81,19 +89,23 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV1[5] = 110;
 		ytrajetoriaV1[6] = 110;
 		
-		/*xtrajetoriaV2[0] = 100;
+		xtrajetoriaV2[0] = 100;
 		xtrajetoriaV2[1] = 115;
 		xtrajetoriaV2[2] = 130;
 		xtrajetoriaV2[3] = 145;
 		xtrajetoriaV2[4] = 160;
+		xtrajetoriaV2[3] = 175;
+		xtrajetoriaV2[4] = 190;
 
 		ytrajetoriaV2[0] = 110;
 		ytrajetoriaV2[1] = 110;
 		ytrajetoriaV2[2] = 110;
 		ytrajetoriaV2[3] = 110;
-		ytrajetoriaV2[4] = 110;*/
+		ytrajetoriaV2[4] = 110;
+		ytrajetoriaV2[5] = 110;
+		ytrajetoriaV2[6] = 110;
 
-		xtrajetoriaV2[0] = 100;
+		/*xtrajetoriaV2[0] = 100;
 		xtrajetoriaV2[1] = 100;
 		xtrajetoriaV2[2] = 100;
 		xtrajetoriaV2[3] = 100;
@@ -107,7 +119,7 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV2[3] = 100;
 		ytrajetoriaV2[4] = 110;
 		ytrajetoriaV2[5] = 120;
-		ytrajetoriaV2[6] = 130;
+		ytrajetoriaV2[6] = 130;*/
 	}
 
 	public RectNetworkItem getS() {
@@ -207,11 +219,7 @@ public class VehicleAgent extends Agent{
 								block();
 							}
 							break;
-						case 4:
-
-							System.out.println("TESTE");
-
-							
+						case 4:	
 							//TODO hardcoded vai ser para mudar para mover no grafo
 							if(getAID().getName().equals("Vehicle1@City Traffic")){
 								nextPosition[0] = xtrajetoriaV1[index];
@@ -222,13 +230,16 @@ public class VehicleAgent extends Agent{
 								nextPosition[1] = ytrajetoriaV2[index];
 							}
 							index++;
-							//encounterCar = new EncounterCar(car, cars);
-							//addBehaviour(encounterCar);
-							step = 6;//5
+							encounterCar = new EncounterCar(car, cars);
+							addBehaviour(encounterCar);
+							step = 5;
 							break;
 						case 5:
 							if(encounterCar.done()){
 								step = 6;
+							}
+							else{
+								block();
 							}
 							break;
 						case 6:
@@ -241,7 +252,6 @@ public class VehicleAgent extends Agent{
 
 							position[0] = nextPosition[0];
 							position[1] = nextPosition[1];
-
 
 							updateDisplayCar();
 
