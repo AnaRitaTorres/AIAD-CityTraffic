@@ -88,7 +88,7 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV1[4] = 110;
 		ytrajetoriaV1[5] = 110;
 		ytrajetoriaV1[6] = 110;
-		
+
 		xtrajetoriaV2[0] = 100;
 		xtrajetoriaV2[1] = 115;
 		xtrajetoriaV2[2] = 130;
@@ -175,103 +175,90 @@ public class VehicleAgent extends Agent{
 
 			@Override
 			protected void onTick() {  
-				
-				//System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
-				/*car.addBehaviour(new Behaviour() {
 
-					@Override
-					public boolean done() {
-						return step == 7;
+				System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
+
+				//carro ve se tem semaforo
+				switch (step){
+				case 0:
+					//perguntar a todos os semaforos a posiçao
+					searchLight = new FindTrafficLights(car, trafficLights);
+					addBehaviour(searchLight);
+					step = 1;
+					break;
+				case 1:
+					if (searchLight.done()){
+						step = 2;
 					}
+					break;
+				case 2:
+					//perguntar cor do semaforo que encontrou
+					if(lightAtCarPos != null){
+						dealLight = new EncounterTrafficLight(car, lightAtCarPos);
+						addBehaviour(dealLight);
+						step = 3;
 
-					@Override
-					public void action() {*/
+					} else{
+						step = 4;
+					}
+					break;
+				case 3:
+					if(dealLight.done()){
+						step = 4;
+					}
+					else{
+						block();
+					}
+					break;
 
-						//carro ve se tem semaforo
-						switch (step){
-						case 0:
-							//perguntar a todos os semaforos a posiçao
-							searchLight = new FindTrafficLights(car, trafficLights);
-							addBehaviour(searchLight);
-							step = 1;
-							break;
-						case 1:
-							if (searchLight.done()){
-								step = 2;
-							}
-							break;
-						case 2:
-							//perguntar cor do semaforo que encontrou
-							if(lightAtCarPos != null){
-								dealLight = new EncounterTrafficLight(car, lightAtCarPos);
-								addBehaviour(dealLight);
-								step = 3;
+				case 4:
+					//TODO hardcoded vai ser para mudar para mover no grafo
+					if(getAID().getName().equals("Vehicle1@City Traffic")){
+						nextPosition[0] = xtrajetoriaV1[index];
+						nextPosition[1] = ytrajetoriaV1[index];
+					}
+					else{
+						nextPosition[0] = xtrajetoriaV2[index];
+						nextPosition[1] = ytrajetoriaV2[index];
+					}
+					index++;
+					encounterCar = new EncounterCar(car, cars);
+					addBehaviour(encounterCar);
+					step = 5;
+					break;
+				case 5:
+					if(encounterCar.done()){
+						System.out.println("TESTE");
+						step = 6;
+					}
+					else{
+						block();
+					}
+					break;
+				case 6:
 
-							} else{
-								step = 4;
-							}
-							break;
-						case 3:
-							if(dealLight.done()){
-								step = 4;
-							}
-							else{
-								block();
-							}
-							break;
+					//position[0] = position[0] + 1;
+					//position[1] = position[1] + 1;
+					//TODO (2) eventualmente faze lo andar pelos pontos do grafo
+					//para já andam random, depois andam pelo caminho até ao destino
+					//para testar vou por aqui caminha harcoded
 
-						case 4:
+					position[0] = nextPosition[0];
+					position[1] = nextPosition[1];
 
-							//System.out.println("TESTE");
+					updateDisplayCar();
 
-							//TODO hardcoded vai ser para mudar para mover no grafo
-							if(getAID().getName().equals("Vehicle1@City Traffic")){
-								nextPosition[0] = xtrajetoriaV1[index];
-								nextPosition[1] = ytrajetoriaV1[index];
-							}
-							else{
-								nextPosition[0] = xtrajetoriaV2[index];
-								nextPosition[1] = ytrajetoriaV2[index];
-							}
-							index++;
-							encounterCar = new EncounterCar(car, cars);
-							addBehaviour(encounterCar);
-							step = 5;
-							break;
-						case 5:
-							if(encounterCar.done()){
-								step = 6;
-							}
-							else{
-								block();
-							}
-							break;
-						case 6:
+					step = 0;
+					break;
+				}
 
-							//position[0] = position[0] + 1;
-							//position[1] = position[1] + 1;
-							//TODO (2) eventualmente faze lo andar pelos pontos do grafo
-							//para já andam random, depois andam pelo caminho até ao destino
-							//para testar vou por aqui caminha harcoded
-
-							position[0] = nextPosition[0];
-							position[1] = nextPosition[1];
-
-							updateDisplayCar();
-
-							step = 0;
-							break;
-						}
-
-					//}
-				//});
 				//TODO (1) tratar de colisões (colisoes - light - carro) - ver se ha outro carro na posiçao em que estou, se houver guardar o numero de carros(nºde colisoes deste carro) e o carro morre(fica parado aí para sempre
 
 				//TODO (5)carro para o tick behavior se tiver chegado ao destino (ou seja implica criar posiçoes iniciais e finas e faze lo percorrer o caminha, implica implementar djkistra
 			}
 		});
 
-		
+
 		addBehaviour(new CyclicBehaviour(){
 
 			@Override
