@@ -94,8 +94,8 @@ public class VehicleAgent extends Agent{
 		xtrajetoriaV2[2] = 130;
 		xtrajetoriaV2[3] = 145;
 		xtrajetoriaV2[4] = 160;
-		xtrajetoriaV2[3] = 175;
-		xtrajetoriaV2[4] = 190;
+		xtrajetoriaV2[5] = 175;
+		xtrajetoriaV2[6] = 190;
 
 		ytrajetoriaV2[0] = 110;
 		ytrajetoriaV2[1] = 110;
@@ -228,7 +228,6 @@ public class VehicleAgent extends Agent{
 					break;
 				case 5:
 					if(encounterCar.done()){
-						System.out.println("TESTE");
 						step = 6;
 					}
 					else{
@@ -274,7 +273,6 @@ public class VehicleAgent extends Agent{
 							reply.setContent(pos);
 							reply.setConversationId("position");
 							car.send(reply);
-							//System.out.println("AQUI! " + reply.getContent());
 						}
 					}
 				}
