@@ -14,6 +14,7 @@ public class RadioAgent extends Agent{
 	
 	
 	//TODO vai ser necessario??
+	//TODO melhorias - esquivar de zonas de transito
 	
 	private static int IDNumber=0;
 	private int ID;

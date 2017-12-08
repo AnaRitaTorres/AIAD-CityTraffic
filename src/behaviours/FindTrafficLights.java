@@ -42,7 +42,7 @@ public class FindTrafficLights extends Behaviour{
 		//receive all answers from traffic lights
 			ACLMessage reply = car.receive(); 
 			if(reply != null){
-				String carPos = "" + car.position[0] + car.position[1] + "";
+				String carPos = "" + car.getPosition()[0] + car.getPosition()[1] + "";
 				if(reply.getContent().equals(carPos)){
 					car.setLightAtCarPos(reply.getSender());
 					foundLight = true;
