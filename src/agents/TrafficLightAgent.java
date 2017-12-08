@@ -17,6 +17,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import behaviours.CrossRoadTrafficLights;
 import behaviours.FindOtherTrafficLights;
+import graph.GraphNode;
 
 @SuppressWarnings("serial")
 public class TrafficLightAgent extends Agent{
@@ -31,8 +32,10 @@ public class TrafficLightAgent extends Agent{
 	private OvalNetworkItem s;
 	private DisplaySurface disp;
 	private Vector<TrafficLightAgent> trafficLights;
-
-	public TrafficLightAgent(int x, int y, Vector<TrafficLightAgent> trafficLights,DisplaySurface disp) {
+	private ArrayList<GraphNode> crossroads;
+	private ArrayList<GraphNode> graphNodes;
+		
+	public TrafficLightAgent(int x, int y, Vector<TrafficLightAgent> trafficLights,ArrayList<GraphNode> crossroads,ArrayList<GraphNode> graphNodes,DisplaySurface disp) {
 		IDNumber++;
 		ID=IDNumber;
 		position[0] = x;
@@ -41,6 +44,8 @@ public class TrafficLightAgent extends Agent{
 		this.s= new OvalNetworkItem(x,y);
 		this.disp=disp;
 		this.trafficLights = trafficLights;
+		this.crossroads=crossroads;
+		this.graphNodes=graphNodes;
 	}
 
 	public OvalNetworkItem getS() {
@@ -62,8 +67,8 @@ public class TrafficLightAgent extends Agent{
 		else {
 			s.setColor(Color.orange);
 		}
-
-
+		disp.updateDisplay();
+		
 	}
 	public int getID() {
 		return ID;
@@ -107,8 +112,7 @@ public class TrafficLightAgent extends Agent{
 					currentColor = color.elementAt(i.get());
 					changeColor(currentColor);
 				}
-
-				disp.updateDisplay();
+				
 			}
 
 
@@ -122,35 +126,38 @@ public class TrafficLightAgent extends Agent{
 				ACLMessage msg = receive(mt);
 				if(msg != null){
 					ACLMessage reply = msg.createReply();
-					if (msg.getConversationId().equals("cor")){
-						reply.setPerformative(ACLMessage.INFORM);
-						reply.setContent(currentColor);
-						reply.setConversationId("cor");
-						light.send(reply);
-						System.out.println(reply.getContent());
-					}
-					else if(msg.getConversationId().equals("position")){
-						reply.setPerformative(ACLMessage.INFORM);
-						String pos = "" + position[0] + position[1] + "";
-						reply.setContent(pos);
-						//reply.setConversationId("position");
-						myAgent.send(reply);
-					}
-					else if(msg.getConversationId().equals("position1")) {
-						reply.setPerformative(ACLMessage.INFORM);
-						String pos = "" + position[0] + ";" +position[1] +"";
-						reply.setContent(pos);
-						reply.setConversationId("position");
-						light.send(reply);
-					}
+					
+						if (msg.getConversationId().equals("cor")){
+							reply.setPerformative(ACLMessage.INFORM);
+							reply.setContent(currentColor);
+							reply.setConversationId("cor");
+							myAgent.send(reply);
+						}
+						else if(msg.getConversationId().equals("position")){
+							reply.setPerformative(ACLMessage.INFORM);
+							String pos = "" + position[0] + position[1] + "";
+							reply.setContent(pos);
+							reply.setConversationId("position");
+							myAgent.send(reply);
+						}
+						//crossroad behaviour
+						else if(msg.getConversationId().equals("cor1")) {
+							reply.setPerformative(ACLMessage.INFORM);
+							String cor = currentColor;
+							reply.setContent(cor);
+							reply.setConversationId("cor1");
+							myAgent.send(reply);
+							System.out.println(reply.getContent());
+						}
+					
 				}
 			}
 
 		});
-
-		//addBehaviour(new CrossRoadTrafficLights(trafficLights.get(0),trafficLights.get(1)));
+		
+		addBehaviour(new CrossRoadTrafficLights(trafficLights.get(0),trafficLights.get(1),crossroads,graphNodes));
 		//addBehaviour(new FindOtherTrafficLights(trafficLights.get(0),trafficLights));
-
+		
 	}
 
 	protected void takeDown(){

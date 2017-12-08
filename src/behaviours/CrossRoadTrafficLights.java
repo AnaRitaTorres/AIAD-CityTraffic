@@ -1,9 +1,14 @@
 package behaviours;
 
+
+import java.util.ArrayList;
 import sajas.core.behaviours.*;
 
 import agents.*;
+import graph.GraphNode;
+
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 @SuppressWarnings("serial")
 public class CrossRoadTrafficLights extends Behaviour{
@@ -12,44 +17,85 @@ public class CrossRoadTrafficLights extends Behaviour{
 	private TrafficLightAgent light2;
 	private int step = 0;
 	private ACLMessage reply;
+	private ArrayList<GraphNode> crossroads;
+	private ArrayList<GraphNode> graphNodes;
+	private MessageTemplate mt;
 	
-	public CrossRoadTrafficLights(TrafficLightAgent light1,TrafficLightAgent light2) {
+	public CrossRoadTrafficLights(TrafficLightAgent light1,TrafficLightAgent light2,ArrayList<GraphNode> crossroads,ArrayList<GraphNode> graphNodes) {
 		
 		this.light1=light1;
 		this.light2=light2;
+		this.crossroads=crossroads;
+		this.graphNodes=graphNodes;
 		
+	}
+	
+	public boolean sameCrossroad(){
+		
+		int x1=light1.getX();
+		int y1=light1.getY();
+		int x2 = light2.getX();
+		int y2=light2.getY();
+		GraphNode n1=null,n2=null;
+		boolean same=false;
+		
+		for(int i=0; i < graphNodes.size(); i++) {
+			if(graphNodes.get(i).getX()== x1 && graphNodes.get(i).getY()==y1) {
+				n1=graphNodes.get(i);
+			}
+			else if(graphNodes.get(i).getX()== x2 && graphNodes.get(i).getY()==y2) {
+				n2=graphNodes.get(i);
+			}
+		}
+		
+		if(n1!= null && n2!=null && n1!=n2) {
+			for(int i=0; i < crossroads.size(); i++) {
+				if(crossroads.get(i).getAdj().contains(n1) && crossroads.get(i).getAdj().contains(n2))
+					same=true;
+			}
+		}
+		
+		return same;
 	}
 	
 	@Override
 	public void action() {
 		ACLMessage cfp= new ACLMessage(ACLMessage.CFP);
-		//send msg to the other light to knows its color
+		//check if they are connected to the same crossroad
 		switch(step){
 		case 0:
-			System.out.println("Cor?");
-			cfp.addReceiver(light2.getAID());
-			cfp.setContent("Cor?");
-			cfp.setConversationId("cor");
-			light1.send(cfp);
-			step=1;
-			break;
-		case 1:
-			//wait for response by traffic light
-			reply= light1.receive();
-			if(reply != null){
-				System.out.println(reply.getContent());
-				step = 2;
+			if(sameCrossroad()) {
+				step=1;
 			}
 			break;
-		case 2:
-			if(reply.getContent().equals("red"))
-				light2.changeColor("green");
-			else 				
-				light2.changeColor("red");//TODO ver a situação do laranja
+		case 1:
+			//if they are, ask each other for the color
+			System.out.println("Cor?");
+			cfp.addReceiver(light2.getAID());
+			cfp.setContent("Cor1");
+			cfp.setConversationId("cor1");
+			cfp.setReplyWith("cfp" + System.currentTimeMillis());
+			light1.send(cfp);
 			
-			step=4;
+			mt= MessageTemplate.and(MessageTemplate.MatchConversationId("cor1"),MessageTemplate.MatchConversationId(cfp.getReplyWith()));
+			step=2;
 			break;
-		default:
+		case 2:
+			//wait for the answer and with that info change colors
+			reply= light1.receive(mt);
+			
+			if(reply != null){
+				if(reply.getContent()=="red") {
+					light1.changeColor("green");
+				}
+				else if(reply.getContent()=="green") {
+					light1.changeColor("red");
+				}
+				System.out.println("b:"+ reply.getContent());
+			}
+			else
+				System.out.println("null msg");
+			step=1;
 			break;
 		}
 		
