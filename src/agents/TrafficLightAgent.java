@@ -126,7 +126,7 @@ public class TrafficLightAgent extends Agent{
 				if(msg != null){
 					ACLMessage reply = msg.createReply();
 					
-						if (msg.getConversationId().equals("cor")){
+						/*if (msg.getConversationId().equals("cor")){
 							reply.setPerformative(ACLMessage.INFORM);
 							reply.setContent(currentColor);
 							reply.setConversationId("cor");
@@ -141,7 +141,7 @@ public class TrafficLightAgent extends Agent{
 							
 						}
 						//crossroad behaviour
-						else if(msg.getConversationId().equals("cor1")) {
+						else */if(msg.getConversationId().equals("cor1")) {
 							reply.setPerformative(ACLMessage.INFORM);
 							reply.setContent(currentColor);
 							reply.setConversationId("cor1");
@@ -156,8 +156,8 @@ public class TrafficLightAgent extends Agent{
 		
 		if(light.getAID().getName().equals("Light0@City Traffic")) {
 			addBehaviour(new CrossRoadTrafficLights(trafficLights.get(0),trafficLights.get(1),crossroads,graphNodes));
-
 		}
+		
 		
 	}
 
