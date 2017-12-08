@@ -91,18 +91,21 @@ public class CrossRoadTrafficLights extends Behaviour{
 			}
 			break;
 		case 3:
-			if(reply.getContent().equals("red")) {
+			System.out.println(reply.getContent());
+			if(reply.getContent().equals("red")|| reply.getContent().equals("orange")) {
 				light1.changeColor("green");
 			}
 			else if(reply.getContent().equals("green")) {
 				light1.changeColor("red");
 			}
-			step=4;
+			
+			
+			step=1;
 			break;
 		}
 		
 	}
-	
+	//TODO averiguar se vale a pena alterar o comportamento para ciclico ou tick
 	@Override
 	public boolean done() {
 		return step == 4;
