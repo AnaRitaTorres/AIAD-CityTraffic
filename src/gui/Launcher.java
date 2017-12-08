@@ -43,14 +43,12 @@ public class Launcher extends Repast3Launcher {
 	
 	private int numNodes = N_NODES;
 	private Graph graph;
-	private int color=0;
-	private int time = 2000;
-	private Schedule schedule;
 	private ArrayList<GraphNode> graphNodes = new ArrayList<GraphNode>();
 	private Connection c = new Connection();
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
 	private ArrayList<MyNode> lightsNodes = new ArrayList<MyNode>();
 	private ArrayList<MyNode> carsNodes = new ArrayList<MyNode>();
+	private ArrayList<GraphNode> crossroadNodes = new ArrayList<GraphNode>();
 	private ContainerController mainContainer;
 	private boolean runInBatchMode;
 	private DisplaySurface displaySurf;
@@ -103,11 +101,7 @@ public class Launcher extends Repast3Launcher {
 	public String getName () {
 	    return "City Traffic";
 	}
-	
-	/*public Schedule getSchedule() {
-	    return schedule;
-	}*/
-	
+		
 	public void readFromFile(String file) {
 		
 		ArrayList<GraphNode> adj = new ArrayList<GraphNode>();
@@ -149,7 +143,6 @@ public class Launcher extends Repast3Launcher {
 	public void setup() {
 		super.setup();
 		
-		//schedule = null;
 		if(displaySurf != null) {
 			displaySurf.dispose();
 		}
@@ -157,7 +150,6 @@ public class Launcher extends Repast3Launcher {
 				
 		displaySurf = new DisplaySurface(this,"City Traffic Window 1");
 		registerDisplaySurface("City Traffic Window 1",displaySurf);
-		//schedule = new Schedule ();
 	}
 	
 	@Override
@@ -357,8 +349,6 @@ public class Launcher extends Repast3Launcher {
 	
 	}
 	
-	
-	
 	public void removeEdgeVisual() {
 		for(int i=0; i < nodes.size(); i++) {
 			if(nodes.get(i).getY()==240) {
@@ -494,6 +484,7 @@ public class Launcher extends Repast3Launcher {
 			}
 		}
 	}
+	
 	public void ConnectNodesVisual() {
 		c.connectVertical(nodes);
 		
@@ -526,6 +517,7 @@ public class Launcher extends Repast3Launcher {
 	
 	}
 	
+	//TODO delete physical rep of crossroads
 	public void crossRoads() {
 		 
 		OvalNetworkItem o1 = new OvalNetworkItem(295,240);
@@ -553,8 +545,22 @@ public class Launcher extends Repast3Launcher {
 		lightsNodes.add(c5);
 		
 		
+		addCrossroad(295,240);
+		addCrossroad(265,110);
+		addCrossroad(160,110);
+		addCrossroad(190,240);
+		addCrossroad(40,350);
+		
+		
 	}
 	
+	public void addCrossroad(int x, int y) {
+		for(int i=0; i < graphNodes.size(); i++) {
+			if(graphNodes.get(i).getX()== x && graphNodes.get(i).getY()==y) {
+				crossroadNodes.add(graphNodes.get(i));
+			}
+		}
+	}
 	public void buildModel() {
 		
 		semColor.addElement(Color.red);
@@ -621,8 +627,8 @@ public class Launcher extends Repast3Launcher {
 			
 			//create traffic lights
 			//for(int i=0; i < numLights;i++) {
-				TrafficLightAgent tLight1 = new TrafficLightAgent(160,50, lightAgents,displaySurf);
-				TrafficLightAgent tLight = new TrafficLightAgent(100,110,lightAgents,displaySurf);
+				TrafficLightAgent tLight1 = new TrafficLightAgent(145,110, lightAgents,crossroadNodes,graphNodes,displaySurf);
+				TrafficLightAgent tLight = new TrafficLightAgent(160,100,lightAgents,crossroadNodes,graphNodes,displaySurf);
 				lightAgents.add(tLight);
 				lightAgents.add(tLight1);
 				mainContainer.acceptNewAgent("Light" + 0, tLight).start();
@@ -630,10 +636,10 @@ public class Launcher extends Repast3Launcher {
 				
 				
 				MyNode n = new MyNode(tLight.getS(), tLight.getX(),tLight.getY());
-				//MyNode n1 = new MyNode(tLight1.getX(),tLight1.getY(),tLight1.getS());
+				MyNode n1 = new MyNode(tLight1.getS(),tLight1.getX(),tLight1.getY());
 				
 				lightsNodes.add(n);
-				//agents.add(n1);
+				lightsNodes.add(n1);
 				
 				//receiverLight = tLight.getAID();
 			//}
