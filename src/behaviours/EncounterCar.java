@@ -45,7 +45,7 @@ public class EncounterCar extends Behaviour{
 			//receive all answers from cars
 			ACLMessage reply = car.receive(); 
 			
-			System.out.println("AQUIIIIIIIIIII" + reply);
+			//System.out.println("AQUIIIIIIIIIII" + reply);
 			//TODO TODO TODO TODO TODO deste lado a reply aparece a null, resolver isto e acabar de testar o behaviour para passar às colisoes e depois imlementar movimentos no grafo random e depois estatisticas e depois extras (entretanto verificar lights da rita)
 			
 			if(reply != null){
