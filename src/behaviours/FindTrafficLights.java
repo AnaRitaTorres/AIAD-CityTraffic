@@ -1,6 +1,7 @@
 package behaviours;
 
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import sajas.core.Agent;
 import sajas.core.behaviours.*;
 import java.util.Vector;
@@ -8,7 +9,6 @@ import agents.TrafficLightAgent;
 import agents.VehicleAgent;
 import jade.core.AID;
 
-@SuppressWarnings("serial")
 public class FindTrafficLights extends Behaviour{
 
 	private int step = 0;
@@ -16,6 +16,7 @@ public class FindTrafficLights extends Behaviour{
 	private boolean foundLight = false;
 	private VehicleAgent car;
 	private Vector<TrafficLightAgent> lights;
+	private MessageTemplate mt;
 	
 	public FindTrafficLights(VehicleAgent car, Vector<TrafficLightAgent> lights) {
 		this.lights = lights;
@@ -34,13 +35,15 @@ public class FindTrafficLights extends Behaviour{
 			}
 			cfp.setContent("position");
 			cfp.setConversationId("position");
-			car.send(cfp);
+			cfp.setReplyWith("cfp"+System.currentTimeMillis());
+			myAgent.send(cfp);
 			
+			mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
 			step = 1;
 			break;
 		case 1:
 		//receive all answers from traffic lights
-			ACLMessage reply = car.receive(); 
+			ACLMessage reply = car.receive(mt); 
 			if(reply != null){
 				String carPos = "" + car.getPosition()[0] + car.getPosition()[1] + "";
 				if(reply.getContent().equals(carPos)){

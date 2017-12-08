@@ -10,13 +10,14 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.core.AID;
 
-@SuppressWarnings("serial")
+//@SuppressWarnings("serial")
 public class EncounterTrafficLight extends Behaviour{
 
 	private AID light;
 	private VehicleAgent car;
 	private int step = 0;
 	private ACLMessage reply;
+	private MessageTemplate mt;
 	
 	public EncounterTrafficLight(VehicleAgent car, AID light){
 		this.car = car;
@@ -33,21 +34,32 @@ public class EncounterTrafficLight extends Behaviour{
 			cfp.addReceiver(light);
 			cfp.setContent("Cor?");
 			cfp.setConversationId("cor");
-			car.send(cfp);
-	
+			cfp.setReplyWith("cfp"+System.currentTimeMillis());
+			myAgent.send(cfp);
+			mt = MessageTemplate.and(MessageTemplate.MatchConversationId("cor"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
 			step = 1;
 			break;
 		case 1:
 			//wait for response by traffic light
-			reply= car.receive();
+			reply = car.receive(mt);
 			if(reply != null){
 				step = 2;
+			}
+			else{
+				block();
 			}
 			break;
 		case 2:
 			//handle traffic light color
+			
+			System.out.println("teste");
+			
+			
 			if(! reply.getContent().equals("red")){
-				step = 4;
+				step = 3;
+			}
+			else{
+				step = 0;
 			}
 			break;
 		}
@@ -55,7 +67,7 @@ public class EncounterTrafficLight extends Behaviour{
 
 	@Override//ver se continua a funcionar
 	public boolean done(){
-		return step == 4;
+		return step == 3;
 	}
 		
 }

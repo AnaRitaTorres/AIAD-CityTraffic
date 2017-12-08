@@ -20,7 +20,6 @@ import sajas.wrapper.ContainerController;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
-import javafx.scene.Node;
 import uchicago.src.sim.engine.BasicAction;
 import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimInit;
@@ -651,11 +650,11 @@ public class Launcher extends Repast3Launcher {
 			//for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
 				//int velocity = r.nextInt(1500) + 500;	DESCOMENTAR
-				VehicleAgent vehicle = new VehicleAgent(55, 110, 1000, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
+				VehicleAgent vehicle = new VehicleAgent(55, 110, 250, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 1, vehicle).start();
-				
-				vehicle = new VehicleAgent(85, 110, 2000, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
+				//100,60 / 85,110
+				vehicle = new VehicleAgent(100, 60, 500, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 2, vehicle).start();
 				
