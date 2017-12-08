@@ -1,6 +1,7 @@
 package graph;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import uchicago.src.sim.network.DefaultDrawableNode;
 import uchicago.src.sim.gui.NetworkDrawable;
@@ -8,6 +9,7 @@ import uchicago.src.sim.network.DefaultNode;
 import uchicago.src.sim.network.Edge;
 
 import graph.MyEdge;
+import javafx.scene.Node;
 
 public class MyNode extends DefaultDrawableNode {
 	
@@ -39,14 +41,17 @@ public class MyNode extends DefaultDrawableNode {
 	    }
 	  }
 	
-	public void removeConnection(MyNode node) {
+	public void removeConnection(int x, int y,ArrayList<MyNode> nodes) {
 	    
-	    if (node != null) {
-	      removeEdgesTo(node);
-	      node.removeEdgesFrom(this);
-	      removeEdgesFrom(node);
-	      node.removeEdgesTo(this);
-	    }
+		for(int i=0; i < nodes.size(); i++) {
+			if(nodes.get(i).getX()== x && nodes.get(i).getY()==y) {
+				removeEdgesTo(nodes.get(i));
+				nodes.get(i).removeEdgesFrom(this);
+				removeEdgesFrom(nodes.get(i));
+				nodes.get(i).removeEdgesTo(this);
+			}
+		}
+	   
 	 }
 	
 	
