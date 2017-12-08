@@ -37,7 +37,7 @@ public class Launcher extends Repast3Launcher {
 	private static final int WIDTH = 400;
 	private static final int N_RADIOS = 0;
 	private static final int N_VEHICLES = 2;
-	private static final int N_LIGHTS = 2;
+	private static final int N_LIGHTS = 9;
 	private static final int N_NODES = 100;
 	
 	private int numNodes = N_NODES;
@@ -158,7 +158,7 @@ public class Launcher extends Repast3Launcher {
 		if(!runInBatchMode) {
 			buildModel();
 			buildDisplay();
-			buildSchedule();
+			
 		}
 		
 		displaySurf.display();
@@ -342,7 +342,10 @@ public class Launcher extends Repast3Launcher {
 		graph.connect2Nodes(graphNodes, 145, 130, 300, 300);
 		graph.connect2Nodes(graphNodes, 55, 40, 280, 280);
 		graph.connect2Nodes(graphNodes, 55, 40, 180, 180);
-		
+		graph.connect2Nodes(graphNodes, 190, 190, 240, 250);
+		graph.connect2Nodes(graphNodes, 175, 190, 240, 240);
+		graph.connect2Nodes(graphNodes, 245, 265, 110, 110);
+		graph.connect2Nodes(graphNodes, 265, 265,100 ,110 );
 		removeEgdeGraph();
 		
 	
@@ -510,7 +513,7 @@ public class Launcher extends Repast3Launcher {
 		c.connect2Nodes(nodes, 145, 130, 300, 300);
 		c.connect2Nodes(nodes, 55, 40, 280, 280);
 		c.connect2Nodes(nodes, 55, 40, 180, 180);
-				
+			
 		removeEdgeVisual();
 		
 	
@@ -569,11 +572,6 @@ public class Launcher extends Repast3Launcher {
 		
 	}
 	
-	public void buildSchedule() {
-		
-		
-	}
-	
 	public void buildDisplay() {
 
 		//TODO(10) na janela das settings pro para dar para alterar numero de agentes
@@ -591,6 +589,15 @@ public class Launcher extends Repast3Launcher {
 		
 	}
 	
+	
+	public void createTrafficLight(int x, int y) {
+		
+		TrafficLightAgent t = new TrafficLightAgent(x,y,lightAgents,crossroadNodes,graphNodes,displaySurf);
+		lightAgents.add(t);
+		MyNode n = new MyNode(t.getS(), t.getX(),t.getY());
+		lightsNodes.add(n);
+		
+	}
 	@Override
 	public String[] getInitParam() {
 		String[] initParams = {"NumRadios", "NumVehicles", "NumLights"};
@@ -624,27 +631,23 @@ public class Launcher extends Repast3Launcher {
 				mainContainer.acceptNewAgent("Radio" + i, radio).start();			
 			}
 			
-			//create traffic lights
-			//for(int i=0; i < numLights;i++) {
-				TrafficLightAgent tLight1 = new TrafficLightAgent(145,110, lightAgents,crossroadNodes,graphNodes,displaySurf);
-				TrafficLightAgent tLight = new TrafficLightAgent(160,100,lightAgents,crossroadNodes,graphNodes,displaySurf);
-				lightAgents.add(tLight);
-				lightAgents.add(tLight1);
-				mainContainer.acceptNewAgent("Light" + 0, tLight).start();
-				mainContainer.acceptNewAgent("Light" + 1, tLight1).start();
+				createTrafficLight(145,110);
+				createTrafficLight(160,100);
+				createTrafficLight(245,110);
+				createTrafficLight(265,100);
+				createTrafficLight(295,230);
+				createTrafficLight(280,240);
+				createTrafficLight(175,240);
+				createTrafficLight(190,250);
+				createTrafficLight(40,340);
+				createTrafficLight(25,350);
 				
 				
-				MyNode n = new MyNode(tLight.getS(), tLight.getX(),tLight.getY());
-				MyNode n1 = new MyNode(tLight1.getS(),tLight1.getX(),tLight1.getY());
 				
-				lightsNodes.add(n);
-				lightsNodes.add(n1);
-				
-				//receiverLight = tLight.getAID();
-			//}
-				
-				
-				//55,110 / 100,60
+				for(int i=0; i < lightAgents.size(); i++) {
+					mainContainer.acceptNewAgent("Light" + i, lightAgents.get(i)).start();
+				}
+						
 			
 			//create vehicles
 			//for(int i=0; i < numVehicles;i++) {

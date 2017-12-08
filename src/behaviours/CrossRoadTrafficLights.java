@@ -99,12 +99,13 @@ public class CrossRoadTrafficLights extends Behaviour{
 				light1.changeColor("red");
 			}
 			
+			
 			step=1;
 			break;
 		}
 		
 	}
-	
+	//TODO averiguar se vale a pena alterar o comportamento para ciclico ou tick
 	@Override
 	public boolean done() {
 		return step == 4;
