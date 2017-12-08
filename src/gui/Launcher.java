@@ -544,11 +544,11 @@ public class Launcher extends Repast3Launcher {
 		MyNode c4 = new MyNode(o4,190,240);
 		MyNode c5 = new MyNode(o5,40,350);
 		
-		agents.add(c1);
-		agents.add(c2);
-		agents.add(c3);
-		agents.add(c4);
-		agents.add(c5);
+		lightsNodes.add(c1);
+		lightsNodes.add(c2);
+		lightsNodes.add(c3);
+		lightsNodes.add(c4);
+		lightsNodes.add(c5);
 		
 		
 	}
