@@ -17,6 +17,7 @@ import behaviours.FindTrafficLights;
 import graph.Graph;
 import graph.MyNode;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jade.core.AID;
 
 @SuppressWarnings("serial")
@@ -30,7 +31,7 @@ public class VehicleAgent extends Agent{
 	private Vector<TrafficLightAgent> trafficLights;
 	public VehicleAgent car = this;//se mudar para private funciona tudo?
 	private AID lightAtCarPos;
-	private int step;	
+	private int step;
 	private int velocity;
 	private RectNetworkItem s;
 	private DisplaySurface disp;
@@ -40,8 +41,8 @@ public class VehicleAgent extends Agent{
 	Behaviour searchLight, dealLight, encounterCar;
 
 	//para apagar
-	private int[] xtrajetoriaV1 = new int[5];
-	private int[] ytrajetoriaV1 = new int[5];
+	private int[] xtrajetoriaV1 = new int[7];
+	private int[] ytrajetoriaV1 = new int[7];
 	private int[] xtrajetoriaV2 = new int[7];
 	private int[] ytrajetoriaV2 = new int[7];
 	private int index = 0;
@@ -67,28 +68,32 @@ public class VehicleAgent extends Agent{
 		xtrajetoriaV1[0] = 70;
 		xtrajetoriaV1[1] = 85;
 		xtrajetoriaV1[2] = 100;
-		xtrajetoriaV1[3] = 160;
-		xtrajetoriaV1[4] = 215;
+		xtrajetoriaV1[3] = 115;
+		xtrajetoriaV1[4] = 130;
+		xtrajetoriaV1[5] = 145;
+		xtrajetoriaV1[6] = 160;
 
 		ytrajetoriaV1[0] = 110;
 		ytrajetoriaV1[1] = 110;
 		ytrajetoriaV1[2] = 110;
 		ytrajetoriaV1[3] = 110;
 		ytrajetoriaV1[4] = 110;
+		ytrajetoriaV1[5] = 110;
+		ytrajetoriaV1[6] = 110;
 		
-		xtrajetoriaV2[0] = 100;
-		xtrajetoriaV2[1] = 160;
-		xtrajetoriaV2[2] = 215;
-		xtrajetoriaV2[3] = 230;
-		xtrajetoriaV2[4] = 245;
+		/*xtrajetoriaV2[0] = 100;
+		xtrajetoriaV2[1] = 115;
+		xtrajetoriaV2[2] = 130;
+		xtrajetoriaV2[3] = 145;
+		xtrajetoriaV2[4] = 160;
 
 		ytrajetoriaV2[0] = 110;
 		ytrajetoriaV2[1] = 110;
 		ytrajetoriaV2[2] = 110;
 		ytrajetoriaV2[3] = 110;
-		ytrajetoriaV2[4] = 110;
+		ytrajetoriaV2[4] = 110;*/
 
-		/*xtrajetoriaV2[0] = 100;
+		xtrajetoriaV2[0] = 100;
 		xtrajetoriaV2[1] = 100;
 		xtrajetoriaV2[2] = 100;
 		xtrajetoriaV2[3] = 100;
@@ -102,7 +107,7 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV2[3] = 100;
 		ytrajetoriaV2[4] = 110;
 		ytrajetoriaV2[5] = 120;
-		ytrajetoriaV2[6] = 130;*/
+		ytrajetoriaV2[6] = 130;
 	}
 
 	public RectNetworkItem getS() {
@@ -152,15 +157,15 @@ public class VehicleAgent extends Agent{
 
 		System.out.println("Hello! Vehicle-Agent "+ getAID().getName() + " is ready.");
 
+		step = 0;
+		lightAtCarPos = null;
 		addBehaviour(new TickerBehaviour(this, velocity){
 
 			@Override
 			protected void onTick() {  
-				step = 0;
-				lightAtCarPos = null;
-
+				
 				System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
-				car.addBehaviour(new Behaviour() {
+				/*car.addBehaviour(new Behaviour() {
 
 					@Override
 					public boolean done() {
@@ -168,7 +173,8 @@ public class VehicleAgent extends Agent{
 					}
 
 					@Override
-					public void action() {
+					public void action() {*/
+
 						//carro ve se tem semaforo
 						switch (step){
 						case 0:
@@ -179,10 +185,6 @@ public class VehicleAgent extends Agent{
 							break;
 						case 1:
 							if (searchLight.done()){
-								
-								System.out.println("teste");
-
-							
 								step = 2;
 							}
 							break;
@@ -201,9 +203,15 @@ public class VehicleAgent extends Agent{
 							if(dealLight.done()){
 								step = 4;
 							}
+							else{
+								block();
+							}
 							break;
 						case 4:
 
+							System.out.println("TESTE");
+
+							
 							//TODO hardcoded vai ser para mudar para mover no grafo
 							if(getAID().getName().equals("Vehicle1@City Traffic")){
 								nextPosition[0] = xtrajetoriaV1[index];
@@ -213,6 +221,7 @@ public class VehicleAgent extends Agent{
 								nextPosition[0] = xtrajetoriaV2[index];
 								nextPosition[1] = ytrajetoriaV2[index];
 							}
+							index++;
 							//encounterCar = new EncounterCar(car, cars);
 							//addBehaviour(encounterCar);
 							step = 6;//5
@@ -235,26 +244,26 @@ public class VehicleAgent extends Agent{
 
 
 							updateDisplayCar();
-							index++;
 
-							step = 7;
+							step = 0;
 							break;
 						}
 
-					}
-				});
+					//}
+				//});
 				//TODO (1) tratar de colisões (colisoes - light - carro) - ver se ha outro carro na posiçao em que estou, se houver guardar o numero de carros(nºde colisoes deste carro) e o carro morre(fica parado aí para sempre
 
 				//TODO (5)carro para o tick behavior se tiver chegado ao destino (ou seja implica criar posiçoes iniciais e finas e faze lo percorrer o caminha, implica implementar djkistra
 			}
 		});
 
-
+		
 		addBehaviour(new CyclicBehaviour(){
 
 			@Override
 			public void action() {
-				ACLMessage msg = receive();
+				MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+				ACLMessage msg = receive(mt);
 				if(msg != null){
 					ACLMessage reply = msg.createReply();
 					if(msg.getPerformative() == ACLMessage.CFP){

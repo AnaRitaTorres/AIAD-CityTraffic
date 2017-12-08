@@ -629,10 +629,10 @@ public class Launcher extends Repast3Launcher {
 				
 				
 				MyNode n = new MyNode(tLight.getS(), tLight.getX(),tLight.getY());
-				//MyNode n1 = new MyNode(tLight1.getX(),tLight1.getY(),tLight1.getS());
+				MyNode n1 = new MyNode(tLight1.getS(),tLight1.getX(),tLight1.getY());
 				
 				lightsNodes.add(n);
-				//agents.add(n1);
+				lightsNodes.add(n1);
 				
 				//receiverLight = tLight.getAID();
 			//}
@@ -644,11 +644,11 @@ public class Launcher extends Repast3Launcher {
 			//for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
 				//int velocity = r.nextInt(1500) + 500;	DESCOMENTAR
-				VehicleAgent vehicle = new VehicleAgent(55, 110, 1000, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
+				VehicleAgent vehicle = new VehicleAgent(55, 110, 250, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 1, vehicle).start();
-				
-				vehicle = new VehicleAgent(85, 110, 2000, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
+				//100,60 / 85,110
+				vehicle = new VehicleAgent(100, 60, 500, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 2, vehicle).start();
 				
