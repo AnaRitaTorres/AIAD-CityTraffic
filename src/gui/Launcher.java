@@ -180,7 +180,7 @@ public class Launcher extends Repast3Launcher {
 		
 		for(int i=0; i < graphNodes.size(); i++) {
 			OvalNetworkItem o = new OvalNetworkItem(graphNodes.get(i).getX(),graphNodes.get(i).getY());
-			MyNode n = new MyNode(graphNodes.get(i).getX(),graphNodes.get(i).getY(),o);
+			MyNode n = new MyNode(o,graphNodes.get(i).getX(),graphNodes.get(i).getY());
 			nodes.add(n);
 		}
 	}
@@ -534,11 +534,11 @@ public class Launcher extends Repast3Launcher {
 		o4.setColor(Color.black);
 		o5.setColor(Color.black);
 		
-		MyNode c1 = new MyNode(295,240,o1);
-		MyNode c2 = new MyNode(265,110,o2);
-		MyNode c3 = new MyNode(160,110,o3);
-		MyNode c4 = new MyNode(190,240,o4);
-		MyNode c5 = new MyNode(40,350,o5);
+		MyNode c1 = new MyNode(o1,295,240);
+		MyNode c2 = new MyNode(o2,265,110);
+		MyNode c3 = new MyNode(o3,160,110);
+		MyNode c4 = new MyNode(o4,190,240);
+		MyNode c5 = new MyNode(o5,40,350);
 		
 		agents.add(c1);
 		agents.add(c2);
@@ -619,8 +619,8 @@ public class Launcher extends Repast3Launcher {
 				mainContainer.acceptNewAgent("Light" + 1, tLight1).start();
 				
 				
-				MyNode n = new MyNode(tLight.getX(),tLight.getY(),tLight.getS());
-				MyNode n1 = new MyNode(tLight1.getX(),tLight1.getY(),tLight1.getS());
+				MyNode n = new MyNode(tLight.getS(),tLight.getX(),tLight.getY());
+				MyNode n1 = new MyNode(tLight1.getS(),tLight1.getX(),tLight1.getY());
 				
 				agents.add(n);
 				agents.add(n1);

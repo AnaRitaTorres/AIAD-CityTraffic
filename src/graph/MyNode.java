@@ -15,7 +15,7 @@ public class MyNode extends DefaultDrawableNode {
 	
 	private Color color;
 	public MyNode() {}	
-	public MyNode(int xSize, int ySize,NetworkDrawable drawable) {
+	public MyNode(NetworkDrawable drawable,int xSize, int ySize) {
 		super(drawable);
 	}
 	
