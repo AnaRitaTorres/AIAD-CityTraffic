@@ -37,7 +37,7 @@ public class Launcher extends Repast3Launcher {
 	private static final int N_NODES = 100;
 	
 	private int numNodes = N_NODES;
-	private Graph grafo;
+	private Graph graph;
 	private int color=0;
 	private int time = 2000;
 	private Schedule schedule;
@@ -135,7 +135,7 @@ public class Launcher extends Repast3Launcher {
 				System.err.println("FILE STREAM ERROR: " + e.getMessage());
 			}
 		
-		grafo = new Graph(graphNodes);
+		graph = new Graph(graphNodes);
 		
 	}
 	
@@ -322,29 +322,29 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public void ConnectNodes() {
-		grafo.connectVertical(graphNodes);
-		grafo.connectStreetY(graphNodes, 110);
-		grafo.connectStreetY(graphNodes, 50);
-		grafo.connectStreetY(graphNodes,360);
-		grafo.connectStreetY(graphNodes, 240);
-		grafo.connectToFrom(graphNodes,55, 25, 350);
-		grafo.connectToFrom(graphNodes,150, 90,130);
-		grafo.connectToFrom(graphNodes,350, 295,130);
-		grafo.connectToFrom(graphNodes, 265, 175, 340);
-		grafo.connectToFrom(graphNodes,330 , 295, 250);
-		grafo.connect2Nodes(graphNodes,350, 330, 210 ,250);
-		grafo.connect2Nodes(graphNodes, 190, 175, 160, 170);
-		grafo.connect2Nodes(graphNodes, 205, 190,210 , 160);
-		grafo.connect2Nodes(graphNodes, 265, 245, 310, 340);
-		grafo.connect2Nodes(graphNodes,280,265,300,310);
-		grafo.connect2Nodes(graphNodes, 295, 280, 260, 300);
-		grafo.connect2Nodes(graphNodes, 70, 55, 360, 350);
-		grafo.connect2Nodes(graphNodes,160, 145, 350, 360);
-		grafo.connect2Nodes(graphNodes, 175, 160, 340, 350);
-		grafo.connect2Nodes(graphNodes, 350, 330, 210, 210);
-		grafo.connect2Nodes(graphNodes, 145, 130, 300, 300);
-		grafo.connect2Nodes(graphNodes, 55, 40, 280, 280);
-		grafo.connect2Nodes(graphNodes, 55, 40, 180, 180);
+		graph.connectVertical(graphNodes);
+		graph.connectStreetY(graphNodes, 110);
+		graph.connectStreetY(graphNodes, 50);
+		graph.connectStreetY(graphNodes,360);
+		graph.connectStreetY(graphNodes, 240);
+		graph.connectToFrom(graphNodes,55, 25, 350);
+		graph.connectToFrom(graphNodes,150, 90,130);
+		graph.connectToFrom(graphNodes,350, 295,130);
+		graph.connectToFrom(graphNodes, 265, 175, 340);
+		graph.connectToFrom(graphNodes,330 , 295, 250);
+		graph.connect2Nodes(graphNodes,350, 330, 210 ,250);
+		graph.connect2Nodes(graphNodes, 190, 175, 160, 170);
+		graph.connect2Nodes(graphNodes, 205, 190,210 , 160);
+		graph.connect2Nodes(graphNodes, 265, 245, 310, 340);
+		graph.connect2Nodes(graphNodes,280,265,300,310);
+		graph.connect2Nodes(graphNodes, 295, 280, 260, 300);
+		graph.connect2Nodes(graphNodes, 70, 55, 360, 350);
+		graph.connect2Nodes(graphNodes,160, 145, 350, 360);
+		graph.connect2Nodes(graphNodes, 175, 160, 340, 350);
+		graph.connect2Nodes(graphNodes, 350, 330, 210, 210);
+		graph.connect2Nodes(graphNodes, 145, 130, 300, 300);
+		graph.connect2Nodes(graphNodes, 55, 40, 280, 280);
+		graph.connect2Nodes(graphNodes, 55, 40, 180, 180);
 		
 		removeEgdeGraph();
 		
@@ -634,7 +634,7 @@ public class Launcher extends Repast3Launcher {
 			for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
 				//int velocity = r.nextInt(1500) + 500;	DESCOMENTAR
-				position[0] = 0;//TODO (4)por posiçoes do grafo
+				position[0] = 0;//TODO (4)por posiçoes do graph
 				position[1] = 0;
 				VehicleAgent vehicle = new VehicleAgent(position, velocity, lightAgents,displaySurf);
 				vehicleAgents.add(vehicle);
