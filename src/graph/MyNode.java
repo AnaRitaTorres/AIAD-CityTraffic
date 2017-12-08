@@ -9,7 +9,6 @@ import uchicago.src.sim.network.DefaultNode;
 import uchicago.src.sim.network.Edge;
 
 import graph.MyEdge;
-import javafx.scene.Node;
 
 public class MyNode extends DefaultDrawableNode {
 	

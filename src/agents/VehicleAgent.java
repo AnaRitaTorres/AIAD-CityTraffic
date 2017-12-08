@@ -169,7 +169,6 @@ public class VehicleAgent extends Agent{
 
 					@Override
 					public void action() {
-
 						//carro ve se tem semaforo
 						switch (step){
 						case 0:
@@ -180,6 +179,10 @@ public class VehicleAgent extends Agent{
 							break;
 						case 1:
 							if (searchLight.done()){
+								
+								System.out.println("teste");
+
+							
 								step = 2;
 							}
 							break;
@@ -210,9 +213,9 @@ public class VehicleAgent extends Agent{
 								nextPosition[0] = xtrajetoriaV2[index];
 								nextPosition[1] = ytrajetoriaV2[index];
 							}
-							encounterCar = new EncounterCar(car, cars);
-							addBehaviour(encounterCar);
-							step = 5;
+							//encounterCar = new EncounterCar(car, cars);
+							//addBehaviour(encounterCar);
+							step = 6;//5
 							break;
 						case 5:
 							if(encounterCar.done()){

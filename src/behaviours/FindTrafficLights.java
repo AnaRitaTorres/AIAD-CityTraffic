@@ -8,7 +8,7 @@ import agents.TrafficLightAgent;
 import agents.VehicleAgent;
 import jade.core.AID;
 
-@SuppressWarnings("serial")
+//@SuppressWarnings("serial")
 public class FindTrafficLights extends Behaviour{
 
 	private int step = 0;
@@ -37,6 +37,8 @@ public class FindTrafficLights extends Behaviour{
 			car.send(cfp);
 			
 			step = 1;
+			System.out.println(step);
+
 			break;
 		case 1:
 		//receive all answers from traffic lights
@@ -50,6 +52,8 @@ public class FindTrafficLights extends Behaviour{
 				repliesCnt++;
 				if(foundLight == true || repliesCnt == lights.size()){
 					step = 2;
+					System.out.println(step);
+
 				}
 			}
 			else{

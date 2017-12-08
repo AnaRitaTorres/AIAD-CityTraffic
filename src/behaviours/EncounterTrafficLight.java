@@ -10,7 +10,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.core.AID;
 
-@SuppressWarnings("serial")
+//@SuppressWarnings("serial")
 public class EncounterTrafficLight extends Behaviour{
 
 	private AID light;

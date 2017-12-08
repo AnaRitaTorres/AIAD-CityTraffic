@@ -150,7 +150,7 @@ public class TrafficLightAgent extends Agent{
 		});
 		
 		//addBehaviour(new CrossRoadTrafficLights(trafficLights.get(0),trafficLights.get(1)));
-		addBehaviour(new FindOtherTrafficLights(trafficLights.get(0),trafficLights));
+		//addBehaviour(new FindOtherTrafficLights(trafficLights.get(0),trafficLights));
 		
 	}
 		
