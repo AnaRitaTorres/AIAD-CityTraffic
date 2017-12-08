@@ -28,7 +28,7 @@ public class VehicleAgent extends Agent{
 	private Vector<TrafficLightAgent> trafficLights;
 	public VehicleAgent car = this;
 	private AID lightAtCarPos;
-	private int step;
+	private int step;	
 	private int velocity;
 	private RectNetworkItem s;
 	private DisplaySurface disp;

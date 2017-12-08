@@ -18,7 +18,7 @@ import sajas.wrapper.ContainerController;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
-
+import javafx.scene.Node;
 import uchicago.src.sim.engine.BasicAction;
 import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimInit;
@@ -176,6 +176,7 @@ public class Launcher extends Repast3Launcher {
 		ConnectNodes();
 		TransformNodes(graphNodes);
 		ConnectNodesVisual();
+		crossRoads();
 		
 	}
 	
@@ -186,6 +187,142 @@ public class Launcher extends Repast3Launcher {
 			MyNode n = new MyNode(o, graphNodes.get(i).getX(),graphNodes.get(i).getY());
 			nodes.add(n);
 		}
+	}
+	
+	public void removeEgdeGraph() {
+		for(int i=0; i < graphNodes.size(); i++) {
+			
+			if(graphNodes.get(i).getY()==240) {
+				if(graphNodes.get(i).getX()==310) {
+					graphNodes.get(i).removeAdj(310,250);
+				}
+				else if(graphNodes.get(i).getX()==320) {
+					graphNodes.get(i).removeAdj(320,250);
+				}
+				else if(graphNodes.get(i).getX()==330) {
+					graphNodes.get(i).removeAdj(330, 250);
+				}
+			}
+			else if(graphNodes.get(i).getY()==50) {
+				if(graphNodes.get(i).getX()==115) {
+					graphNodes.get(i).removeAdj(115, 110);
+				}
+				else if(graphNodes.get(i).getX()==130) {
+					graphNodes.get(i).removeAdj(130, 110);
+					
+				}
+				else if(graphNodes.get(i).getX()==145) {
+					graphNodes.get(i).removeAdj(145, 110);
+				}
+				else if(graphNodes.get(i).getX()==175) {
+					graphNodes.get(i).removeAdj(175, 240);
+					graphNodes.get(i).removeAdj(175, 110);
+					
+				}
+				else if(graphNodes.get(i).getX()==190) {
+					graphNodes.get(i).removeAdj(190, 160);
+					graphNodes.get(i).removeAdj(190, 110);
+				}
+				else if(graphNodes.get(i).getX()==205) {
+					graphNodes.get(i).removeAdj(205, 210);
+					graphNodes.get(i).removeAdj(205, 50);
+				}
+				else if(graphNodes.get(i).getX()==40) {
+					graphNodes.get(i).removeAdj(40, 110);
+				}
+				else if(graphNodes.get(i).getX()==55) {
+					graphNodes.get(i).removeAdj(55, 110);
+				}
+				else if(graphNodes.get(i).getX()==70) {
+					graphNodes.get(i).removeAdj(70, 110);
+				}
+				else if(graphNodes.get(i).getX()==85) {
+					graphNodes.get(i).removeAdj(85, 110);
+				}
+			}
+			else if(graphNodes.get(i).getY()==180){
+				if(graphNodes.get(i).getX()==40) {
+					graphNodes.get(i).removeAdj(40, 280);
+					graphNodes.get(i).removeAdj(40, 240);
+				}
+				else if(graphNodes.get(i).getX()==55) {
+					graphNodes.get(i).removeAdj(55, 280);
+					graphNodes.get(i).removeAdj(55, 240);
+				}
+			}
+			else if(graphNodes.get(i).getY()==210) {
+				if(graphNodes.get(i).getX()==130){
+					graphNodes.get(i).removeAdj(130,300);
+				}
+				else if(graphNodes.get(i).getX()==145){
+					graphNodes.get(i).removeAdj(145, 300);
+				}
+				
+			}
+			else if (graphNodes.get(i).getY()==250 && graphNodes.get(i).getX()==330){
+				graphNodes.get(i).removeAdj(350, 210);
+			}
+			else if(graphNodes.get(i).getY()== 130 && graphNodes.get(i).getX()==310) {
+				graphNodes.get(i).removeAdj(310, 240);
+			}
+			else if(graphNodes.get(i).getY()==240) {
+				if(graphNodes.get(i).getX()==115) {
+					graphNodes.get(i).removeAdj(160, 240);
+				}
+				else if (graphNodes.get(i).getX()==130) {
+					graphNodes.get(i).removeAdj(130, 300);
+				}
+				else if (graphNodes.get(i).getX()==145) {
+					graphNodes.get(i).removeAdj(145, 300);
+				}
+				else if (graphNodes.get(i).getX()==130) {
+					graphNodes.get(i).removeAdj(130, 210);
+				}
+				else if (graphNodes.get(i).getX()==145) {
+					graphNodes.get(i).removeAdj(145, 210);
+				}
+			}
+			else if(graphNodes.get(i).getY()==110) {
+				if(graphNodes.get(i).getX()==175) {
+					graphNodes.get(i).removeAdj(175, 240);
+				}
+				else if(graphNodes.get(i).getX()==190) {
+					graphNodes.get(i).removeAdj(190, 160);
+				}
+				else if(graphNodes.get(i).getX()==205) {
+					graphNodes.get(i).removeAdj(205,210);
+				}
+				else if(graphNodes.get(i).getX()==205) {
+					graphNodes.get(i).removeAdj(205,50);
+				}
+			}
+			else if(graphNodes.get(i).getY()==210) {
+				if(graphNodes.get(i).getX()==130) {
+					graphNodes.get(i).removeAdj(130, 240);
+				}
+				else if(graphNodes.get(i).getX()==145) {
+					graphNodes.get(i).removeAdj(145, 240);
+				}
+			}
+			
+			else if(graphNodes.get(i).getY()==280) {
+				if(graphNodes.get(i).getX()==40) {
+					graphNodes.get(i).removeAdj(40, 240);
+				}else if(graphNodes.get(i).getX()==55) {
+					graphNodes.get(i).removeAdj(55, 240);
+				}
+			}
+			else if(graphNodes.get(i).getY()==300) {
+				if(graphNodes.get(i).getX()==130) {
+					graphNodes.get(i).removeAdj(130, 240);
+				}else if(graphNodes.get(i).getX()==145) {
+					graphNodes.get(i).removeAdj(145, 240);
+				}
+				
+			}
+		}	
+		
+		
 	}
 	
 	public void ConnectNodes() {
@@ -208,8 +345,153 @@ public class Launcher extends Repast3Launcher {
 		graph.connect2Nodes(graphNodes, 70, 55, 360, 350);
 		graph.connect2Nodes(graphNodes,160, 145, 350, 360);
 		graph.connect2Nodes(graphNodes, 175, 160, 340, 350);
+		graph.connect2Nodes(graphNodes, 350, 330, 210, 210);
+		graph.connect2Nodes(graphNodes, 145, 130, 300, 300);
+		graph.connect2Nodes(graphNodes, 55, 40, 280, 280);
+		graph.connect2Nodes(graphNodes, 55, 40, 180, 180);
+		
+		removeEgdeGraph();
+		
+	
 	}
 	
+	
+	
+	public void removeEdgeVisual() {
+		for(int i=0; i < nodes.size(); i++) {
+			if(nodes.get(i).getY()==240) {
+				if(nodes.get(i).getX()==310) {
+					nodes.get(i).removeConnection(310,250,nodes);
+				}
+				else if(nodes.get(i).getX()==320) {
+					nodes.get(i).removeConnection(320,250,nodes);
+				}
+				else if(nodes.get(i).getX()==330) {
+					nodes.get(i).removeConnection(330, 250,nodes);
+				}
+			}
+			else if(nodes.get(i).getY()==50) {
+				if(nodes.get(i).getX()==115) {
+					nodes.get(i).removeConnection(115, 110, nodes);
+				}
+				else if(nodes.get(i).getX()==130) {
+					nodes.get(i).removeConnection(130, 110, nodes);
+					
+				}
+				else if(nodes.get(i).getX()==145) {
+					nodes.get(i).removeConnection(145, 110, nodes);
+				}
+				else if(nodes.get(i).getX()==175) {
+					nodes.get(i).removeConnection(175, 240, nodes);
+					nodes.get(i).removeConnection(175, 110, nodes);
+					
+				}
+				else if(nodes.get(i).getX()==190) {
+					nodes.get(i).removeConnection(190, 160, nodes);
+					nodes.get(i).removeConnection(190, 110, nodes);
+				}
+				else if(nodes.get(i).getX()==205) {
+					nodes.get(i).removeConnection(205, 210, nodes);
+					nodes.get(i).removeConnection(205, 50, nodes);
+				}
+				else if(nodes.get(i).getX()==40) {
+					nodes.get(i).removeConnection(40, 110, nodes);
+				}
+				else if(nodes.get(i).getX()==55) {
+					nodes.get(i).removeConnection(55, 110, nodes);
+				}
+				else if(nodes.get(i).getX()==70) {
+					nodes.get(i).removeConnection(70, 110, nodes);
+				}
+				else if(nodes.get(i).getX()==85) {
+					nodes.get(i).removeConnection(85, 110, nodes);
+				}
+			}
+			else if(nodes.get(i).getY()==180){
+				if(nodes.get(i).getX()==40) {
+					nodes.get(i).removeConnection(40, 280, nodes);
+					nodes.get(i).removeConnection(40, 240, nodes);
+				}
+				else if(nodes.get(i).getX()==55) {
+					nodes.get(i).removeConnection(55, 280, nodes);
+					nodes.get(i).removeConnection(55, 240, nodes);
+				}
+			}
+			else if(nodes.get(i).getY()==210) {
+				if(nodes.get(i).getX()==130){
+					nodes.get(i).removeConnection(130,300, nodes);
+				}
+				else if(nodes.get(i).getX()==145){
+					nodes.get(i).removeConnection(145, 300, nodes);
+				}
+			}
+							
+			
+			else if (nodes.get(i).getY()==250 && nodes.get(i).getX()==330){
+				nodes.get(i).removeConnection(350, 210, nodes);
+			}
+			else if(nodes.get(i).getY()== 130 && nodes.get(i).getX()==310) {
+				nodes.get(i).removeConnection(310, 240, nodes);
+			}
+			else if(nodes.get(i).getY()==240) {
+				if(nodes.get(i).getX()==115) {
+					nodes.get(i).removeConnection(160, 240, nodes);
+				}
+				else if (nodes.get(i).getX()==130) {
+					nodes.get(i).removeConnection(130, 300, nodes);
+				}
+				else if (nodes.get(i).getX()==145) {
+					nodes.get(i).removeConnection(145, 300, nodes);
+				}
+				else if (nodes.get(i).getX()==130) {
+					nodes.get(i).removeConnection(130, 210, nodes);
+				}
+				else if (nodes.get(i).getX()==145) {
+					nodes.get(i).removeConnection(145, 210, nodes);
+				}
+			}
+			else if(nodes.get(i).getY()==110) {
+				if(nodes.get(i).getX()==175) {
+					nodes.get(i).removeConnection(175, 240, nodes);
+				}
+				else if(nodes.get(i).getX()==190) {
+					nodes.get(i).removeConnection(190, 160,nodes);
+				}
+				else if(nodes.get(i).getX()==205) {
+					nodes.get(i).removeConnection(205, 210,nodes);
+				}
+				else if(nodes.get(i).getX()==205) {
+					nodes.get(i).removeConnection(205, 50,nodes);
+				}
+				
+				
+			}
+			else if(nodes.get(i).getY()==210) {
+				if(nodes.get(i).getX()==130) {
+					nodes.get(i).removeConnection(130, 240, nodes);
+				}
+				else if(nodes.get(i).getX()==145) {
+					nodes.get(i).removeConnection(145, 240, nodes);
+				}
+				
+			}
+			else if(nodes.get(i).getY()==280) {
+				if(nodes.get(i).getX()==40) {
+					nodes.get(i).removeConnection(40, 240, nodes);
+				}else if(nodes.get(i).getX()==55) {
+					nodes.get(i).removeConnection(55, 240, nodes);
+				}
+			}
+			else if(nodes.get(i).getY()==300) {
+				if(nodes.get(i).getX()==130) {
+					nodes.get(i).removeConnection(130, 240, nodes);
+				}else if(nodes.get(i).getX()==145) {
+					nodes.get(i).removeConnection(145, 240, nodes);
+				}
+				
+			}
+		}
+	}
 	public void ConnectNodesVisual() {
 		c.connectVertical(nodes);
 		
@@ -231,8 +513,44 @@ public class Launcher extends Repast3Launcher {
 		c.connect2Nodes(nodes,280,265,300,310);
 		c.connect2Nodes(nodes, 295, 280, 260, 300);
 		c.connect2Nodes(nodes,350, 330, 210 ,250);
-		c.connect2Nodes(nodes, 190, 175, 160, 170);
 		c.connect2Nodes(nodes, 205, 190,210 , 160);
+		c.connect2Nodes(nodes, 350, 330, 210, 210);
+		c.connect2Nodes(nodes, 145, 130, 300, 300);
+		c.connect2Nodes(nodes, 55, 40, 280, 280);
+		c.connect2Nodes(nodes, 55, 40, 180, 180);
+				
+		removeEdgeVisual();
+		
+	
+	}
+	
+	public void crossRoads() {
+		 
+		OvalNetworkItem o1 = new OvalNetworkItem(295,240);
+		OvalNetworkItem o2 = new OvalNetworkItem(265,110);
+		OvalNetworkItem o3 = new OvalNetworkItem(160,110);
+		OvalNetworkItem o4 = new OvalNetworkItem(190,240);
+		OvalNetworkItem o5 = new OvalNetworkItem(40,350);
+		
+		o1.setColor(Color.black);
+		o2.setColor(Color.black);
+		o3.setColor(Color.black);
+		o4.setColor(Color.black);
+		o5.setColor(Color.black);
+		
+		MyNode c1 = new MyNode(o1,295,240);
+		MyNode c2 = new MyNode(o2,265,110);
+		MyNode c3 = new MyNode(o3,160,110);
+		MyNode c4 = new MyNode(o4,190,240);
+		MyNode c5 = new MyNode(o5,40,350);
+		
+		lightsNodes.add(c1);
+		lightsNodes.add(c2);
+		lightsNodes.add(c3);
+		lightsNodes.add(c4);
+		lightsNodes.add(c5);
+		
+		
 	}
 	
 	public void buildModel() {
@@ -246,59 +564,7 @@ public class Launcher extends Repast3Launcher {
 	
 	public void buildSchedule() {
 		
-		/*class ChangeLight extends BasicAction {
-			public void execute() {
-				if(color==2) {
-					lightAgents.get(0).changeColor(semColor.get(color));
-					color=0;
-				}
-				else {
-					lightAgents.get(0).changeColor(semColor.get(color));
-					color++;
-				}
-				displaySurf.updateDisplay(); 
-			}
-			
-		}*/
 		
-		//ChangeLight run = new ChangeLight();
-		//schedule.scheduleActionBeginning(1000,run,500.0);
-		
-		/*schedule.scheduleActionAtInterval(time, new BasicAction() {
-			public void execute() {
-				
-		    	if(color==0) {
-		    		lightAgents.get(0).changeColor(semColor.get(color));  
-		    		color++;
-		    		time = time +2000;
-		    	 }
-		    	displaySurf.updateDisplay(); 
-		     }
-		},2000);
-		
-		schedule.scheduleActionBeginning(time, new BasicAction() {
-			public void execute() {
-				
-		    	if(color==1) {
-		    		lightAgents.get(0).changeColor(semColor.get(color));  
-		    		color++;
-		    		time= time+2000;
-		    	 }
-		    	 displaySurf.updateDisplay(); 
-			 }
-		},2000);
-		
-		schedule.scheduleActionBeginning(time, new BasicAction() {
-			public void execute() {
-				
-		    	if(color==2) {
-		    		lightAgents.get(0).changeColor(semColor.get(color));  
-		    		color=0;
-		    		time=time+2000;
-		    	 }
-		    	 displaySurf.updateDisplay(); 
-			 }
-		},2000);*/
 	}
 	
 	public void buildDisplay() {
@@ -353,12 +619,12 @@ public class Launcher extends Repast3Launcher {
 			
 			//create traffic lights
 			//for(int i=0; i < numLights;i++) {
-				//TrafficLightAgent tLight1 = new TrafficLightAgent(160,50);
-				TrafficLightAgent tLight = new TrafficLightAgent(100,110,displaySurf);
+				TrafficLightAgent tLight1 = new TrafficLightAgent(160,50, lightAgents,displaySurf);
+				TrafficLightAgent tLight = new TrafficLightAgent(100,110,lightAgents,displaySurf);
 				lightAgents.add(tLight);
-				//lightAgents.add(tLight1);
+				lightAgents.add(tLight1);
 				mainContainer.acceptNewAgent("Light" + 0, tLight).start();
-				//mainContainer.acceptNewAgent("Light" + 1, tLight1).start();
+				mainContainer.acceptNewAgent("Light" + 1, tLight1).start();
 				
 				
 				MyNode n = new MyNode(tLight.getS(), tLight.getX(),tLight.getY());

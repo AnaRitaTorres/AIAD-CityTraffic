@@ -19,6 +19,7 @@ public class Graph{
 			GraphNode n1 = nodes.get(i-1);
 			if(n.getX() == n1.getX()) {
 				n.addAdj(n1);
+				n1.addAdj(n);
 			}
 		}
 	}
@@ -39,6 +40,7 @@ public class Graph{
 			GraphNode n1 = aux.get(i);
 			GraphNode n2 = aux.get(i-1);
 			n2.addAdj(n1);
+			n1.addAdj(n2);
 		}
 	
 	}
@@ -67,6 +69,7 @@ public class Graph{
 			GraphNode n1 = aux1.get(i);
 			GraphNode n2 = aux1.get(i-1);
 			n2.addAdj(n1);
+			n1.addAdj(n2);
 		}
 	
 	}
@@ -89,5 +92,6 @@ public class Graph{
 		}
 		
 		in.addAdj(out);
+		out.addAdj(in);
 	}
 }
