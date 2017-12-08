@@ -1,6 +1,8 @@
 //TODO(4) fazer experiencias com numero diferente de carros (e semaforos?) e 
 //tirar estatisticas do numero de colisoes, distancia percorrida, tempo demorado, tempo de espera em semaforos, tempo total que os carros estao parados durante o percurso(semaforos+transito)
 
+//TODO melhorias implementar sentidos do transito
+
 package gui;
 
 import java.util.Vector;
@@ -377,11 +379,11 @@ public class Launcher extends Repast3Launcher {
 			//for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
 				//int velocity = r.nextInt(1500) + 500;	DESCOMENTAR
-				VehicleAgent vehicle = new VehicleAgent(55, 110, 1000, lightAgents, graph, carsNodes, displaySurf);
+				VehicleAgent vehicle = new VehicleAgent(55, 110, 1000, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 1, vehicle).start();
 				
-				vehicle = new VehicleAgent(100, 60, 2000, lightAgents, graph, carsNodes, displaySurf);
+				vehicle = new VehicleAgent(85, 110, 2000, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 2, vehicle).start();
 				
