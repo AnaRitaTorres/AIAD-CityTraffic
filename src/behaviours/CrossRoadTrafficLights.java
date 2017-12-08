@@ -4,7 +4,7 @@ package behaviours;
 import java.util.ArrayList;
 import sajas.core.behaviours.*;
 
-import agents.*;
+import agents.TrafficLightAgent;
 import graph.GraphNode;
 
 import jade.lang.acl.ACLMessage;
@@ -60,7 +60,7 @@ public class CrossRoadTrafficLights extends Behaviour{
 	
 	@Override
 	public void action() {
-		ACLMessage cfp= new ACLMessage(ACLMessage.CFP);
+		
 		//check if they are connected to the same crossroad
 		switch(step){
 		case 0:
@@ -70,32 +70,34 @@ public class CrossRoadTrafficLights extends Behaviour{
 			break;
 		case 1:
 			//if they are, ask each other for the color
-			System.out.println("Cor?");
+			ACLMessage cfp= new ACLMessage(ACLMessage.CFP);
 			cfp.addReceiver(light2.getAID());
-			cfp.setContent("Cor1");
+			cfp.setContent("Cor?");
 			cfp.setConversationId("cor1");
-			cfp.setReplyWith("cfp" + System.currentTimeMillis());
-			light1.send(cfp);
-			
-			mt= MessageTemplate.and(MessageTemplate.MatchConversationId("cor1"),MessageTemplate.MatchConversationId(cfp.getReplyWith()));
+			cfp.setReplyWith("cfp"+System.currentTimeMillis());
+			myAgent.send(cfp);
+			mt= MessageTemplate.and(MessageTemplate.MatchConversationId("cor1"),MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
 			step=2;
 			break;
 		case 2:
 			//wait for the answer and with that info change colors
-			reply= light1.receive(mt);
 			
+			reply= light1.receive(mt);
 			if(reply != null){
-				if(reply.getContent()=="red") {
-					light1.changeColor("green");
-				}
-				else if(reply.getContent()=="green") {
-					light1.changeColor("red");
-				}
-				System.out.println("b:"+ reply.getContent());
+				step=3;
 			}
-			else
-				System.out.println("null msg");
-			step=1;
+			else {
+				block();
+			}
+			break;
+		case 3:
+			if(reply.getContent().equals("red")) {
+				light1.changeColor("green");
+			}
+			else if(reply.getContent().equals("green")) {
+				light1.changeColor("red");
+			}
+			step=4;
 			break;
 		}
 		

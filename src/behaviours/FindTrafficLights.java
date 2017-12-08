@@ -37,7 +37,7 @@ public class FindTrafficLights extends Behaviour{
 			cfp.setConversationId("position");
 			cfp.setReplyWith("cfp"+System.currentTimeMillis());
 			myAgent.send(cfp);
-			
+			System.out.println("CFP" + cfp);
 			mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
 			step = 1;
 			break;
