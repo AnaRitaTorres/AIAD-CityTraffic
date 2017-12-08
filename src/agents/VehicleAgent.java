@@ -29,7 +29,7 @@ public class VehicleAgent extends Agent{
 	private int[] nextPosition = new int[2]; //posiçao seguinte do carro
 	private Vector<VehicleAgent> cars;
 	private Vector<TrafficLightAgent> trafficLights;
-	public VehicleAgent car = this;//se mudar para private funciona tudo?
+	public VehicleAgent car = this;
 	private AID lightAtCarPos;
 	private int step;
 	private int velocity;
@@ -38,13 +38,20 @@ public class VehicleAgent extends Agent{
 	private Graph graph;
 	private ArrayList<MyNode> carsNodes;
 	private MyNode n;
+	private boolean accident;
+	private int numAccidents;
+	private int repliesCnt;
+	private boolean foundCar;
+	private ACLMessage reply;
+	private MessageTemplate mt;
 	Behaviour searchLight, dealLight, encounterCar;
+
 
 	//para apagar
 	private int[] xtrajetoriaV1 = new int[7];
 	private int[] ytrajetoriaV1 = new int[7];
-	private int[] xtrajetoriaV2 = new int[7];
-	private int[] ytrajetoriaV2 = new int[7];
+	private int[] xtrajetoriaV2 = new int[5];
+	private int[] ytrajetoriaV2 = new int[5];
 	private int index = 0;
 
 
@@ -56,16 +63,17 @@ public class VehicleAgent extends Agent{
 		position[0] = x;
 		position[1] = y;
 		this.velocity = velocity;
+		this.accident = false;
+		this.numAccidents = 0;
 		this.s= new RectNetworkItem(x,y);
 		this.disp=disp;
-		Color[] cores = new Color[5];
-		cores[0] = Color.BLACK;
-		cores[1] = Color.BLUE;
-		cores[2] = Color.CYAN;
-		cores[3] = Color.PINK;
-		cores[4] = Color.YELLOW;
+		Color[] cores = new Color[4];
+		cores[0] = Color.BLUE;
+		cores[1] = Color.CYAN;
+		cores[2] = Color.PINK;
+		cores[3] = Color.YELLOW;
 		java.util.Random r = new java.util.Random();
-		int iCor = r.nextInt(5);
+		int iCor = r.nextInt(4);
 		s.setColor(cores[iCor]);
 		this.carsNodes = carsNodes;
 		this.graph = graph;
@@ -89,7 +97,7 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV1[5] = 110;
 		ytrajetoriaV1[6] = 110;
 
-		xtrajetoriaV2[0] = 100;
+		/*xtrajetoriaV2[0] = 100;
 		xtrajetoriaV2[1] = 115;
 		xtrajetoriaV2[2] = 130;
 		xtrajetoriaV2[3] = 145;
@@ -103,23 +111,23 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV2[3] = 110;
 		ytrajetoriaV2[4] = 110;
 		ytrajetoriaV2[5] = 110;
-		ytrajetoriaV2[6] = 110;
+		ytrajetoriaV2[6] = 110;*/
 
-		/*xtrajetoriaV2[0] = 100;
+		xtrajetoriaV2[0] = 100;
 		xtrajetoriaV2[1] = 100;
 		xtrajetoriaV2[2] = 100;
 		xtrajetoriaV2[3] = 100;
 		xtrajetoriaV2[4] = 100;
-		xtrajetoriaV2[5] = 100;
-		xtrajetoriaV2[6] = 100;
+		//xtrajetoriaV2[5] = 100;
+		//xtrajetoriaV2[6] = 100;
 
-		ytrajetoriaV2[0] = 70;
-		ytrajetoriaV2[1] = 80;
-		ytrajetoriaV2[2] = 90;
-		ytrajetoriaV2[3] = 100;
-		ytrajetoriaV2[4] = 110;
-		ytrajetoriaV2[5] = 120;
-		ytrajetoriaV2[6] = 130;*/
+		//ytrajetoriaV2[0] = 70;
+		//ytrajetoriaV2[1] = 80;
+		ytrajetoriaV2[0] = 90;
+		ytrajetoriaV2[1] = 100;
+		ytrajetoriaV2[2] = 110;
+		ytrajetoriaV2[3] = 120;
+		ytrajetoriaV2[4] = 130;
 	}
 
 	public RectNetworkItem getS() {
@@ -138,11 +146,11 @@ public class VehicleAgent extends Agent{
 		return ID;
 	}
 
-	public int getX() {
+	private int getX() {
 		return position[0];
 	}
 
-	public int getY() {
+	private int getY() {
 		return position[1];
 	}
 
@@ -161,6 +169,9 @@ public class VehicleAgent extends Agent{
 		carsNodes.add(n);
 		s.setX(getX());
 		s.setY(getY());
+		if(accident == true){
+			s.setColor(Color.BLACK);
+		}
 		disp.updateDisplay();
 	}
 
@@ -177,41 +188,79 @@ public class VehicleAgent extends Agent{
 			protected void onTick() {  
 
 				System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
+				String strCarPos = "" + car.getPosition()[0] + car.getPosition()[1] + "";
 
 				//carro ve se tem semaforo
 				switch (step){
+
 				case 0:
-					//perguntar a todos os semaforos a posiçao
-					searchLight = new FindTrafficLights(car, trafficLights);
-					addBehaviour(searchLight);
+					//send the cfp to all cars
+					ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
+					for(int i = 0; i < cars.size(); i++){
+						if(cars.elementAt(i).getAID() != car.getAID()){
+							cfp.addReceiver(cars.elementAt(i).getAID());
+						}
+					}
+					cfp.setContent("position");
+					cfp.setConversationId("position");
+					cfp.setReplyWith("cfp"+System.currentTimeMillis());
+					car.send(cfp);
+					mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
+
+					repliesCnt = 0;
+					foundCar = false;
 					step = 1;
 					break;
 				case 1:
-					if (searchLight.done()){
-						step = 2;
+					//receive all answers from cars
+					reply = car.receive(mt); 
+					if(reply != null){
+						if(reply.getContent().equals(strCarPos)){
+							foundCar = true;
+							accident = true;
+							numAccidents++;
+						}
+						repliesCnt++;
+						if(repliesCnt == cars.size()-1){
+							step = 2;
+						}
+					}
+					else{
+						block();
 					}
 					break;
 				case 2:
+					//perguntar a todos os semaforos a posiçao
+					searchLight = new FindTrafficLights(car, trafficLights);
+					addBehaviour(searchLight);
+					step = 3;
+					break;
+				case 3:
+					if (searchLight.done()){
+						step = 4;
+					}
+					break;
+				case 4:
 					//perguntar cor do semaforo que encontrou
 					if(lightAtCarPos != null){
 						dealLight = new EncounterTrafficLight(car, lightAtCarPos);
 						addBehaviour(dealLight);
-						step = 3;
+						step = 5;
 
 					} else{
-						step = 4;
+						step = 6;
 					}
 					break;
-				case 3:
+				case 5:
 					if(dealLight.done()){
-						step = 4;
+						step = 6;
 					}
 					else{
 						block();
 					}
 					break;
 
-				case 4:
+				case 6:
 					//TODO hardcoded vai ser para mudar para mover no grafo
 					if(getAID().getName().equals("Vehicle1@City Traffic")){
 						nextPosition[0] = xtrajetoriaV1[index];
@@ -224,17 +273,17 @@ public class VehicleAgent extends Agent{
 					index++;
 					encounterCar = new EncounterCar(car, cars);
 					addBehaviour(encounterCar);
-					step = 5;
+					step = 7;
 					break;
-				case 5:
+				case 7:
 					if(encounterCar.done()){
-						step = 6;
+						step = 8;
 					}
 					else{
 						block();
 					}
 					break;
-				case 6:
+				case 8:
 
 					//position[0] = position[0] + 1;
 					//position[1] = position[1] + 1;
@@ -248,10 +297,10 @@ public class VehicleAgent extends Agent{
 					updateDisplayCar();
 
 					step = 0;
+					repliesCnt = 0;
+					foundCar = false;
 					break;
 				}
-
-				//TODO (1) tratar de colisões (colisoes - light - carro) - ver se ha outro carro na posiçao em que estou, se houver guardar o numero de carros(nºde colisoes deste carro) e o carro morre(fica parado aí para sempre
 
 				//TODO (5)carro para o tick behavior se tiver chegado ao destino (ou seja implica criar posiçoes iniciais e finas e faze lo percorrer o caminha, implica implementar djkistra
 			}

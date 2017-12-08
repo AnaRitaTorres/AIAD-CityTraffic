@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import agents.VehicleAgent;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import sajas.core.behaviours.*;
 
 public class EncounterCar extends Behaviour{
@@ -16,8 +17,8 @@ public class EncounterCar extends Behaviour{
 	private int step = 0;
 	private int repliesCnt = 0;
 	private boolean foundCar = false;
-	private ACLMessage r;
 	private ACLMessage reply;
+	private MessageTemplate mt;
 
 	public EncounterCar(VehicleAgent car, Vector<VehicleAgent> cars) {
 		this.car = car;
@@ -39,7 +40,9 @@ public class EncounterCar extends Behaviour{
 			}
 			cfp.setContent("position");
 			cfp.setConversationId("position");
+			cfp.setReplyWith("cfp"+System.currentTimeMillis());
 			car.send(cfp);
+			mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
 
 			repliesCnt = 0;
 			foundCar = false;
@@ -47,7 +50,7 @@ public class EncounterCar extends Behaviour{
 			break;
 		case 1:
 			//receive all answers from cars
-			reply = car.receive(); 
+			reply = car.receive(mt); 
 			if(reply != null){
 				if(reply.getContent().equals(carNextPos)){
 					foundCar = true;
