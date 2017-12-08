@@ -654,7 +654,7 @@ public class Launcher extends Repast3Launcher {
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 1, vehicle).start();
 				//100,60 / 85,110
-				vehicle = new VehicleAgent(100, 60, 500, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
+				vehicle = new VehicleAgent(85, 110, 500, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 2, vehicle).start();
 				

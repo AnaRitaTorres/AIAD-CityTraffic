@@ -44,9 +44,7 @@ public class EncounterCar extends Behaviour{
 		case 1:
 			//receive all answers from cars
 			ACLMessage reply = car.receive(); 
-			
-			//System.out.println("AQUIIIIIIIIIII" + reply);
-			//TODO TODO TODO TODO TODO deste lado a reply aparece a null, resolver isto e acabar de testar o behaviour para passar às colisoes e depois imlementar movimentos no grafo random e depois estatisticas e depois extras (entretanto verificar lights da rita)
+			//TODO resolver isto e acabar de testar o behaviour para passar às colisoes e depois imlementar movimentos no grafo random e depois estatisticas e depois extras (entretanto verificar lights da rita)
 			
 			if(reply != null){
 				String carNextPos = "" + car.getNextPosition()[0] + car.getNextPosition()[1] + "";
@@ -56,6 +54,7 @@ public class EncounterCar extends Behaviour{
 				}
 				repliesCnt++;
 				if(foundCar == false && repliesCnt == cars.size()){
+					System.out.println("AQUIIIIIIIIIII");
 					step = 3;
 				}
 			}
