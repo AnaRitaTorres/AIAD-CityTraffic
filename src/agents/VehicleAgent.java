@@ -273,7 +273,7 @@ public class VehicleAgent extends Agent{
 							reply.setContent(pos);
 							reply.setConversationId("position");
 							car.send(reply);
-							System.out.println("AQUI! " + reply.getContent());
+							//System.out.println("AQUI! " + reply.getContent());
 						}
 					}
 				}
