@@ -30,7 +30,7 @@ public class EncounterTrafficLight extends Behaviour{
 		switch(step){
 		case 0:
 			//send request for color to traffic light encountered by the car
-			//System.out.println("Cor?");
+			System.out.println("Cor?");
 			cfp.addReceiver(light);
 			cfp.setContent("Cor?");
 			cfp.setConversationId("cor");
@@ -51,10 +51,6 @@ public class EncounterTrafficLight extends Behaviour{
 			break;
 		case 2:
 			//handle traffic light color
-			
-			//System.out.println("teste");
-			
-			
 			if(! reply.getContent().equals("red")){
 				step = 3;
 			}
@@ -65,7 +61,7 @@ public class EncounterTrafficLight extends Behaviour{
 		}
 	}
 
-	@Override//ver se continua a funcionar
+	@Override
 	public boolean done(){
 		return step == 3;
 	}

@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import agents.VehicleAgent;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import sajas.core.behaviours.*;
 
 public class EncounterCar extends Behaviour{
@@ -16,7 +17,8 @@ public class EncounterCar extends Behaviour{
 	private int step = 0;
 	private int repliesCnt = 0;
 	private boolean foundCar = false;
-	private ACLMessage r;
+	private ACLMessage reply;
+	private MessageTemplate mt;
 
 	public EncounterCar(VehicleAgent car, Vector<VehicleAgent> cars) {
 		this.car = car;
@@ -25,7 +27,8 @@ public class EncounterCar extends Behaviour{
 
 	@Override
 	public void action() {
-
+		String carNextPos = "" + car.getNextPosition()[0] + car.getNextPosition()[1] + "";
+		
 		switch(step){
 		case 0:
 			//send the cfp to all cars
@@ -37,40 +40,43 @@ public class EncounterCar extends Behaviour{
 			}
 			cfp.setContent("position");
 			cfp.setConversationId("position");
+			cfp.setReplyWith("cfp"+System.currentTimeMillis());
 			car.send(cfp);
+			mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
 
+			repliesCnt = 0;
+			foundCar = false;
 			step = 1;
 			break;
 		case 1:
 			//receive all answers from cars
-			ACLMessage reply = car.receive(); 
-			
-			//System.out.println("AQUIIIIIIIIIII" + reply);
-			//TODO TODO TODO TODO TODO deste lado a reply aparece a null, resolver isto e acabar de testar o behaviour para passar às colisoes e depois imlementar movimentos no grafo random e depois estatisticas e depois extras (entretanto verificar lights da rita)
-			
+			reply = car.receive(mt); 
 			if(reply != null){
-				String carNextPos = "" + car.getNextPosition()[0] + car.getNextPosition()[1] + "";
 				if(reply.getContent().equals(carNextPos)){
 					foundCar = true;
-					r = reply;
+					step = 2;
 				}
 				repliesCnt++;
-				if(foundCar == false && repliesCnt == cars.size()){
+				if(foundCar == false && repliesCnt == cars.size()-1){
 					step = 3;
 				}
+				
 			}
 			else{
 				block();
 			}
 			break;
 		case 2:
-			//??
+			if(reply.getContent().equals(carNextPos)){
+				step = 0;
+			}
+			else{
+				step = 3;
+			}
 			break;
 		}
 
 	}
-
-
 
 	@Override
 	public boolean done() {
