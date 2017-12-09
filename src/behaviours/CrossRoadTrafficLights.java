@@ -22,7 +22,7 @@ public class CrossRoadTrafficLights extends TickerBehaviour{
 		super(light1,10000);
 		this.light1=light1;
 		this.light2=light2;
-		System.out.println(light2);
+		//System.out.println(light2);
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class CrossRoadTrafficLights extends TickerBehaviour{
 		case 1:
 			//wait for the answer and with that info change colors
 			reply= light1.receive(mt);
-			System.out.println(reply.getContent());
+			//System.out.println(reply.getContent());
 			if(reply != null){
 				step=2;
 			}

@@ -102,7 +102,7 @@ public class TrafficLightAgent extends Agent{
 
 		changeColor(currentColor);
 
-		addBehaviour(new TickerBehaviour(this, 10000){
+		addBehaviour(new TickerBehaviour(this, 3000){
 
 			protected void onTick() {  
 				if(i.get() == 2){

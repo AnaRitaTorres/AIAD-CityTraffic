@@ -1,5 +1,5 @@
-//TODO(4) fazer experiencias com numero diferente de carros (e semaforos?) e 
-//tirar estatisticas do numero de colisoes, distancia percorrida, tempo demorado, tempo de espera em semaforos, tempo total que os carros estao parados durante o percurso(semaforos+transito)
+//TODO fazer experiencias com numero diferente de carros (e semaforos?) para por os resultados dessas estatisticas no relatorio
+//TODO por estatisticas na janela em direto
 
 //TODO melhorias implementar sentidos do transito, dar para por semaforos em qualquer sitio e alterer o numero de lights agenst na janelinha
 
@@ -85,9 +85,6 @@ public class Launcher extends Repast3Launcher {
 	}
 
 	public void setNumVehicles(int numVehicles) {
-		
-		System.out.println("entrei");
-		
 		this.numVehicles = numVehicles;
 	}
 
@@ -326,8 +323,6 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public void buildDisplay() {
-
-		//TODO(10) na janela das settings pro para dar para alterar numero de agentes
 		
 		Network2DDisplay display = new Network2DDisplay (nodes,WIDTH,HEIGHT);
 		display.setNodesVisible(false);
@@ -338,8 +333,6 @@ public class Launcher extends Repast3Launcher {
 		displaySurf.addDisplayableProbeable (display1, "City");
 		displaySurf.addZoomable (display);
 		displaySurf.setBackground (java.awt.Color.white);
-		
-		
 	}
 	
 	
@@ -365,6 +358,7 @@ public class Launcher extends Repast3Launcher {
 		mainContainer = rt.createMainContainer(p);
 		readFromFile(file);
 		launchAgents();
+		
 	}
 	
 	private void launchAgents() {
