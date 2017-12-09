@@ -81,13 +81,13 @@ public class VehicleAgent extends Agent{
 		this.carsNodes.add(n);
 
 		//para apagar
-		xtrajetoriaV1[0] = 70;
-		xtrajetoriaV1[1] = 85;
-		xtrajetoriaV1[2] = 100;
-		xtrajetoriaV1[3] = 115;
-		xtrajetoriaV1[4] = 130;
-		xtrajetoriaV1[5] = 145;
-		xtrajetoriaV1[6] = 160;
+		xtrajetoriaV1[0] = 70+30;
+		xtrajetoriaV1[1] = 85+30;
+		xtrajetoriaV1[2] = 100+30;
+		xtrajetoriaV1[3] = 115+30;
+		xtrajetoriaV1[4] = 130+30;
+		xtrajetoriaV1[5] = 145+30;
+		xtrajetoriaV1[6] = 160+30;
 
 		ytrajetoriaV1[0] = 110;
 		ytrajetoriaV1[1] = 110;
@@ -113,11 +113,11 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV2[5] = 110;
 		ytrajetoriaV2[6] = 110;*/
 
-		xtrajetoriaV2[0] = 100;
-		xtrajetoriaV2[1] = 100;
-		xtrajetoriaV2[2] = 100;
-		xtrajetoriaV2[3] = 100;
-		xtrajetoriaV2[4] = 100;
+		xtrajetoriaV2[0] = 100+60;
+		xtrajetoriaV2[1] = 100+60;
+		xtrajetoriaV2[2] = 100+60;
+		xtrajetoriaV2[3] = 100+60;
+		xtrajetoriaV2[4] = 100+60;
 		//xtrajetoriaV2[5] = 100;
 		//xtrajetoriaV2[6] = 100;
 
@@ -178,7 +178,7 @@ public class VehicleAgent extends Agent{
 
 	protected void setup() {
 
-		//System.out.println("Hello! Vehicle-Agent "+ getAID().getName() + " is ready.");
+		System.out.println("Hello! Vehicle-Agent "+ getAID().getName() + " is ready.");
 
 		step = 0;
 		lightAtCarPos = null;
@@ -187,7 +187,7 @@ public class VehicleAgent extends Agent{
 			@Override
 			protected void onTick() {  
 
-				//System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
+				System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
 				String strCarPos = "" + car.getPosition()[0] + car.getPosition()[1] + "";
 
 				//carro ve se tem semaforo

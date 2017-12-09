@@ -405,11 +405,11 @@ public class Launcher extends Repast3Launcher {
 			//for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
 				//int velocity = r.nextInt(475) + 125;	DESCOMENTAR
-				VehicleAgent vehicle = new VehicleAgent(55, 110, 125, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
+				VehicleAgent vehicle = new VehicleAgent(55+30, 110, 125, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 1, vehicle).start();
 				//100,80 / 85,110
-				vehicle = new VehicleAgent(100, 80, 125, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
+				vehicle = new VehicleAgent(100+60, 80, 125, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 2, vehicle).start();
 				
