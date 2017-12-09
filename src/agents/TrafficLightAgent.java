@@ -95,6 +95,10 @@ public class TrafficLightAgent extends Agent{
 	public boolean isHaspair() {
 		return haspair;
 	}
+	
+	public void setCurrentColor(String color){
+		this.currentColor = color;
+	}
 
 	public ArrayList<TrafficLightAgent> getPair() {
 		return pair;

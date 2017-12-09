@@ -21,15 +21,11 @@ public class CrossRoadTrafficLights extends Behaviour{
 	
 	public CrossRoadTrafficLights(ArrayList <TrafficLightAgent> pair) {
 		
-<<<<<<< HEAD
-		super(light1,10000);
-		this.light1=light1;
-		this.light2=light2;
+		
 		//System.out.println(light2);
-=======
 		this.light1=pair.get(0);
 		this.light2=pair.get(1);
->>>>>>> eba459ed37a8952d46b45b7ff496e963755818c0
+
 	}
 	
 	@Override
@@ -63,10 +59,12 @@ public class CrossRoadTrafficLights extends Behaviour{
 		case 2:
 			if(reply.getContent().equals("green")) {
 				light1.changeColor("red");
+				light1.setCurrentColor("red");
 				
 			}
 			else if(reply.getContent().equals("red") || reply.getContent().equals("orange")) {
 				light1.changeColor("green");
+				light1.setCurrentColor("green");
 			}
 			step=0;
 			break;

@@ -190,6 +190,7 @@ public class Launcher extends Repast3Launcher {
 		ConnectGraphNodes(265,310,280,300);
 		ConnectGraphNodes(280,300,295,260);
 		ConnectGraphNodes(330,240,350,210);
+		ConnectGraphNodes(190,160,205,210);
 	}
 	
 	public void groupByX() {
