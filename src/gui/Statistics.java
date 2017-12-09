@@ -24,11 +24,11 @@ public class Statistics {
 		return avgAccidents;
 	}
 	
-	public float getTotalDistance() {
+	public double getTotalDistance() {
 		return totalDistance;
 	}
 	
-	public float getAvgDistance() {
+	public double getAvgDistance() {
 		return avgDistance;
 	}
 	
