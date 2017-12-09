@@ -47,8 +47,6 @@ public class CrossRoadTrafficLights extends Behaviour{
 			//wait for the answer and with that info change colors
 			reply= light1.receive(mt);
 
-			//System.out.println(reply.getContent());
-
 			if(reply != null){
 				step=2;
 			}
