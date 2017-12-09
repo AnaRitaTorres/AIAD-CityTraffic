@@ -9,10 +9,10 @@ public class GraphNode{
 	private ArrayList<GraphNode> adj = new ArrayList<GraphNode>();
 	
 	public GraphNode() {}
-	public GraphNode(int x, int y, ArrayList<GraphNode> adj) {
+	public GraphNode(int x, int y) {
 		this.x=x;
 		this.y=y;
-		this.adj=adj;
+		
 	}
 	
 	public void addAdj(GraphNode node) {
@@ -26,7 +26,8 @@ public class GraphNode{
 	public int getY() {
 		return y;
 	}
-
+	
+	
 	public ArrayList<GraphNode> getAdj() {
 		return adj;
 	}

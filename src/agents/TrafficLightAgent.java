@@ -143,7 +143,7 @@ public class TrafficLightAgent extends Agent{
 							
 						}
 						//crossroad behaviour
-						else */if(msg.getConversationId().equals("cor1")) {
+						else*/ if(msg.getConversationId().equals("cor1")) {
 							reply.setPerformative(ACLMessage.INFORM);
 							reply.setContent(currentColor);
 							reply.setConversationId("cor1");
