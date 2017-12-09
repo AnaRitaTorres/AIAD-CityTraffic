@@ -42,6 +42,7 @@ public class Launcher extends Repast3Launcher {
 	
 	private int numNodes = N_NODES;
 	private Graph graph;
+	private Statistics stats = new Statistics();
 	private ArrayList<GraphNode> graphNodes = new ArrayList<GraphNode>();
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
 	private ArrayList<MyNode> lightsNodes = new ArrayList<MyNode>();
@@ -410,7 +411,7 @@ public class Launcher extends Repast3Launcher {
 				GraphNode posInit = graph.getNodes().get(pos);
 				GraphNode posEnd = posInit;//TODO
 				//55+30, 110
-				VehicleAgent vehicle = new VehicleAgent(posInit, posEnd, velocity, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
+				VehicleAgent vehicle = new VehicleAgent(posInit, posEnd, velocity, vehicleAgents, lightAgents, graph, carsNodes, displaySurf, stats);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
 			}

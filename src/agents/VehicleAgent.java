@@ -17,6 +17,7 @@ import behaviours.FindTrafficLights;
 import graph.Graph;
 import graph.GraphNode;
 import graph.MyNode;
+import gui.Statistics;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.core.AID;
@@ -39,6 +40,7 @@ public class VehicleAgent extends Agent{
 	private RectNetworkItem s;
 	private DisplaySurface disp;
 	private Graph graph;
+	private Statistics stats;
 	private ArrayList<MyNode> carsNodes;
 	private MyNode n;
 	private boolean accident;
@@ -49,7 +51,7 @@ public class VehicleAgent extends Agent{
 	private MessageTemplate mt;
 	Behaviour searchLight, dealLight, encounterCar;
 
-	public VehicleAgent(GraphNode posInit, GraphNode posEnd, int velocity, Vector<VehicleAgent> cars, Vector<TrafficLightAgent> trafficLights, Graph graph, ArrayList<MyNode> carsNodes, DisplaySurface disp) {
+	public VehicleAgent(GraphNode posInit, GraphNode posEnd, int velocity, Vector<VehicleAgent> cars, Vector<TrafficLightAgent> trafficLights, Graph graph, ArrayList<MyNode> carsNodes, DisplaySurface disp, Statistics stats) {
 		IDNumber++;
 		ID=IDNumber;
 		this.cars = cars;
@@ -62,6 +64,7 @@ public class VehicleAgent extends Agent{
 		this.numAccidents = 0;
 		this.s= new RectNetworkItem(posInit.getX(),posInit.getY());
 		this.disp=disp;
+		this.stats = stats;
 		s.setColor(Color.CYAN);
 		this.carsNodes = carsNodes;
 		//this.graph = graph;	//TODO é preciso tirar do construtor??
@@ -210,6 +213,8 @@ public class VehicleAgent extends Agent{
 							foundCar = true;
 							accident = true;
 							numAccidents++;
+							stats.updateTotalAccidents();
+							stats.updateAvgAccidents(cars.size());
 						}
 						repliesCnt++;
 						if(repliesCnt == cars.size()-1){
