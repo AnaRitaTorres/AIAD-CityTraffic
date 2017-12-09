@@ -177,7 +177,6 @@ public class TrafficLightAgent extends Agent{
 							reply.setContent(currentColor);
 							reply.setConversationId("cor1");
 							myAgent.send(reply);
-							System.out.println("envio:" + reply.getContent());
 						}
 						else if(msg.getConversationId().equals("position1")) {
 							reply.setPerformative(ACLMessage.INFORM);
