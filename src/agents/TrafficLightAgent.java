@@ -28,7 +28,7 @@ public class TrafficLightAgent extends Agent{
 	private static int IDNumber=0;
 	private int ID;
 	private String currentColor;
-	private int[] position = new int[2];	//posiçao do semaforo (TODO eventualmente atribuir valores de grafo
+	private int[] position = new int[2];
 	private TrafficLightAgent light;
 	private OvalNetworkItem s;
 	private DisplaySurface disp;
