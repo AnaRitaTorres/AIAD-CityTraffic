@@ -1,5 +1,5 @@
 package behaviours;
-import behaviours.CrossRoadTrafficLights;
+
 import sajas.core.behaviours.*;
 
 import java.util.ArrayList;
