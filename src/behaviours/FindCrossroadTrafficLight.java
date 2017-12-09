@@ -1,5 +1,5 @@
 package behaviours;
-
+import behaviours.CrossRoadTrafficLights;
 import sajas.core.behaviours.*;
 
 import java.util.ArrayList;
@@ -84,15 +84,14 @@ public boolean sameCrossroad(String position){
 			//receive all answers from traffic lights
 			ACLMessage reply = light.receive(mt); 
 			if(reply != null){
-				//System.out.println(sameCrossroad(reply.getContent()));
 				if(sameCrossroad(reply.getContent())) {
-					//cenas
+					//send aid to the traffic light
+					
 				}
 				repliesCnt++;
 				if(sameCross ||repliesCnt == lights.size()){
 					step = 3;
 				}
-				
 			}
 			else
 				block();

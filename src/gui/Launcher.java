@@ -218,6 +218,7 @@ public class Launcher extends Repast3Launcher {
 		connectX(240,295,310,15);
 		connectX(240,310,330,10);
 		connectX(210,330,350,20);
+		connectX(240,280,295,15);
 		
 	}
 	
