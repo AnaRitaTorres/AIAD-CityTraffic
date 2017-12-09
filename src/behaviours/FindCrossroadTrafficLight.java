@@ -19,7 +19,7 @@ public class FindCrossroadTrafficLight extends Behaviour{
 	private int step=0;
 	private MessageTemplate mt;
 	private int repliesCnt = 0;
-	private boolean sameCross=false;
+	private boolean same=false;
 	private ArrayList<GraphNode> graphNodes;
 	private ArrayList<GraphNode> crossroads;
 	
@@ -55,7 +55,6 @@ public boolean sameCrossroad(String position){
 		if(n1!= null && n2!=null) {
 			for(int i=0; i < crossroads.size(); i++) {
 				if(crossroads.get(i).getAdj().contains(n1) && crossroads.get(i).getAdj().contains(n2))
-					System.out.println(x1 + "-"+ y1 + ";" + x2 + "-" + y2);
 					same=true;
 			}
 		}
@@ -84,15 +83,15 @@ public boolean sameCrossroad(String position){
 			//receive all answers from traffic lights
 			ACLMessage reply = light.receive(mt); 
 			if(reply != null){
-				//System.out.println(sameCrossroad(reply.getContent()));
 				if(sameCrossroad(reply.getContent())) {
-					//cenas
+					same=true;
+					//System.out.println(reply.getContent());
+					myAgent.addBehaviour(new CrossRoadTrafficLights(light,reply.getSender()));
 				}
 				repliesCnt++;
-				if(sameCross ||repliesCnt == lights.size()){
+				if(same ||repliesCnt == lights.size()){
 					step = 3;
 				}
-				
 			}
 			else
 				block();
@@ -101,6 +100,8 @@ public boolean sameCrossroad(String position){
 		}
 		
 	}
+	
+	
 	
 	@Override
 	public boolean done() {

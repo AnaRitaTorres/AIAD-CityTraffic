@@ -15,6 +15,7 @@ import uchicago.src.sim.gui.DisplaySurface;
 
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.core.AID;
 import behaviours.CrossRoadTrafficLights;
 import behaviours.FindCrossroadTrafficLight;
 import graph.GraphNode;
@@ -32,8 +33,10 @@ public class TrafficLightAgent extends Agent{
 	private OvalNetworkItem s;
 	private DisplaySurface disp;
 	private Vector<TrafficLightAgent> trafficLights;
+	private AID aid;
 	private ArrayList<GraphNode> crossroads;
 	private ArrayList<GraphNode> graphNodes;
+	private AID aux;
 		
 	public TrafficLightAgent(int x, int y, Vector<TrafficLightAgent> trafficLights,ArrayList<GraphNode> crossroads,ArrayList<GraphNode> graphNodes,DisplaySurface disp) {
 		IDNumber++;
@@ -127,7 +130,7 @@ public class TrafficLightAgent extends Agent{
 				if(msg != null){
 					ACLMessage reply = msg.createReply();
 					
-						/*if (msg.getConversationId().equals("cor")){
+					/*	if (msg.getConversationId().equals("cor")){
 							reply.setPerformative(ACLMessage.INFORM);
 							reply.setContent(currentColor);
 							reply.setConversationId("cor");
@@ -156,7 +159,7 @@ public class TrafficLightAgent extends Agent{
 							reply.setConversationId("position1");
 							myAgent.send(reply);
 						}
-					
+						
 				}
 			}
 
@@ -164,9 +167,13 @@ public class TrafficLightAgent extends Agent{
 		
 		
 		
-			
-		//addBehaviour(new CrossRoadTrafficLights(trafficLights.get(j),trafficLights.get(1),crossroads,graphNodes));
 		addBehaviour(new FindCrossroadTrafficLight(this,trafficLights,crossroads,graphNodes));
+		
+	
+		//addBehaviour(new CrossRoadTrafficLights(this,aid));
+		
+		
+		
 		
 		
 		
