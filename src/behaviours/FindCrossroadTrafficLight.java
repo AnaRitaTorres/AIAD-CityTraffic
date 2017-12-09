@@ -7,8 +7,10 @@ import java.util.Vector;
 
 import agents.TrafficLightAgent;
 import graph.GraphNode;
+
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.core.AID;
 
 
 @SuppressWarnings("serial")
@@ -20,6 +22,7 @@ public class FindCrossroadTrafficLight extends Behaviour{
 	private MessageTemplate mt;
 	private int repliesCnt = 0;
 	private boolean same=false;
+	private ArrayList<AID> aid = new ArrayList<AID>();
 	private ArrayList<GraphNode> graphNodes;
 	private ArrayList<GraphNode> crossroads;
 	
@@ -59,7 +62,6 @@ public boolean sameCrossroad(String position){
 			}
 		}
 		
-		
 		return same;
 	}
 	
@@ -84,12 +86,32 @@ public boolean sameCrossroad(String position){
 			ACLMessage reply = light.receive(mt); 
 			if(reply != null){
 				if(sameCrossroad(reply.getContent())) {
-					same=true;
-					//System.out.println(reply.getContent());
-					myAgent.addBehaviour(new CrossRoadTrafficLights(light,reply.getSender()));
+					light.setHaspair(true);
+					for(int i=0; i < lights.size(); i++) {
+						if(lights.get(i).getAID().equals(reply.getSender())) {
+							if(light.getX() > lights.get(i).getX()) {
+								light.setPair(light,lights.get(i));
+							}
+							else if(light.getX() < lights.get(i).getX()) {
+								light.setPair(lights.get(i),light);
+							}
+							else {
+								if(light.getY() > lights.get(i).getY()) {
+									light.setPair(light,lights.get(i));
+								}
+								else if(light.getY() > lights.get(i).getY()){
+									light.setPair(lights.get(i),light);
+								}
+							}
+							
+							myAgent.addBehaviour(new CrossRoadTrafficLights(light.getPair()));
+						}
+							
+					}
+					//myAgent.addBehaviour(new CrossRoadTrafficLights(light,reply.getSender()));
 				}
 				repliesCnt++;
-				if(same ||repliesCnt == lights.size()){
+				if(same || repliesCnt== lights.size()){
 					step = 3;
 				}
 			}

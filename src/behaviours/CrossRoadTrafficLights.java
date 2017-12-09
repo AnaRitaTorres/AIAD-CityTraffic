@@ -1,38 +1,38 @@
 package behaviours;
 
-import sajas.core.behaviours.TickerBehaviour;
+import sajas.core.behaviours.Behaviour;
+
+import java.util.ArrayList;
+import java.awt.Color;
 
 import agents.TrafficLightAgent;
-
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.core.AID;
 
 @SuppressWarnings("serial")
-public class CrossRoadTrafficLights extends TickerBehaviour{
+public class CrossRoadTrafficLights extends Behaviour{
 	
 	private TrafficLightAgent light1;
-	private AID light2;
+	private TrafficLightAgent light2;
 	private int step = 0;
 	private ACLMessage reply;
 	private MessageTemplate mt;
 	
-	public CrossRoadTrafficLights(TrafficLightAgent light1,AID light2) {
+	public CrossRoadTrafficLights(ArrayList <TrafficLightAgent> pair) {
 		
-		super(light1,10000);
-		this.light1=light1;
-		this.light2=light2;
-		System.out.println(light2);
+		this.light1=pair.get(0);
+		this.light2=pair.get(1);
 	}
 	
 	@Override
-	protected void onTick(){
+	public void action(){
 		
 		switch(step){
 		case 0:
 			//if they are, ask each other for the color
 			ACLMessage cfp= new ACLMessage(ACLMessage.CFP);
-			cfp.addReceiver(light2);
+			cfp.addReceiver(light2.getAID());
 			cfp.setContent("Cor?");
 			cfp.setConversationId("cor1");
 			cfp.setReplyWith("cfp"+System.currentTimeMillis());
@@ -43,7 +43,7 @@ public class CrossRoadTrafficLights extends TickerBehaviour{
 		case 1:
 			//wait for the answer and with that info change colors
 			reply= light1.receive(mt);
-			System.out.println(reply.getContent());
+			
 			if(reply != null){
 				step=2;
 			}
@@ -52,18 +52,22 @@ public class CrossRoadTrafficLights extends TickerBehaviour{
 			}
 			break;
 		case 2:
-			System.out.println(reply.getContent());
-			if(reply.getContent().equals("red")|| reply.getContent().equals("orange")) {
+			if(reply.getContent().equals("green")) {
+				light1.changeColor("red");
+				
+			}
+			else if(reply.getContent().equals("red") || reply.getContent().equals("orange")) {
 				light1.changeColor("green");
 			}
-			else if(reply.getContent().equals("green")) {
-				light1.changeColor("red");
-			}
-	
+			step=0;
 			break;
+			
 		}
 		
 	}
 	
+	public boolean done() {
+		return step==4;
+	}
 	
 }
