@@ -27,7 +27,7 @@ public class EncounterCar extends Behaviour{
 
 	@Override
 	public void action() {
-		String carNextPos = "" + car.getNextPosition()[0] + car.getNextPosition()[1] + "";
+		String carNextPos = "" + car.getNextPosition().getX() + car.getNextPosition().getY() + "";
 		
 		switch(step){
 		case 0:
