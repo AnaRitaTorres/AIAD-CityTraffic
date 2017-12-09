@@ -33,10 +33,11 @@ public class TrafficLightAgent extends Agent{
 	private OvalNetworkItem s;
 	private DisplaySurface disp;
 	private Vector<TrafficLightAgent> trafficLights;
-	private AID aid;
 	private ArrayList<GraphNode> crossroads;
 	private ArrayList<GraphNode> graphNodes;
-	private AID aux;
+	private boolean haspair=false;
+	private ArrayList<TrafficLightAgent> pair = new ArrayList<TrafficLightAgent>(2);
+
 		
 	public TrafficLightAgent(int x, int y, Vector<TrafficLightAgent> trafficLights,ArrayList<GraphNode> crossroads,ArrayList<GraphNode> graphNodes,DisplaySurface disp) {
 		IDNumber++;
@@ -49,6 +50,7 @@ public class TrafficLightAgent extends Agent{
 		this.trafficLights = trafficLights;
 		this.crossroads=crossroads;
 		this.graphNodes=graphNodes;
+		
 	}
 
 	public OvalNetworkItem getS() {
@@ -67,7 +69,7 @@ public class TrafficLightAgent extends Agent{
 		else if(color=="green") {
 			s.setColor(Color.green);
 		}
-		else {
+		else if(color=="orange"){
 			s.setColor(Color.orange);
 		}
 		disp.updateDisplay();
@@ -89,6 +91,24 @@ public class TrafficLightAgent extends Agent{
 	public int getY() {
 		return position[1];
 	}
+	
+	public boolean isHaspair() {
+		return haspair;
+	}
+
+	public ArrayList<TrafficLightAgent> getPair() {
+		return pair;
+	}
+
+	public void setPair(TrafficLightAgent pair,TrafficLightAgent pair1) {
+		this.pair.add(pair);
+		this.pair.add(pair1);
+	}
+
+	public void setHaspair(boolean haspair) {
+		this.haspair = haspair;
+	}
+	
 	protected void setup() {
 		System.out.println("Hello! Traffic-Agent "+getAID().getName()+" is ready.");
 
@@ -116,9 +136,11 @@ public class TrafficLightAgent extends Agent{
 					changeColor(currentColor);
 				}
 				
+				
+				
 			}
 
-
+			
 		});
 
 		addBehaviour(new CyclicBehaviour(){
@@ -151,6 +173,7 @@ public class TrafficLightAgent extends Agent{
 							reply.setContent(currentColor);
 							reply.setConversationId("cor1");
 							myAgent.send(reply);
+							System.out.println("envio:" + reply.getContent());
 						}
 						else if(msg.getConversationId().equals("position1")) {
 							reply.setPerformative(ACLMessage.INFORM);
@@ -166,16 +189,7 @@ public class TrafficLightAgent extends Agent{
 		});
 		
 		
-		
 		addBehaviour(new FindCrossroadTrafficLight(this,trafficLights,crossroads,graphNodes));
-		
-	
-		//addBehaviour(new CrossRoadTrafficLights(this,aid));
-		
-		
-		
-		
-		
 		
 	}
 
@@ -183,4 +197,6 @@ public class TrafficLightAgent extends Agent{
 		// Printout a dismissal	message
 		System.out.println("Traffic-Agent "+getAID().getName()+ "terminating.");
 	}
+
+
 }
