@@ -92,6 +92,7 @@ public class Statistics {
 	
 	public void updateAvgTimeWaitingTraffic(int numCars){
 		avgTimeWaitingTraffic = totalTimeWaitingTraffic/(float)numCars;
+		updateAvgTimeNotMoving(numCars);
 	}
 	
 	public void updateAvgTimeNotMoving(int numCars){
