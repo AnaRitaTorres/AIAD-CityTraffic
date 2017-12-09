@@ -163,7 +163,7 @@ public class Launcher extends Repast3Launcher {
 		}
 		displayData = null;
 		
-		displayData = new DisplaySurface(this,"City Traffic Data");
+		displayData = new DisplaySurface(this,"City Traffic Statistics");
 		registerDisplaySurface("City Traffic Data",displayData);
 	}
 	
@@ -347,24 +347,26 @@ public class Launcher extends Repast3Launcher {
 			public void execute() {
 				
 				textDisp.clearLines();
-				textDisp.addLine("Total Accidents: " + stats.getTotalAccidents());
-				textDisp.addLine("Avg Accidents: " + stats.getAvgAccidents());
-				textDisp.addLine("Total Distance: " + stats.getTotalDistance());
-				textDisp.addLine("Avg Distance: " + stats.getAvgDistance());
-				textDisp.addLine("Avg Travel Time: " + stats.getAvgTravelTime());
-				textDisp.addLine("Total Time Waiting Traffic Light: " + stats.getTotalTimeWaitingTrafficLight());
-				textDisp.addLine("Avg Time Waiting Traffic Light: " + stats.getAvgTimeWaitingTraffic());
-				textDisp.addLine("Total Time Waiting Traffic: " + stats.getTotalTimeWaitingTraffic());
-				textDisp.addLine("Avg Time Waiting Traffic: " + stats.getAvgTimeWaitingTraffic());
-				textDisp.addLine("Avg Time Not Moving: " + stats.getAvgTimeNotMoving());
-				
+				textDisp.addLine(" ");
+				textDisp.addLine(" - Total Accidents: " + stats.getTotalAccidents());
+				textDisp.addLine(" - Avg Accidents: " + stats.getAvgAccidents());
+				textDisp.addLine(" - Total Distance: " + stats.getTotalDistance());
+				textDisp.addLine(" - Avg Distance: " + stats.getAvgDistance());
+				textDisp.addLine(" - Avg Travel Time: " + stats.getAvgTravelTime());
+				textDisp.addLine(" - Total Time Waiting Traffic Light: " + stats.getTotalTimeWaitingTrafficLight());
+				textDisp.addLine(" - Avg Time Waiting Traffic Light: " + stats.getAvgTimeWaitingTraffic());
+				textDisp.addLine(" - Total Time Waiting Traffic: " + stats.getTotalTimeWaitingTraffic());
+				textDisp.addLine(" - Avg Time Waiting Traffic: " + stats.getAvgTimeWaitingTraffic());
+				textDisp.addLine(" - Avg Time Not Moving: " + stats.getAvgTimeNotMoving());
+				textDisp.addLine(" ");
+
 				displayData.updateDisplay();
 				
 				
 			}
 		}
 		//the function states the 1st time step in which we want the action to be taken (0)
-		schedule.scheduleActionAtInterval(500, new UpdateData());
+		schedule.scheduleActionAtInterval(125, new UpdateData());
 		
 	}
 	
@@ -386,7 +388,7 @@ public class Launcher extends Repast3Launcher {
 		displaySurf.setBackground (Color.white);
 		
 		//data
-		textDisp = new TextDisplay(40,45,0,15, Color.black);
+		textDisp = new TextDisplay(300,185,0,15, Color.black);
 		textDisp.setBoxVisible(false);
 		displayData.addDisplayableProbeable(textDisp, "City Data");
 		displayData.setBackground(Color.white);
