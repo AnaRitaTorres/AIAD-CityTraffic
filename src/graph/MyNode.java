@@ -44,19 +44,6 @@ public class MyNode extends DefaultDrawableNode {
 	    }
 	  }
 	
-	public void removeConnection(int x, int y,ArrayList<MyNode> nodes) {
-	    
-		for(int i=0; i < nodes.size(); i++) {
-			if(nodes.get(i).getX()== x && nodes.get(i).getY()==y) {
-				removeEdgesTo(nodes.get(i));
-				nodes.get(i).removeEdgesFrom(this);
-				removeEdgesFrom(nodes.get(i));
-				nodes.get(i).removeEdgesTo(this);
-			}
-		}
-	   
-	 }
-	
 	public boolean equals(MyNode n){
 		if(n.x == this.x && n.y == this.y){
 			return true;

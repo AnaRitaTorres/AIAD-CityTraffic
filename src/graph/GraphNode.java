@@ -32,15 +32,4 @@ public class GraphNode{
 		return adj;
 	}
 	
-	public void removeAdj(int x, int y) {
-		if(this.adj!= null) {
-			for(int i=0; i < this.adj.size(); i++) {
-				if(this.adj.get(i).getX()==x && this.adj.get(i).getY()==y) {
-					this.adj.remove(i);
-				}
-			}
-		}
-		
-	}
-	
 }

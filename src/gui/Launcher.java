@@ -162,69 +162,96 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public void buildGraph() {
-		
-		
 		groupByY();
 		groupByX();
+		groupByDirect();
 		TransformNodes(graph.getNodes());
-		for(int i=0; i < graph.getNodes().size(); i++) {
-			System.out.println("NODE:"+ graph.getNodes().get(i).getX() + " "+ graph.getNodes().get(i).getY() + "\n");
-			for(int j=0; j < graph.getNodes().get(i).getAdj().size(); j++) {
-				System.out.println(graph.getNodes().get(i).getAdj().get(j).getX()+ " "+graph.getNodes().get(i).getAdj().get(j).getY() + "\n");
-				
-			}
-		}
-		
+		crossRoads();
 	}
 	
 	
-	public void connectY(int x, int yi, int yf) {
+	public void connectY(int x, int yi, int yf, int inc) {
 		while(yi!=yf) {
-			ConnectGraphNodes(x,yi,x,yi+10);
-			yi=yi+10;
+			ConnectGraphNodes(x,yi,x,yi+inc);
+			yi=yi+inc;
 		}
 	}
 	
-	public void connectX(int y, int xi, int xf) {
+	public void connectX(int y, int xi, int xf, int inc) {
 		while(xi!=xf) {
-			ConnectGraphNodes(xi,y,xi+15,y);
-			xi=xi+15;
+			ConnectGraphNodes(xi,y,xi+inc,y);
+			xi=xi+inc;
 		}
 	}
 	
+	public void groupByDirect() {
+		ConnectGraphNodes(55,350,70,360);
+		ConnectGraphNodes(145,360,160,350);
+		ConnectGraphNodes(160,350,175,340);
+		ConnectGraphNodes(245,340,265,310);
+		ConnectGraphNodes(265,310,280,300);
+		ConnectGraphNodes(280,300,295,260);
+		ConnectGraphNodes(330,240,350,210);
+	}
 	public void groupByX() {
-		connectX(50,25,205);
-		connectX(110,25,205);
-		connectX(240,25,205);
+		connectX(50,25,205,15);
+		connectX(110,25,205,15);
+		connectX(240,25,205,15);
+		connectX(50,215,245,15);
+		connectX(50,265,280,15);
+		connectX(50,205,215,10);
+		connectX(50,245,265,20);
+		connectX(130,295,310,15);
+		connectX(130,310,350,10);
+		connectX(110,205,215,10);
+		connectX(110,215,245,15);
+		connectX(110,245,265,20);
+		connectX(110,265,280,15);
+		connectX(180,40,55,15);
+		connectX(280,40,55,15);
+		connectX(300,130,145,15);
+		connectX(350,25,55,15);
+		connectX(360,70,145,15);
+		connectX(340,175,205,15);
+		connectX(340,215,245,15);
+		connectX(340,205,215,10);
+		connectX(240,295,310,15);
+		connectX(240,310,330,10);
+		connectX(210,330,350,20);
+		
 	}
 	
 	public void groupByY() {
-		connectY(25,50,350);
-		connectY(40,110,180);
-		connectY(40,280,350);
-		connectY(55,110,180);
-		connectY(55,280,350);
-		connectY(70,110,360);
-		connectY(85,110,360);
-		connectY(100,50,360);
-		connectY(130,110,210);
-		connectY(130,300,360);
-		connectY(145,110,210);
-		connectY(145,300,360);
-		connectY(160,50,350);
-		connectY(175,240,340);
-		connectY(190,160,340);
-		connectY(205,210,340);
-		connectY(215,50,340);
-		connectY(230,50,340);
-		connectY(245,50,340);
-		connectY(265,50,310);
-		connectY(280,50,300);
-		connectY(295,130,260);
-		connectY(310,240,250);
-		connectY(320,130,250);
-		connectY(330,130,250);
-		connectY(350,130,210);
+		connectY(25,50,350,10);
+		connectY(40,110,180,10);
+		connectY(40,280,350,10);
+		connectY(55,110,180,10);
+		connectY(55,280,350,10);
+		connectY(70,110,360,10);
+		connectY(85,110,360,10);
+		connectY(100,50,360,10);
+		connectY(130,110,210,10);
+		connectY(130,300,360,10);
+		connectY(145,110,210,10);
+		connectY(145,300,360,10);
+		connectY(160,50,350,10);
+		connectY(175,240,340,10);
+		connectY(190,160,340,10);
+		connectY(205,210,340,10);
+		connectY(215,50,340,10);
+		connectY(230,50,340,10);
+		connectY(245,50,340,10);
+		connectY(265,50,310,10);
+		connectY(280,50,300,10);
+		connectY(295,130,260,10);
+		connectY(320,130,240,10);
+		connectY(330,130,240,10);
+		connectY(350,130,210,10);
+		connectY(205,50,110,30);
+		connectY(130,210,240,30);
+		connectY(145,210,240,30);
+		connectY(115,110,360,10);
+			
 	}
 	
 	public void TransformNodes( ArrayList<GraphNode> graphNodes) {
@@ -239,14 +266,11 @@ public class Launcher extends Repast3Launcher {
 		for(int i=0; i < graphNodes.size(); i++) {
 			for(int x=0; x < nodes.size(); x++) {
 				if(graphNodes.get(i).getX()== nodes.get(x).getX() && graphNodes.get(i).getY()== nodes.get(x).getY()) {
-					System.out.println("in");
 					MyNode n= nodes.get(x);
 					if(graphNodes.get(i).getAdj().size()!=0) {
-						System.out.println("in1");
 						for(int j=0; j < graphNodes.get(i).getAdj().size(); j++ ) {
 							for(int w=0; w < nodes.size(); w++) {
 								if(graphNodes.get(i).getAdj().get(j).getX() == nodes.get(w).getX() && graphNodes.get(i).getAdj().get(j).getY() == nodes.get(w).getY()) {
-									System.out.println("in2");
 									n.makeEdgeToFrom(nodes.get(w), 5, Color.magenta);
 								}
 								
@@ -280,38 +304,11 @@ public class Launcher extends Repast3Launcher {
 	//TODO delete physical rep of crossroads
 	public void crossRoads() {
 		 
-		OvalNetworkItem o1 = new OvalNetworkItem(295,240);
-		OvalNetworkItem o2 = new OvalNetworkItem(265,110);
-		OvalNetworkItem o3 = new OvalNetworkItem(160,110);
-		OvalNetworkItem o4 = new OvalNetworkItem(190,240);
-		OvalNetworkItem o5 = new OvalNetworkItem(40,350);
-		
-		o1.setColor(Color.black);
-		o2.setColor(Color.black);
-		o3.setColor(Color.black);
-		o4.setColor(Color.black);
-		o5.setColor(Color.black);
-		
-		MyNode c1 = new MyNode(o1,295,240);
-		MyNode c2 = new MyNode(o2,265,110);
-		MyNode c3 = new MyNode(o3,160,110);
-		MyNode c4 = new MyNode(o4,190,240);
-		MyNode c5 = new MyNode(o5,40,350);
-		
-		lightsNodes.add(c1);
-		lightsNodes.add(c2);
-		lightsNodes.add(c3);
-		lightsNodes.add(c4);
-		lightsNodes.add(c5);
-		
-		
 		addCrossroad(295,240);
 		addCrossroad(265,110);
 		addCrossroad(160,110);
 		addCrossroad(190,240);
 		addCrossroad(40,350);
-		
-		
 	}
 	
 	public void addCrossroad(int x, int y) {
