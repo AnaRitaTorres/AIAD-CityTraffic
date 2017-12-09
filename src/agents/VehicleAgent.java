@@ -26,11 +26,10 @@ public class VehicleAgent extends Agent{
 
 	private static int IDNumber=0;
 	private int ID;
-	//private int[] position = new int[2];	//posiçao atual do carro
-	//private int[] nextPosition = new int[2]; //posiçao seguinte do carro
 	private GraphNode position;
 	private GraphNode nextPosition;
 	private GraphNode posEnd;
+	private GraphNode lastVisited;
 	private Vector<VehicleAgent> cars;
 	private Vector<TrafficLightAgent> trafficLights;
 	public VehicleAgent car = this;
@@ -50,15 +49,6 @@ public class VehicleAgent extends Agent{
 	private MessageTemplate mt;
 	Behaviour searchLight, dealLight, encounterCar;
 
-
-	//para apagar
-	private int[] xtrajetoriaV1 = new int[7];
-	private int[] ytrajetoriaV1 = new int[7];
-	private int[] xtrajetoriaV2 = new int[5];
-	private int[] ytrajetoriaV2 = new int[5];
-	private int index = 0;
-
-
 	public VehicleAgent(GraphNode posInit, GraphNode posEnd, int velocity, Vector<VehicleAgent> cars, Vector<TrafficLightAgent> trafficLights, Graph graph, ArrayList<MyNode> carsNodes, DisplaySurface disp) {
 		IDNumber++;
 		ID=IDNumber;
@@ -66,21 +56,15 @@ public class VehicleAgent extends Agent{
 		this.trafficLights = trafficLights;
 		this.position = posInit;
 		this.posEnd = posEnd;
+		this.lastVisited = posInit;
 		this.velocity = velocity;
 		this.accident = false;
 		this.numAccidents = 0;
 		this.s= new RectNetworkItem(posInit.getX(),posInit.getY());
 		this.disp=disp;
-		Color[] cores = new Color[4];
-		cores[0] = Color.BLUE;
-		cores[1] = Color.CYAN;
-		cores[2] = Color.PINK;
-		cores[3] = Color.YELLOW;
-		java.util.Random r = new java.util.Random();
-		int iCor = r.nextInt(4);
-		s.setColor(cores[iCor]);
+		s.setColor(Color.CYAN);
 		this.carsNodes = carsNodes;
-		this.graph = graph;	//TODO é preciso?
+		//this.graph = graph;	//TODO é preciso tirar do construtor??
 		n = new MyNode(getS(),position.getX(), position.getY());
 		this.carsNodes.add(n);
 
@@ -160,6 +144,12 @@ public class VehicleAgent extends Agent{
 		//now random depois TODO seguir caminho
 		java.util.Random r = new java.util.Random();
 		int pos = r.nextInt(position.getAdj().size());
+		
+		//nao ser igual a last se calhar só é preciso para random movement?
+		int iLast = position.getAdj().indexOf(lastVisited);
+		while(pos == iLast){
+			pos = r.nextInt(position.getAdj().size());
+		}
 		return position.getAdj().get(pos);
 	}
 
@@ -262,17 +252,7 @@ public class VehicleAgent extends Agent{
 					break;
 
 				case 6:
-					//TODO hardcoded vai ser para mudar para mover no grafo
-					/*if(getAID().getName().equals("Vehicle1@City Traffic")){
-						nextPosition[0] = xtrajetoriaV1[index];
-						nextPosition[1] = ytrajetoriaV1[index];
-					}
-					else{
-						nextPosition[0] = xtrajetoriaV2[index];
-						nextPosition[1] = ytrajetoriaV2[index];
-					}*/
 					nextPosition = car.getNextPosition();
-					index++;
 					encounterCar = new EncounterCar(car, cars);
 					addBehaviour(encounterCar);
 					step = 7;
@@ -286,17 +266,9 @@ public class VehicleAgent extends Agent{
 					}
 					break;
 				case 8:
-
-					//position[0] = position[0] + 1;
-					//position[1] = position[1] + 1;
-					//TODO (2) eventualmente faze lo andar pelos pontos do grafo
-					//para já andam random, depois andam pelo caminho até ao destino
-					//para testar vou por aqui caminha harcoded
-
-					/*position[0] = nextPosition[0];
-					position[1] = nextPosition[1];*/
+					//TODO para já andam random, depois andam pelo caminho até ao destino
+					car.lastVisited = car.position;
 					car.position = car.nextPosition;
-
 					updateDisplayCar();
 
 					step = 0;

@@ -1,7 +1,7 @@
 //TODO(4) fazer experiencias com numero diferente de carros (e semaforos?) e 
 //tirar estatisticas do numero de colisoes, distancia percorrida, tempo demorado, tempo de espera em semaforos, tempo total que os carros estao parados durante o percurso(semaforos+transito)
 
-//TODO melhorias implementar sentidos do transito
+//TODO melhorias implementar sentidos do transito, dar para por semaforos em qualquer sitio e alterer o numero de lights agenst na janelinha
 
 package gui;
 
@@ -85,6 +85,9 @@ public class Launcher extends Repast3Launcher {
 	}
 
 	public void setNumVehicles(int numVehicles) {
+		
+		System.out.println("entrei");
+		
 		this.numVehicles = numVehicles;
 	}
 
@@ -398,9 +401,16 @@ public class Launcher extends Repast3Launcher {
 				
 								
 			//create vehicles
-			//for(int i=0; i < numVehicles;i++) {
+			for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
-				int velocity = r.nextInt(240) + 60;
+				int p = r.nextInt(11);
+				int velocity;
+				if(p <= 7){
+					velocity = r.nextInt(60) + 5;
+				}
+				else{
+					velocity = r.nextInt(60) + 65;
+				}
 				r = new java.util.Random();
 				int pos = r.nextInt(graph.getNodes().size());
 				GraphNode posInit = graph.getNodes().get(pos);
@@ -408,18 +418,8 @@ public class Launcher extends Repast3Launcher {
 				//55+30, 110
 				VehicleAgent vehicle = new VehicleAgent(posInit, posEnd, velocity, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
-				mainContainer.acceptNewAgent("Vehicle" + 1, vehicle).start();
-				
-				
-				r = new java.util.Random();
-				pos = r.nextInt(graph.getNodes().size());
-				posInit = graph.getNodes().get(pos);
-				//100,80 / 85,110
-				vehicle = new VehicleAgent(posInit, posEnd, velocity, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
-				vehicleAgents.add(vehicle);
-				mainContainer.acceptNewAgent("Vehicle" + 2, vehicle).start();
-				
-			//}
+				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
+			}
 						
 		}catch (StaleProxyException e) {
 			e.printStackTrace();
