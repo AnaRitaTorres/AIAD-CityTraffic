@@ -20,12 +20,14 @@ import sajas.wrapper.ContainerController;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
-import uchicago.src.sim.engine.BasicAction;
+
 import uchicago.src.sim.engine.Schedule;
+import uchicago.src.sim.engine.BasicAction;
 import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.Network2DDisplay;
 import uchicago.src.sim.gui.OvalNetworkItem;
+import uchicago.src.sim.gui.TextDisplay;
 
 import agents.*;
 import graph.*;
@@ -49,8 +51,11 @@ public class Launcher extends Repast3Launcher {
 	private ArrayList<MyNode> carsNodes = new ArrayList<MyNode>();
 	private ArrayList<GraphNode> crossroadNodes = new ArrayList<GraphNode>();
 	private ContainerController mainContainer;
+	private Schedule schedule;
 	private boolean runInBatchMode;
 	private DisplaySurface displaySurf;
+	private DisplaySurface displayData;
+	private TextDisplay textDisp;
 	private int numRadios = N_RADIOS;
 	private int numVehicles = N_VEHICLES;
 	private int numLights = N_LIGHTS;
@@ -100,7 +105,11 @@ public class Launcher extends Repast3Launcher {
 	public String getName () {
 	    return "City Traffic";
 	}
-		
+	
+	public Schedule getSchedule() {
+		return schedule;
+	}
+	
 	public void readFromFile(String file) {
 		
 		try{
@@ -139,13 +148,23 @@ public class Launcher extends Repast3Launcher {
 	public void setup() {
 		super.setup();
 		
+		schedule = super.getSchedule();
+		
 		if(displaySurf != null) {
 			displaySurf.dispose();
 		}
 		displaySurf = null;
 				
-		displaySurf = new DisplaySurface(this,"City Traffic Window 1");
-		registerDisplaySurface("City Traffic Window 1",displaySurf);
+		displaySurf = new DisplaySurface(this,"City Traffic Window ");
+		registerDisplaySurface("City Traffic Window ",displaySurf);
+		
+		if(displayData != null) {
+			displayData.dispose();
+		}
+		displayData = null;
+		
+		displayData = new DisplaySurface(this,"City Traffic Data");
+		registerDisplaySurface("City Traffic Data",displayData);
 	}
 	
 	@Override
@@ -155,9 +174,11 @@ public class Launcher extends Repast3Launcher {
 		if(!runInBatchMode) {
 			buildModel();
 			buildDisplay();
+			buildSchedule();
 		}
 		
 		displaySurf.display();
+		displayData.display();
 	}
 	
 	public void buildGraph() {
@@ -320,12 +341,40 @@ public class Launcher extends Repast3Launcher {
 		}
 	}
 	
+	public void buildSchedule() {
+		
+		class UpdateData extends BasicAction{
+			public void execute() {
+				
+				textDisp.clearLines();
+				textDisp.addLine("Total Accidents: " + stats.getTotalAccidents());
+				textDisp.addLine("Avg Accidents: " + stats.getAvgAccidents());
+				textDisp.addLine("Total Distance: " + stats.getTotalDistance());
+				textDisp.addLine("Avg Distance: " + stats.getAvgDistance());
+				textDisp.addLine("Avg Travel Time: " + stats.getAvgTravelTime());
+				textDisp.addLine("Total Time Waiting Traffic Light: " + stats.getTotalTimeWaitingTrafficLight());
+				textDisp.addLine("Avg Time Waiting Traffic Light: " + stats.getAvgTimeWaitingTraffic());
+				textDisp.addLine("Total Time Waiting Traffic: " + stats.getTotalTimeWaitingTraffic());
+				textDisp.addLine("Avg Time Waiting Traffic: " + stats.getAvgTimeWaitingTraffic());
+				textDisp.addLine("Avg Time Not Moving: " + stats.getAvgTimeNotMoving());
+				
+				displayData.updateDisplay();
+				
+				
+			}
+		}
+		//the function states the 1st time step in which we want the action to be taken (0)
+		schedule.scheduleActionAtInterval(500, new UpdateData());
+		
+	}
+	
 	public void buildModel() {
 		buildGraph();
 	}
 	
 	public void buildDisplay() {
-		
+	
+		//simulation
 		Network2DDisplay display = new Network2DDisplay (nodes,WIDTH,HEIGHT);
 		display.setNodesVisible(false);
 		Network2DDisplay display1 = new Network2DDisplay (lightsNodes, WIDTH,HEIGHT);
@@ -334,7 +383,13 @@ public class Launcher extends Repast3Launcher {
 		displaySurf.addDisplayableProbeable (display2, "CityTraffic");
 		displaySurf.addDisplayableProbeable (display1, "City");
 		displaySurf.addZoomable (display);
-		displaySurf.setBackground (java.awt.Color.white);
+		displaySurf.setBackground (Color.white);
+		
+		//data
+		textDisp = new TextDisplay(40,45,0,15, Color.black);
+		textDisp.setBoxVisible(false);
+		displayData.addDisplayableProbeable(textDisp, "City Data");
+		displayData.setBackground(Color.white);
 	}
 	
 	
@@ -361,7 +416,6 @@ public class Launcher extends Repast3Launcher {
 		mainContainer = rt.createMainContainer(p);
 		readFromFile(file);
 		launchAgents();
-		
 	}
 	
 	private void launchAgents() {
@@ -414,6 +468,7 @@ public class Launcher extends Repast3Launcher {
 				VehicleAgent vehicle = new VehicleAgent(posInit, posEnd, velocity, vehicleAgents, lightAgents, graph, carsNodes, displaySurf, stats);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
+				
 			}
 						
 		}catch (StaleProxyException e) {

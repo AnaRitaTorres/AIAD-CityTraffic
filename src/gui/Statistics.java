@@ -16,6 +16,46 @@ public class Statistics {
 		this.disp=disp;
 	}*/
 	
+	public int getTotalAccidents() {
+		return totalAccidents;
+	}
+	
+	public float getAvgAccidents() {
+		return avgAccidents;
+	}
+	
+	public double getTotalDistance() {
+		return totalDistance;
+	}
+	
+	public double getAvgDistance() {
+		return avgDistance;
+	}
+	
+	public float getAvgTravelTime() {
+		return avgTravelTime;
+	}
+	
+	public float getTotalTimeWaitingTrafficLight() {
+		return totalTimeWaitingTrafficLight;
+	}
+	
+	public float getAvgTimeWaitingTrafficLight() {
+		return avgTimeWaitingTrafficLight;
+	}
+	
+	public float getTotalTimeWaitingTraffic(){
+		return  totalTimeWaitingTraffic;
+	}
+	
+	public float getAvgTimeWaitingTraffic() {
+		return  avgTimeWaitingTraffic;
+	}
+	
+	public float getAvgTimeNotMoving() {
+		return avgTimeNotMoving;
+	}
+	
 	public void updateTotalAccidents(){
 		totalAccidents ++;
 		updateDisplay();
