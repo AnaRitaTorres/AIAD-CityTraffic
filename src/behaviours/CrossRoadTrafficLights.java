@@ -1,40 +1,33 @@
 package behaviours;
 
-
-import java.util.ArrayList;
-import sajas.core.behaviours.*;
+import sajas.core.behaviours.TickerBehaviour;
 
 import agents.TrafficLightAgent;
-import graph.GraphNode;
 
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.core.AID;
 
 @SuppressWarnings("serial")
-public class CrossRoadTrafficLights extends Behaviour{
+public class CrossRoadTrafficLights extends TickerBehaviour{
 	
 	private TrafficLightAgent light1;
 	private AID light2;
 	private int step = 0;
 	private ACLMessage reply;
-	private ArrayList<GraphNode> crossroads;
-	private ArrayList<GraphNode> graphNodes;
 	private MessageTemplate mt;
 	
-	public CrossRoadTrafficLights(TrafficLightAgent light1,AID light2,ArrayList<GraphNode> crossroads,ArrayList<GraphNode> graphNodes) {
+	public CrossRoadTrafficLights(TrafficLightAgent light1,AID light2) {
 		
+		super(light1,10000);
 		this.light1=light1;
 		this.light2=light2;
-		this.crossroads=crossroads;
-		this.graphNodes=graphNodes;
-		
+		System.out.println(light2);
 	}
 	
 	@Override
-	public void action() {
+	protected void onTick(){
 		
-		//check if they are connected to the same crossroad
 		switch(step){
 		case 0:
 			//if they are, ask each other for the color
@@ -49,8 +42,8 @@ public class CrossRoadTrafficLights extends Behaviour{
 			break;
 		case 1:
 			//wait for the answer and with that info change colors
-			
 			reply= light1.receive(mt);
+			System.out.println(reply.getContent());
 			if(reply != null){
 				step=2;
 			}
@@ -66,14 +59,11 @@ public class CrossRoadTrafficLights extends Behaviour{
 			else if(reply.getContent().equals("green")) {
 				light1.changeColor("red");
 			}
-			step=0;
+	
 			break;
 		}
 		
 	}
-	//TODO averiguar se vale a pena alterar o comportamento para ciclico ou tick
-	@Override
-	public boolean done() {
-		return step == 4;
-	}
+	
+	
 }
