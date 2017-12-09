@@ -132,7 +132,6 @@ public class Launcher extends Repast3Launcher {
 			}
 		
 		graph = new Graph(graphNodes);
-		
 	}
 	
 	@Override
@@ -151,11 +150,10 @@ public class Launcher extends Repast3Launcher {
 	@Override
 	public void begin() {
 		super.begin();
-		readFromFile(file);
+		
 		if(!runInBatchMode) {
 			buildModel();
 			buildDisplay();
-			
 		}
 		
 		displaySurf.display();
@@ -362,7 +360,7 @@ public class Launcher extends Repast3Launcher {
 		Runtime rt = Runtime.instance();
 		Profile p = new ProfileImpl();
 		mainContainer = rt.createMainContainer(p);
-		 
+		readFromFile(file);
 		launchAgents();
 	}
 	
@@ -404,12 +402,22 @@ public class Launcher extends Repast3Launcher {
 			//create vehicles
 			//for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
-				//int velocity = r.nextInt(475) + 125;	DESCOMENTAR
-				VehicleAgent vehicle = new VehicleAgent(55, 110, 125, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
+				int velocity = r.nextInt(240) + 60;
+				r = new java.util.Random();
+				int pos = r.nextInt(graph.getNodes().size());
+				GraphNode posInit = graph.getNodes().get(pos);
+				GraphNode posEnd = posInit;//TODO
+				//55+30, 110
+				VehicleAgent vehicle = new VehicleAgent(posInit, posEnd, velocity, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 1, vehicle).start();
+				
+				
+				r = new java.util.Random();
+				pos = r.nextInt(graph.getNodes().size());
+				posInit = graph.getNodes().get(pos);
 				//100,80 / 85,110
-				vehicle = new VehicleAgent(100, 80, 125, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
+				vehicle = new VehicleAgent(posInit, posEnd, velocity, vehicleAgents, lightAgents, graph, carsNodes, displaySurf);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + 2, vehicle).start();
 				

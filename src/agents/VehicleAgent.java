@@ -15,6 +15,7 @@ import behaviours.EncounterCar;
 import behaviours.EncounterTrafficLight;
 import behaviours.FindTrafficLights;
 import graph.Graph;
+import graph.GraphNode;
 import graph.MyNode;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -25,8 +26,11 @@ public class VehicleAgent extends Agent{
 
 	private static int IDNumber=0;
 	private int ID;
-	private int[] position = new int[2];	//posiçao atual do carro
-	private int[] nextPosition = new int[2]; //posiçao seguinte do carro
+	//private int[] position = new int[2];	//posiçao atual do carro
+	//private int[] nextPosition = new int[2]; //posiçao seguinte do carro
+	private GraphNode position;
+	private GraphNode nextPosition;
+	private GraphNode posEnd;
 	private Vector<VehicleAgent> cars;
 	private Vector<TrafficLightAgent> trafficLights;
 	public VehicleAgent car = this;
@@ -55,17 +59,17 @@ public class VehicleAgent extends Agent{
 	private int index = 0;
 
 
-	public VehicleAgent(int x, int y, int velocity, Vector<VehicleAgent> cars, Vector<TrafficLightAgent> trafficLights, Graph graph, ArrayList<MyNode> carsNodes, DisplaySurface disp) {
+	public VehicleAgent(GraphNode posInit, GraphNode posEnd, int velocity, Vector<VehicleAgent> cars, Vector<TrafficLightAgent> trafficLights, Graph graph, ArrayList<MyNode> carsNodes, DisplaySurface disp) {
 		IDNumber++;
 		ID=IDNumber;
 		this.cars = cars;
 		this.trafficLights = trafficLights;
-		position[0] = x;
-		position[1] = y;
+		this.position = posInit;
+		this.posEnd = posEnd;
 		this.velocity = velocity;
 		this.accident = false;
 		this.numAccidents = 0;
-		this.s= new RectNetworkItem(x,y);
+		this.s= new RectNetworkItem(posInit.getX(),posInit.getY());
 		this.disp=disp;
 		Color[] cores = new Color[4];
 		cores[0] = Color.BLUE;
@@ -76,18 +80,19 @@ public class VehicleAgent extends Agent{
 		int iCor = r.nextInt(4);
 		s.setColor(cores[iCor]);
 		this.carsNodes = carsNodes;
-		this.graph = graph;
-		n = new MyNode(getS(),getX(),getY());
+		this.graph = graph;	//TODO é preciso?
+		n = new MyNode(getS(),position.getX(), position.getY());
 		this.carsNodes.add(n);
 
+		/*
 		//para apagar
-		xtrajetoriaV1[0] = 70;
-		xtrajetoriaV1[1] = 85;
-		xtrajetoriaV1[2] = 100;
-		xtrajetoriaV1[3] = 115;
-		xtrajetoriaV1[4] = 130;
-		xtrajetoriaV1[5] = 145;
-		xtrajetoriaV1[6] = 160;
+		xtrajetoriaV1[0] = 70+30;
+		xtrajetoriaV1[1] = 85+30;
+		xtrajetoriaV1[2] = 100+30;
+		xtrajetoriaV1[3] = 115+30;
+		xtrajetoriaV1[4] = 130+30;
+		xtrajetoriaV1[5] = 145+30;
+		xtrajetoriaV1[6] = 160+30;
 
 		ytrajetoriaV1[0] = 110;
 		ytrajetoriaV1[1] = 110;
@@ -111,13 +116,13 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV2[3] = 110;
 		ytrajetoriaV2[4] = 110;
 		ytrajetoriaV2[5] = 110;
-		ytrajetoriaV2[6] = 110;*/
+		ytrajetoriaV2[6] = 110;
 
-		xtrajetoriaV2[0] = 100;
-		xtrajetoriaV2[1] = 100;
-		xtrajetoriaV2[2] = 100;
-		xtrajetoriaV2[3] = 100;
-		xtrajetoriaV2[4] = 100;
+		xtrajetoriaV2[0] = 100+60;
+		xtrajetoriaV2[1] = 100+60;
+		xtrajetoriaV2[2] = 100+60;
+		xtrajetoriaV2[3] = 100+60;
+		xtrajetoriaV2[4] = 100+60;
 		//xtrajetoriaV2[5] = 100;
 		//xtrajetoriaV2[6] = 100;
 
@@ -128,6 +133,7 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV2[2] = 110;
 		ytrajetoriaV2[3] = 120;
 		ytrajetoriaV2[4] = 130;
+		*/
 	}
 
 	public RectNetworkItem getS() {
@@ -146,29 +152,24 @@ public class VehicleAgent extends Agent{
 		return ID;
 	}
 
-	private int getX() {
-		return position[0];
-	}
-
-	private int getY() {
-		return position[1];
-	}
-
-	public int[] getPosition() {
+	public GraphNode getPosition() {
 		return position;
 	}
 
-	public int[] getNextPosition() {
-		return nextPosition;
+	public GraphNode getNextPosition() {
+		//now random depois TODO seguir caminho
+		java.util.Random r = new java.util.Random();
+		int pos = r.nextInt(position.getAdj().size());
+		return position.getAdj().get(pos);
 	}
 
 	public void updateDisplayCar(){
 
 		carsNodes.remove(n);
-		n = new MyNode(this.getS(),this.getX(),this.getY());
+		n = new MyNode(this.getS(),this.position.getX(),this.position.getY());
 		carsNodes.add(n);
-		s.setX(getX());
-		s.setY(getY());
+		s.setX(position.getX());
+		s.setY(position.getY());
 		if(accident == true){
 			s.setColor(Color.BLACK);
 		}
@@ -178,7 +179,7 @@ public class VehicleAgent extends Agent{
 
 	protected void setup() {
 
-		//System.out.println("Hello! Vehicle-Agent "+ getAID().getName() + " is ready.");
+		System.out.println("Hello! Vehicle-Agent "+ getAID().getName() + " is ready.");
 
 		step = 0;
 		lightAtCarPos = null;
@@ -187,8 +188,8 @@ public class VehicleAgent extends Agent{
 			@Override
 			protected void onTick() {  
 
-				//System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
-				String strCarPos = "" + car.getPosition()[0] + car.getPosition()[1] + "";
+				System.out.println("car " + getAID().getName()+ " position: " + position.getX() + position.getY());
+				String strCarPos = "" + position.getX() + position.getY() + "";
 
 				//carro ve se tem semaforo
 				switch (step){
@@ -262,14 +263,15 @@ public class VehicleAgent extends Agent{
 
 				case 6:
 					//TODO hardcoded vai ser para mudar para mover no grafo
-					if(getAID().getName().equals("Vehicle1@City Traffic")){
+					/*if(getAID().getName().equals("Vehicle1@City Traffic")){
 						nextPosition[0] = xtrajetoriaV1[index];
 						nextPosition[1] = ytrajetoriaV1[index];
 					}
 					else{
 						nextPosition[0] = xtrajetoriaV2[index];
 						nextPosition[1] = ytrajetoriaV2[index];
-					}
+					}*/
+					nextPosition = car.getNextPosition();
 					index++;
 					encounterCar = new EncounterCar(car, cars);
 					addBehaviour(encounterCar);
@@ -291,8 +293,9 @@ public class VehicleAgent extends Agent{
 					//para já andam random, depois andam pelo caminho até ao destino
 					//para testar vou por aqui caminha harcoded
 
-					position[0] = nextPosition[0];
-					position[1] = nextPosition[1];
+					/*position[0] = nextPosition[0];
+					position[1] = nextPosition[1];*/
+					car.position = car.nextPosition;
 
 					updateDisplayCar();
 
@@ -318,7 +321,7 @@ public class VehicleAgent extends Agent{
 					if(msg.getPerformative() == ACLMessage.CFP){
 						if(msg.getConversationId().equals("position")){
 							reply.setPerformative(ACLMessage.INFORM);
-							String pos = "" + position[0] + position[1] + "";
+							String pos = "" + position.getX() + position.getY() + "";
 							reply.setContent(pos);
 							reply.setConversationId("position");
 							car.send(reply);
