@@ -178,7 +178,7 @@ public class VehicleAgent extends Agent{
 
 	protected void setup() {
 
-		System.out.println("Hello! Vehicle-Agent "+ getAID().getName() + " is ready.");
+		//System.out.println("Hello! Vehicle-Agent "+ getAID().getName() + " is ready.");
 
 		step = 0;
 		lightAtCarPos = null;
@@ -187,7 +187,7 @@ public class VehicleAgent extends Agent{
 			@Override
 			protected void onTick() {  
 
-				System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
+				//System.out.println("car " + getAID().getName()+ " position: " + position[0] + position [1]);
 				String strCarPos = "" + car.getPosition()[0] + car.getPosition()[1] + "";
 
 				//carro ve se tem semaforo

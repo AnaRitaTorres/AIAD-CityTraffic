@@ -43,7 +43,6 @@ public class Launcher extends Repast3Launcher {
 	private int numNodes = N_NODES;
 	private Graph graph;
 	private ArrayList<GraphNode> graphNodes = new ArrayList<GraphNode>();
-	private Connection c = new Connection();
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
 	private ArrayList<MyNode> lightsNodes = new ArrayList<MyNode>();
 	private ArrayList<MyNode> carsNodes = new ArrayList<MyNode>();
@@ -103,8 +102,6 @@ public class Launcher extends Repast3Launcher {
 		
 	public void readFromFile(String file) {
 		
-		ArrayList<GraphNode> adj = new ArrayList<GraphNode>();
-			
 		try{
 			
 			FileInputStream fstream = new FileInputStream(file);
@@ -125,7 +122,7 @@ public class Launcher extends Repast3Launcher {
 				int x = Integer.valueOf(nodesRead[0]);
 				int y= Integer.valueOf(nodesRead[1]);
 				
-				GraphNode n = new GraphNode(x,y,adj);
+				GraphNode n = new GraphNode(x,y);
 				graphNodes.add(n);
 			}
 				
@@ -165,395 +162,153 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public void buildGraph() {
-		
-		ConnectNodes();
-		TransformNodes(graphNodes);
-		ConnectNodesVisual();
+		groupByY();
+		groupByX();
+		groupByDirect();
+		TransformNodes(graph.getNodes());
 		crossRoads();
+	}
+	
+	
+	public void connectY(int x, int yi, int yf, int inc) {
+		while(yi!=yf) {
+			ConnectGraphNodes(x,yi,x,yi+inc);
+			yi=yi+inc;
+		}
+	}
+	
+	public void connectX(int y, int xi, int xf, int inc) {
+		while(xi!=xf) {
+			ConnectGraphNodes(xi,y,xi+inc,y);
+			xi=xi+inc;
+		}
+	}
+	
+	public void groupByDirect() {
+		ConnectGraphNodes(55,350,70,360);
+		ConnectGraphNodes(145,360,160,350);
+		ConnectGraphNodes(160,350,175,340);
+		ConnectGraphNodes(245,340,265,310);
+		ConnectGraphNodes(265,310,280,300);
+		ConnectGraphNodes(280,300,295,260);
+		ConnectGraphNodes(330,240,350,210);
+	}
+	public void groupByX() {
+		connectX(50,25,205,15);
+		connectX(110,25,205,15);
+		connectX(240,25,205,15);
+		connectX(50,215,245,15);
+		connectX(50,265,280,15);
+		connectX(50,205,215,10);
+		connectX(50,245,265,20);
+		connectX(130,295,310,15);
+		connectX(130,310,350,10);
+		connectX(110,205,215,10);
+		connectX(110,215,245,15);
+		connectX(110,245,265,20);
+		connectX(110,265,280,15);
+		connectX(180,40,55,15);
+		connectX(280,40,55,15);
+		connectX(300,130,145,15);
+		connectX(350,25,55,15);
+		connectX(360,70,145,15);
+		connectX(340,175,205,15);
+		connectX(340,215,245,15);
+		connectX(340,205,215,10);
+		connectX(240,295,310,15);
+		connectX(240,310,330,10);
+		connectX(210,330,350,20);
 		
 	}
 	
+	public void groupByY() {
+		connectY(25,50,350,10);
+		connectY(40,110,180,10);
+		connectY(40,280,350,10);
+		connectY(55,110,180,10);
+		connectY(55,280,350,10);
+		connectY(70,110,360,10);
+		connectY(85,110,360,10);
+		connectY(100,50,360,10);
+		connectY(130,110,210,10);
+		connectY(130,300,360,10);
+		connectY(145,110,210,10);
+		connectY(145,300,360,10);
+		connectY(160,50,350,10);
+		connectY(175,240,340,10);
+		connectY(190,160,340,10);
+		connectY(205,210,340,10);
+		connectY(215,50,340,10);
+		connectY(230,50,340,10);
+		connectY(245,50,340,10);
+		connectY(265,50,310,10);
+		connectY(280,50,300,10);
+		connectY(295,130,260,10);
+		connectY(320,130,240,10);
+		connectY(330,130,240,10);
+		connectY(350,130,210,10);
+		connectY(205,50,110,30);
+		connectY(130,210,240,30);
+		connectY(145,210,240,30);
+		connectY(115,110,360,10);
+			
+	}
+	
 	public void TransformNodes( ArrayList<GraphNode> graphNodes) {
+		
 		
 		for(int i=0; i < graphNodes.size(); i++) {
 			OvalNetworkItem o = new OvalNetworkItem(graphNodes.get(i).getX(),graphNodes.get(i).getY());
 			MyNode n = new MyNode(o, graphNodes.get(i).getX(),graphNodes.get(i).getY());
 			nodes.add(n);
 		}
-	}
-	
-	public void removeEgdeGraph() {
+		
 		for(int i=0; i < graphNodes.size(); i++) {
-			
-			if(graphNodes.get(i).getY()==240) {
-				if(graphNodes.get(i).getX()==310) {
-					graphNodes.get(i).removeAdj(310,250);
+			for(int x=0; x < nodes.size(); x++) {
+				if(graphNodes.get(i).getX()== nodes.get(x).getX() && graphNodes.get(i).getY()== nodes.get(x).getY()) {
+					MyNode n= nodes.get(x);
+					if(graphNodes.get(i).getAdj().size()!=0) {
+						for(int j=0; j < graphNodes.get(i).getAdj().size(); j++ ) {
+							for(int w=0; w < nodes.size(); w++) {
+								if(graphNodes.get(i).getAdj().get(j).getX() == nodes.get(w).getX() && graphNodes.get(i).getAdj().get(j).getY() == nodes.get(w).getY()) {
+									n.makeEdgeToFrom(nodes.get(w), 5, Color.magenta);
+								}
+								
+							}
+						}
+					}
 				}
-				else if(graphNodes.get(i).getX()==320) {
-					graphNodes.get(i).removeAdj(320,250);
-				}
-				else if(graphNodes.get(i).getX()==330) {
-					graphNodes.get(i).removeAdj(330, 250);
-				}
-			}
-			else if(graphNodes.get(i).getY()==50) {
-				if(graphNodes.get(i).getX()==115) {
-					graphNodes.get(i).removeAdj(115, 110);
-				}
-				else if(graphNodes.get(i).getX()==130) {
-					graphNodes.get(i).removeAdj(130, 110);
-					
-				}
-				else if(graphNodes.get(i).getX()==145) {
-					graphNodes.get(i).removeAdj(145, 110);
-				}
-				else if(graphNodes.get(i).getX()==175) {
-					graphNodes.get(i).removeAdj(175, 240);
-					graphNodes.get(i).removeAdj(175, 110);
-					
-				}
-				else if(graphNodes.get(i).getX()==190) {
-					graphNodes.get(i).removeAdj(190, 160);
-					graphNodes.get(i).removeAdj(190, 110);
-				}
-				else if(graphNodes.get(i).getX()==205) {
-					graphNodes.get(i).removeAdj(205, 210);
-					graphNodes.get(i).removeAdj(205, 50);
-				}
-				else if(graphNodes.get(i).getX()==40) {
-					graphNodes.get(i).removeAdj(40, 110);
-				}
-				else if(graphNodes.get(i).getX()==55) {
-					graphNodes.get(i).removeAdj(55, 110);
-				}
-				else if(graphNodes.get(i).getX()==70) {
-					graphNodes.get(i).removeAdj(70, 110);
-				}
-				else if(graphNodes.get(i).getX()==85) {
-					graphNodes.get(i).removeAdj(85, 110);
-				}
-			}
-			else if(graphNodes.get(i).getY()==180){
-				if(graphNodes.get(i).getX()==40) {
-					graphNodes.get(i).removeAdj(40, 280);
-					graphNodes.get(i).removeAdj(40, 240);
-				}
-				else if(graphNodes.get(i).getX()==55) {
-					graphNodes.get(i).removeAdj(55, 280);
-					graphNodes.get(i).removeAdj(55, 240);
-				}
-			}
-			else if(graphNodes.get(i).getY()==210) {
-				if(graphNodes.get(i).getX()==130){
-					graphNodes.get(i).removeAdj(130,300);
-				}
-				else if(graphNodes.get(i).getX()==145){
-					graphNodes.get(i).removeAdj(145, 300);
-				}
-				
-			}
-			else if (graphNodes.get(i).getY()==250 && graphNodes.get(i).getX()==330){
-				graphNodes.get(i).removeAdj(350, 210);
-			}
-			else if(graphNodes.get(i).getY()== 130 && graphNodes.get(i).getX()==310) {
-				graphNodes.get(i).removeAdj(310, 240);
-			}
-			else if(graphNodes.get(i).getY()==240) {
-				if(graphNodes.get(i).getX()==115) {
-					graphNodes.get(i).removeAdj(160, 240);
-				}
-				else if (graphNodes.get(i).getX()==130) {
-					graphNodes.get(i).removeAdj(130, 300);
-				}
-				else if (graphNodes.get(i).getX()==145) {
-					graphNodes.get(i).removeAdj(145, 300);
-				}
-				else if (graphNodes.get(i).getX()==130) {
-					graphNodes.get(i).removeAdj(130, 210);
-				}
-				else if (graphNodes.get(i).getX()==145) {
-					graphNodes.get(i).removeAdj(145, 210);
-				}
-			}
-			else if(graphNodes.get(i).getY()==110) {
-				if(graphNodes.get(i).getX()==175) {
-					graphNodes.get(i).removeAdj(175, 240);
-				}
-				else if(graphNodes.get(i).getX()==190) {
-					graphNodes.get(i).removeAdj(190, 160);
-				}
-				else if(graphNodes.get(i).getX()==205) {
-					graphNodes.get(i).removeAdj(205,210);
-				}
-				else if(graphNodes.get(i).getX()==205) {
-					graphNodes.get(i).removeAdj(205,50);
-				}
-			}
-			else if(graphNodes.get(i).getY()==210) {
-				if(graphNodes.get(i).getX()==130) {
-					graphNodes.get(i).removeAdj(130, 240);
-				}
-				else if(graphNodes.get(i).getX()==145) {
-					graphNodes.get(i).removeAdj(145, 240);
-				}
-			}
-			
-			else if(graphNodes.get(i).getY()==280) {
-				if(graphNodes.get(i).getX()==40) {
-					graphNodes.get(i).removeAdj(40, 240);
-				}else if(graphNodes.get(i).getX()==55) {
-					graphNodes.get(i).removeAdj(55, 240);
-				}
-			}
-			else if(graphNodes.get(i).getY()==300) {
-				if(graphNodes.get(i).getX()==130) {
-					graphNodes.get(i).removeAdj(130, 240);
-				}else if(graphNodes.get(i).getX()==145) {
-					graphNodes.get(i).removeAdj(145, 240);
-				}
-				
-			}
-		}	
-		
-		
-	}
-	
-	public void ConnectNodes() {
-		graph.connectVertical(graphNodes);
-		graph.connectStreetY(graphNodes, 110);
-		graph.connectStreetY(graphNodes, 50);
-		graph.connectStreetY(graphNodes,360);
-		graph.connectStreetY(graphNodes, 240);
-		graph.connectToFrom(graphNodes,55, 25, 350);
-		graph.connectToFrom(graphNodes,150, 90,130);
-		graph.connectToFrom(graphNodes,350, 295,130);
-		graph.connectToFrom(graphNodes, 265, 175, 340);
-		graph.connectToFrom(graphNodes,330 , 295, 250);
-		graph.connect2Nodes(graphNodes,350, 330, 210 ,250);
-		graph.connect2Nodes(graphNodes, 190, 175, 160, 170);
-		graph.connect2Nodes(graphNodes, 205, 190,210 , 160);
-		graph.connect2Nodes(graphNodes, 265, 245, 310, 340);
-		graph.connect2Nodes(graphNodes,280,265,300,310);
-		graph.connect2Nodes(graphNodes, 295, 280, 260, 300);
-		graph.connect2Nodes(graphNodes, 70, 55, 360, 350);
-		graph.connect2Nodes(graphNodes,160, 145, 350, 360);
-		graph.connect2Nodes(graphNodes, 175, 160, 340, 350);
-		graph.connect2Nodes(graphNodes, 350, 330, 210, 210);
-		graph.connect2Nodes(graphNodes, 145, 130, 300, 300);
-		graph.connect2Nodes(graphNodes, 55, 40, 280, 280);
-		graph.connect2Nodes(graphNodes, 55, 40, 180, 180);
-		graph.connect2Nodes(graphNodes, 190, 190, 240, 250);
-		graph.connect2Nodes(graphNodes, 175, 190, 240, 240);
-		graph.connect2Nodes(graphNodes, 245, 265, 110, 110);
-		graph.connect2Nodes(graphNodes, 265, 265,100 ,110 );
-		removeEgdeGraph();
-		
-	
-	}
-	
-	public void removeEdgeVisual() {
-		for(int i=0; i < nodes.size(); i++) {
-			if(nodes.get(i).getY()==240) {
-				if(nodes.get(i).getX()==310) {
-					nodes.get(i).removeConnection(310,250,nodes);
-				}
-				else if(nodes.get(i).getX()==320) {
-					nodes.get(i).removeConnection(320,250,nodes);
-				}
-				else if(nodes.get(i).getX()==330) {
-					nodes.get(i).removeConnection(330, 250,nodes);
-				}
-			}
-			else if(nodes.get(i).getY()==50) {
-				if(nodes.get(i).getX()==115) {
-					nodes.get(i).removeConnection(115, 110, nodes);
-				}
-				else if(nodes.get(i).getX()==130) {
-					nodes.get(i).removeConnection(130, 110, nodes);
-					
-				}
-				else if(nodes.get(i).getX()==145) {
-					nodes.get(i).removeConnection(145, 110, nodes);
-				}
-				else if(nodes.get(i).getX()==175) {
-					nodes.get(i).removeConnection(175, 240, nodes);
-					nodes.get(i).removeConnection(175, 110, nodes);
-					
-				}
-				else if(nodes.get(i).getX()==190) {
-					nodes.get(i).removeConnection(190, 160, nodes);
-					nodes.get(i).removeConnection(190, 110, nodes);
-				}
-				else if(nodes.get(i).getX()==205) {
-					nodes.get(i).removeConnection(205, 210, nodes);
-					nodes.get(i).removeConnection(205, 50, nodes);
-				}
-				else if(nodes.get(i).getX()==40) {
-					nodes.get(i).removeConnection(40, 110, nodes);
-				}
-				else if(nodes.get(i).getX()==55) {
-					nodes.get(i).removeConnection(55, 110, nodes);
-				}
-				else if(nodes.get(i).getX()==70) {
-					nodes.get(i).removeConnection(70, 110, nodes);
-				}
-				else if(nodes.get(i).getX()==85) {
-					nodes.get(i).removeConnection(85, 110, nodes);
-				}
-			}
-			else if(nodes.get(i).getY()==180){
-				if(nodes.get(i).getX()==40) {
-					nodes.get(i).removeConnection(40, 280, nodes);
-					nodes.get(i).removeConnection(40, 240, nodes);
-				}
-				else if(nodes.get(i).getX()==55) {
-					nodes.get(i).removeConnection(55, 280, nodes);
-					nodes.get(i).removeConnection(55, 240, nodes);
-				}
-			}
-			else if(nodes.get(i).getY()==210) {
-				if(nodes.get(i).getX()==130){
-					nodes.get(i).removeConnection(130,300, nodes);
-				}
-				else if(nodes.get(i).getX()==145){
-					nodes.get(i).removeConnection(145, 300, nodes);
-				}
-			}
-							
-			
-			else if (nodes.get(i).getY()==250 && nodes.get(i).getX()==330){
-				nodes.get(i).removeConnection(350, 210, nodes);
-			}
-			else if(nodes.get(i).getY()== 130 && nodes.get(i).getX()==310) {
-				nodes.get(i).removeConnection(310, 240, nodes);
-			}
-			else if(nodes.get(i).getY()==240) {
-				if(nodes.get(i).getX()==115) {
-					nodes.get(i).removeConnection(160, 240, nodes);
-				}
-				else if (nodes.get(i).getX()==130) {
-					nodes.get(i).removeConnection(130, 300, nodes);
-				}
-				else if (nodes.get(i).getX()==145) {
-					nodes.get(i).removeConnection(145, 300, nodes);
-				}
-				else if (nodes.get(i).getX()==130) {
-					nodes.get(i).removeConnection(130, 210, nodes);
-				}
-				else if (nodes.get(i).getX()==145) {
-					nodes.get(i).removeConnection(145, 210, nodes);
-				}
-			}
-			else if(nodes.get(i).getY()==110) {
-				if(nodes.get(i).getX()==175) {
-					nodes.get(i).removeConnection(175, 240, nodes);
-				}
-				else if(nodes.get(i).getX()==190) {
-					nodes.get(i).removeConnection(190, 160,nodes);
-				}
-				else if(nodes.get(i).getX()==205) {
-					nodes.get(i).removeConnection(205, 210,nodes);
-				}
-				else if(nodes.get(i).getX()==205) {
-					nodes.get(i).removeConnection(205, 50,nodes);
-				}
-				
-				
-			}
-			else if(nodes.get(i).getY()==210) {
-				if(nodes.get(i).getX()==130) {
-					nodes.get(i).removeConnection(130, 240, nodes);
-				}
-				else if(nodes.get(i).getX()==145) {
-					nodes.get(i).removeConnection(145, 240, nodes);
-				}
-				
-			}
-			else if(nodes.get(i).getY()==280) {
-				if(nodes.get(i).getX()==40) {
-					nodes.get(i).removeConnection(40, 240, nodes);
-				}else if(nodes.get(i).getX()==55) {
-					nodes.get(i).removeConnection(55, 240, nodes);
-				}
-			}
-			else if(nodes.get(i).getY()==300) {
-				if(nodes.get(i).getX()==130) {
-					nodes.get(i).removeConnection(130, 240, nodes);
-				}else if(nodes.get(i).getX()==145) {
-					nodes.get(i).removeConnection(145, 240, nodes);
-				}
-				
 			}
 		}
+		
+		
 	}
 	
-	public void ConnectNodesVisual() {
-		c.connectVertical(nodes);
-		
-		c.connectStreetY(nodes,110);
-		c.connectStreetY(nodes, 50);
-		c.connectStreetY(nodes,360);
-		c.connectStreetY(nodes, 240);
-		
-		c.connectToFrom(nodes, 265, 175, 340);
-		c.connectToFrom(nodes,55, 25, 350);
-		c.connectToFrom(nodes,150, 90,130);
-		c.connectToFrom(nodes,350, 295,130);
-		c.connectToFrom(nodes,330 , 295, 250);
-		
-		c.connect2Nodes(nodes, 70, 55, 360, 350);
-		c.connect2Nodes(nodes,160, 145, 350, 360);
-		c.connect2Nodes(nodes, 175, 160, 340, 350);
-		c.connect2Nodes(nodes, 265, 245, 310, 340);
-		c.connect2Nodes(nodes,280,265,300,310);
-		c.connect2Nodes(nodes, 295, 280, 260, 300);
-		c.connect2Nodes(nodes,350, 330, 210 ,250);
-		c.connect2Nodes(nodes, 205, 190,210 , 160);
-		c.connect2Nodes(nodes, 350, 330, 210, 210);
-		c.connect2Nodes(nodes, 145, 130, 300, 300);
-		c.connect2Nodes(nodes, 55, 40, 280, 280);
-		c.connect2Nodes(nodes, 55, 40, 180, 180);
+	
+	public void ConnectGraphNodes(int xi, int yi, int xf, int yf) {
 			
-		removeEdgeVisual();
+		for(int i=0; i < graph.getNodes().size(); i++) {
+			if(graph.getNodes().get(i).getX()==xi && graph.getNodes().get(i).getY()==yi) {
+				for(int j=0; j < graph.getNodes().size(); j++) {
+					if(graph.getNodes().get(j).getX()==xf && graph.getNodes().get(j).getY()==yf) {
+						graph.getNodes().get(i).addAdj(graph.getNodes().get(j));
+						graph.getNodes().get(j).addAdj(graph.getNodes().get(i));
+					}
+				}
+			}
+		}
 		
-	
 	}
+	
 	
 	//TODO delete physical rep of crossroads
 	public void crossRoads() {
 		 
-		OvalNetworkItem o1 = new OvalNetworkItem(295,240);
-		OvalNetworkItem o2 = new OvalNetworkItem(265,110);
-		OvalNetworkItem o3 = new OvalNetworkItem(160,110);
-		OvalNetworkItem o4 = new OvalNetworkItem(190,240);
-		OvalNetworkItem o5 = new OvalNetworkItem(40,350);
-		
-		o1.setColor(Color.black);
-		o2.setColor(Color.black);
-		o3.setColor(Color.black);
-		o4.setColor(Color.black);
-		o5.setColor(Color.black);
-		
-		MyNode c1 = new MyNode(o1,295,240);
-		MyNode c2 = new MyNode(o2,265,110);
-		MyNode c3 = new MyNode(o3,160,110);
-		MyNode c4 = new MyNode(o4,190,240);
-		MyNode c5 = new MyNode(o5,40,350);
-		
-		lightsNodes.add(c1);
-		lightsNodes.add(c2);
-		lightsNodes.add(c3);
-		lightsNodes.add(c4);
-		lightsNodes.add(c5);
-		
-		
 		addCrossroad(295,240);
 		addCrossroad(265,110);
 		addCrossroad(160,110);
 		addCrossroad(190,240);
 		addCrossroad(40,350);
-		
-		
 	}
 	
 	public void addCrossroad(int x, int y) {
@@ -563,13 +318,9 @@ public class Launcher extends Repast3Launcher {
 			}
 		}
 	}
+	
 	public void buildModel() {
-		
-		semColor.addElement(Color.red);
-		semColor.addElement(Color.green);
-		semColor.addElement(Color.orange);
 		buildGraph();
-		
 	}
 	
 	public void buildDisplay() {
