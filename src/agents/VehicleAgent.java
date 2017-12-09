@@ -168,6 +168,10 @@ public class VehicleAgent extends Agent{
 		}
 		disp.updateDisplay();
 	}
+	
+	public double calcDist(GraphNode n1, GraphNode n2){
+		return Math.sqrt(Math.pow((n2.getX() - n1.getX()), 2) + Math.pow((n2.getY() - n1.getY()), 2));
+	}
 
 
 	protected void setup() {
@@ -274,6 +278,9 @@ public class VehicleAgent extends Agent{
 					//TODO para já andam random, depois andam pelo caminho até ao destino
 					car.lastVisited = car.position;
 					car.position = car.nextPosition;
+					double dist = calcDist(car.lastVisited, car.position);
+					stats.updateTotalDistance(dist);
+					stats.updateAvgDistance(cars.size());
 					updateDisplayCar();
 
 					step = 0;
