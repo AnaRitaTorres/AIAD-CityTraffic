@@ -386,7 +386,7 @@ public class Launcher extends Repast3Launcher {
 		displaySurf.setBackground (Color.white);
 		
 		//data
-		textDisp = new TextDisplay(40,60,0,15, Color.black);
+		textDisp = new TextDisplay(40,45,0,15, Color.black);
 		textDisp.setBoxVisible(false);
 		displayData.addDisplayableProbeable(textDisp, "City Data");
 		displayData.setBackground(Color.white);
