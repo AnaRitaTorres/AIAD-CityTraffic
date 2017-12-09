@@ -30,7 +30,7 @@ public class EncounterTrafficLight extends Behaviour{
 		switch(step){
 		case 0:
 			//send request for color to traffic light encountered by the car
-			System.out.println("Cor?");
+			//System.out.println("Cor?");
 			cfp.addReceiver(light);
 			cfp.setContent("Cor?");
 			cfp.setConversationId("cor");

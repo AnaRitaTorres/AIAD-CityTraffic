@@ -178,7 +178,7 @@ public class VehicleAgent extends Agent{
 			@Override
 			protected void onTick() {  
 
-				System.out.println("car " + getAID().getName()+ " position: " + position.getX() + position.getY());
+				//System.out.println("car " + getAID().getName()+ " position: " + position.getX() + position.getY());
 				String strCarPos = "" + position.getX() + position.getY() + "";
 
 				//carro ve se tem semaforo

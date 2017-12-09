@@ -1,5 +1,5 @@
-//TODO(4) fazer experiencias com numero diferente de carros (e semaforos?) e 
-//tirar estatisticas do numero de colisoes, distancia percorrida, tempo demorado, tempo de espera em semaforos, tempo total que os carros estao parados durante o percurso(semaforos+transito)
+//TODO fazer experiencias com numero diferente de carros (e semaforos?) para por os resultados dessas estatisticas no relatorio
+//TODO por estatisticas na janela em direto
 
 //TODO melhorias implementar sentidos do transito, dar para por semaforos em qualquer sitio e alterer o numero de lights agenst na janelinha
 
@@ -85,9 +85,6 @@ public class Launcher extends Repast3Launcher {
 	}
 
 	public void setNumVehicles(int numVehicles) {
-		
-		System.out.println("entrei");
-		
 		this.numVehicles = numVehicles;
 	}
 
@@ -193,7 +190,9 @@ public class Launcher extends Repast3Launcher {
 		ConnectGraphNodes(265,310,280,300);
 		ConnectGraphNodes(280,300,295,260);
 		ConnectGraphNodes(330,240,350,210);
+		ConnectGraphNodes(190,160,205,210);
 	}
+	
 	public void groupByX() {
 		connectX(50,25,205,15);
 		connectX(110,25,205,15);
@@ -303,7 +302,6 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	
-	//TODO delete physical rep of crossroads
 	public void crossRoads() {
 		 
 		addCrossroad(295,240);
@@ -326,8 +324,6 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public void buildDisplay() {
-
-		//TODO(10) na janela das settings pro para dar para alterar numero de agentes
 		
 		Network2DDisplay display = new Network2DDisplay (nodes,WIDTH,HEIGHT);
 		display.setNodesVisible(false);
@@ -338,12 +334,10 @@ public class Launcher extends Repast3Launcher {
 		displaySurf.addDisplayableProbeable (display1, "City");
 		displaySurf.addZoomable (display);
 		displaySurf.setBackground (java.awt.Color.white);
-		
-		
 	}
 	
 	
-	public void createTrafficLight(int x, int y) {
+	public void createTrafficLight(int x, int y,Vector<TrafficLightAgent> lightAgents) {
 		
 		TrafficLightAgent t = new TrafficLightAgent(x,y,lightAgents,crossroadNodes,graphNodes,displaySurf);
 		lightAgents.add(t);
@@ -351,6 +345,7 @@ public class Launcher extends Repast3Launcher {
 		lightsNodes.add(n);
 		
 	}
+	
 	@Override
 	public String[] getInitParam() {
 		String[] initParams = {"NumRadios", "NumVehicles", "NumLights"};
@@ -365,6 +360,7 @@ public class Launcher extends Repast3Launcher {
 		mainContainer = rt.createMainContainer(p);
 		readFromFile(file);
 		launchAgents();
+		
 	}
 	
 	private void launchAgents() {
@@ -372,9 +368,7 @@ public class Launcher extends Repast3Launcher {
 		radioAgents= new Vector<RadioAgent>();
 		vehicleAgents= new Vector<VehicleAgent>();
 		lightAgents= new Vector<TrafficLightAgent>();
-		//AID receiverLight = null;
-		//AID receiverRadio = null;
-		
+				
 		try {
 			
 			//create radios
@@ -384,24 +378,22 @@ public class Launcher extends Repast3Launcher {
 				mainContainer.acceptNewAgent("Radio" + i, radio).start();			
 			}
 			
-				createTrafficLight(145,110);
-				createTrafficLight(160,100);
-				createTrafficLight(245,110);
-				createTrafficLight(265,100);
-				createTrafficLight(295,230);
-				createTrafficLight(280,240);
-				createTrafficLight(175,240);
-				createTrafficLight(190,250);
-				createTrafficLight(40,340);
-				createTrafficLight(25,350);
-				
-				
+				createTrafficLight(145,110,lightAgents);
+				createTrafficLight(245,110,lightAgents);
+				createTrafficLight(295,230,lightAgents);
+				createTrafficLight(175,240,lightAgents);
+				createTrafficLight(40,340,lightAgents);
+				createTrafficLight(160,100,lightAgents);
+				createTrafficLight(265,100,lightAgents);
+				createTrafficLight(280,240,lightAgents);
+				createTrafficLight(190,250,lightAgents);
+				createTrafficLight(25,350,lightAgents);
 				
 				for(int i=0; i < lightAgents.size(); i++) {
 					mainContainer.acceptNewAgent("Light" + i, lightAgents.get(i)).start();
 				}
-						
-			
+				
+								
 			//create vehicles
 			for(int i=0; i < numVehicles;i++) {
 				java.util.Random r = new java.util.Random();
@@ -430,11 +422,12 @@ public class Launcher extends Repast3Launcher {
 	
 	public static void main(String[] args) {
 		
-		
 		boolean runMode = !BATCH_MODE; 
 		
 		SimInit init = new SimInit();
 		init.setNumRuns(1);   // works only in batch mode
 		init.loadModel(new Launcher(runMode), null, runMode);
+		
+		
 	}
 }
