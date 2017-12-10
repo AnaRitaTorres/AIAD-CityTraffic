@@ -6,15 +6,11 @@ public class Statistics {
 	private double totalDistance = 0;
 	private double avgDistance = 0;
 	private float avgTravelTime = 0;	//TODO later or not at all se nao houver tempo
-	private float totalTimeWaitingTrafficLight = 0;	//TODO vou aqui
-	private float avgTimeWaitingTrafficLight = 0;	//TODO
-	private float totalTimeWaitingTraffic = 0;	//TODO
-	private float avgTimeWaitingTraffic = 0;	//TODO
-	private float avgTimeNotMoving = 0;	//TODO
-	
-	/*public Statistics(disp){
-		this.disp=disp;
-	}*/
+	private float totalTimeWaitingTrafficLight = 0;
+	private float avgTimeWaitingTrafficLight = 0;
+	private float totalTimeWaitingTraffic = 0;
+	private float avgTimeWaitingTraffic = 0;
+	private float avgTimeNotMoving = 0;
 	
 	public int getTotalAccidents() {
 		return totalAccidents;
@@ -58,12 +54,10 @@ public class Statistics {
 	
 	public void updateTotalAccidents(){
 		totalAccidents ++;
-		updateDisplay();
 	}
 	
 	public void updateAvgAccidents(int numCars){
 		avgAccidents = (float)totalAccidents/(float)numCars;
-		updateDisplay();
 	}
 	
 	public void updateTotalDistance(double dist){
@@ -76,18 +70,17 @@ public class Statistics {
 	
 	//update avgTravelTime
 	
-	public void updateTotalTimeWaitingTrafficLight(float time){
-		totalTimeWaitingTrafficLight += time;
-		System.out.println("total " + totalTimeWaitingTrafficLight);
+	public void updateTotalTimeWaitingTrafficLight(long time){
+		totalTimeWaitingTrafficLight = totalTimeWaitingTrafficLight + time;
 	}
 	
 	public void updateAvgTimeWaitingTrafficLight(int numCars){
 		avgTimeWaitingTrafficLight = totalTimeWaitingTrafficLight/(float)numCars;
-		System.out.println("avg " + avgTimeWaitingTrafficLight);
+		updateAvgTimeNotMoving(numCars);
 	}
 	
-	public void updateTotalTimeWaitingTraffic(float time){
-		totalTimeWaitingTraffic += time;
+	public void updateTotalTimeWaitingTraffic(long time){
+		totalTimeWaitingTraffic = totalTimeWaitingTraffic + time;
 	}
 	
 	public void updateAvgTimeWaitingTraffic(int numCars){
@@ -97,10 +90,6 @@ public class Statistics {
 	
 	public void updateAvgTimeNotMoving(int numCars){
 		avgTimeNotMoving = (totalTimeWaitingTrafficLight + totalTimeWaitingTraffic)/(float)numCars;
-	}
-	
-	public void updateDisplay(){
-		//TODO fazerdispX.update()
 	}
 	
 }

@@ -1,7 +1,4 @@
 //TODO fazer experiencias com numero diferente de carros (e semaforos?) para por os resultados dessas estatisticas no relatorio
-//TODO por estatisticas na janela em direto
-
-//TODO melhorias implementar sentidos do transito, dar para por semaforos em qualquer sitio e alterer o numero de lights agenst na janelinha
 
 package gui;
 
@@ -360,9 +357,9 @@ public class Launcher extends Repast3Launcher {
 				textDisp.addLine(" - Avg Accidents: " + stats.getAvgAccidents());
 				textDisp.addLine(" - Total Distance: " + stats.getTotalDistance());
 				textDisp.addLine(" - Avg Distance: " + stats.getAvgDistance());
-				textDisp.addLine(" - Avg Travel Time: " + stats.getAvgTravelTime());
+				textDisp.addLine(" - Avg Travel Time: DO OR DELETE" /*+ stats.getAvgTravelTime()*/);
 				textDisp.addLine(" - Total Time Waiting Traffic Light: " + stats.getTotalTimeWaitingTrafficLight());
-				textDisp.addLine(" - Avg Time Waiting Traffic Light: " + stats.getAvgTimeWaitingTraffic());
+				textDisp.addLine(" - Avg Time Waiting Traffic Light: " + stats.getAvgTimeWaitingTrafficLight());
 				textDisp.addLine(" - Total Time Waiting Traffic: " + stats.getTotalTimeWaitingTraffic());
 				textDisp.addLine(" - Avg Time Waiting Traffic: " + stats.getAvgTimeWaitingTraffic());
 				textDisp.addLine(" - Avg Time Not Moving: " + stats.getAvgTimeNotMoving());
