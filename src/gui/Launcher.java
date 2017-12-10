@@ -39,7 +39,7 @@ public class Launcher extends Repast3Launcher {
 	private static final int WIDTH = 400;
 	private static final int N_RADIOS = 0;
 	private static final int N_VEHICLES = 2;
-	private static final int N_LIGHTS = 9;
+	private static final int N_LIGHTS = 10;
 	private static final int N_NODES = 100;
 	
 	private int numNodes = N_NODES;
@@ -187,6 +187,13 @@ public class Launcher extends Repast3Launcher {
 		groupByDirect();
 		TransformNodes(graph.getNodes());
 		crossRoads();
+		
+		for(int i=0; i < graph.getNodes().size(); i++) {
+			if(graph.getNodes().get(i).getAdj().size() < 2) {
+				System.out.println(graph.getNodes().get(i).getX());
+				System.out.println(graph.getNodes().get(i).getY());
+			}
+		}
 	}
 	
 	
@@ -213,6 +220,7 @@ public class Launcher extends Repast3Launcher {
 		ConnectGraphNodes(280,300,295,260);
 		ConnectGraphNodes(330,240,350,210);
 		ConnectGraphNodes(190,160,205,210);
+		ConnectGraphNodes(145,210,160,210);
 	}
 	
 	public void groupByX() {
@@ -272,7 +280,6 @@ public class Launcher extends Repast3Launcher {
 		connectY(350,130,210,10);
 		connectY(205,50,110,30);
 		connectY(130,210,240,30);
-		connectY(145,210,240,30);
 		connectY(115,110,360,10);
 			
 	}
@@ -327,10 +334,11 @@ public class Launcher extends Repast3Launcher {
 	public void crossRoads() {
 		 
 		addCrossroad(295,240);
-		addCrossroad(265,110);
-		addCrossroad(160,110);
-		addCrossroad(190,240);
 		addCrossroad(40,350);
+		addCrossroad(70,240);
+		addCrossroad(160,110);
+		addCrossroad(160,240);
+		
 	}
 	
 	public void addCrossroad(int x, int y) {
@@ -371,7 +379,7 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	public void buildModel() {
-		buildGraph();
+		
 	}
 	
 	public void buildDisplay() {
@@ -417,6 +425,7 @@ public class Launcher extends Repast3Launcher {
 		Profile p = new ProfileImpl();
 		mainContainer = rt.createMainContainer(p);
 		readFromFile(file);
+		buildGraph();
 		launchAgents();
 	}
 	
@@ -435,21 +444,34 @@ public class Launcher extends Repast3Launcher {
 				mainContainer.acceptNewAgent("Radio" + i, radio).start();			
 			}
 			
-				createTrafficLight(145,110,lightAgents);
-				createTrafficLight(245,110,lightAgents);
-				createTrafficLight(295,230,lightAgents);
-				createTrafficLight(175,240,lightAgents);
-				createTrafficLight(40,340,lightAgents);
-				createTrafficLight(160,100,lightAgents);
-				createTrafficLight(265,100,lightAgents);
-				createTrafficLight(280,240,lightAgents);
-				createTrafficLight(190,250,lightAgents);
-				createTrafficLight(25,350,lightAgents);
-				
-				for(int i=0; i < lightAgents.size(); i++) {
-					mainContainer.acceptNewAgent("Light" + i, lightAgents.get(i)).start();
+			createTrafficLight(40,340,lightAgents);
+			createTrafficLight(25,350,lightAgents);
+			createTrafficLight(295,230,lightAgents);
+			createTrafficLight(310,240,lightAgents);
+			createTrafficLight(55,240,lightAgents);
+			createTrafficLight(70,230,lightAgents);
+			createTrafficLight(160,100,lightAgents);
+			createTrafficLight(175,110,lightAgents);
+			createTrafficLight(145,240, lightAgents);
+			createTrafficLight(160,230,lightAgents);
+			
+			if(numLights > 10) {
+				int w=0;
+				while(w < numLights-10) {
+					java.util.Random r = new java.util.Random();
+					int pos = r.nextInt(graph.getNodes().size());
+					GraphNode luz = graph.getNodes().get(pos);
+					
+					if(luz.getAdj().size()==2) {
+						int x = 10+w;
+						createTrafficLight(luz.getX(),luz.getY(),lightAgents);
+						w++;
+					}
 				}
-				
+			}
+			for(int i=0; i < lightAgents.size(); i++) {
+				mainContainer.acceptNewAgent("Light" + i, lightAgents.get(i)).start();
+			}	
 								
 			//create vehicles
 			for(int i=0; i < numVehicles;i++) {
