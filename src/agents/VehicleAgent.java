@@ -191,7 +191,9 @@ public class VehicleAgent extends Agent{
 		while(pos == iLast){
 			pos = r.nextInt(position.getAdj().size());
 		}*/
-		indexPath++;
+		if(indexPath + 1 < path.size()){
+			indexPath++;
+		}
 		
 		return path.get(indexPath);
 	}
