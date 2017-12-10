@@ -3,6 +3,7 @@ package agents;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -29,7 +30,7 @@ public class VehicleAgent extends Agent{
 	private static int IDNumber=0;
 	private int ID;
 	private GraphNode position;
-	private GraphNode nextPosition;
+	public GraphNode nextPosition;
 	private GraphNode posEnd;
 	private GraphNode lastVisited;
 	private Vector<VehicleAgent> cars;
@@ -41,15 +42,20 @@ public class VehicleAgent extends Agent{
 	private RectNetworkItem s;
 	private DisplaySurface disp;
 	private Graph graph;
-	private List<GraphNode> path;
+	private List<Stack<GraphNode>> allPaths = new ArrayList<Stack<GraphNode>>();
+	private Stack<GraphNode> path = new Stack<GraphNode>();
+	private List<GraphNode> onPath = new ArrayList<GraphNode>();
+	private int numPaths = 5;
 	private int indexPath = 0;
 	private Statistics stats;
 	private ArrayList<MyNode> carsNodes;
 	private MyNode n;
 	private boolean accident;
+	private boolean end = false;
 	private int numAccidents;
 	public long dt;
 	public long dt2;
+	private boolean arrived = false;
 	private int repliesCnt;
 	private boolean foundCar;
 	private ACLMessage reply;
@@ -72,15 +78,24 @@ public class VehicleAgent extends Agent{
 		this.stats = stats;
 		s.setColor(Color.CYAN);
 		this.carsNodes = carsNodes;
-		//this.graph = graph;	//TODO é preciso tirar do construtor??
+		this.graph = graph;
 		n = new MyNode(getS(),position.getX(), position.getY());
 		this.carsNodes.add(n);
-		
-		List<GraphNode> visited = new ArrayList<>();
-		path = new ArrayList<>();
-		calculatePath(position, posEnd, visited, path);
-		System.out.println("visited=" + visited.size());
-		System.out.println("path=" + path);
+
+		calculatePath(position, posEnd);
+
+		if(allPaths.size() > 0){
+			int min = allPaths.get(0).size();
+			for(int i = 0; i < allPaths.size(); i++){
+				if(allPaths.get(i).size() <= min){
+					min = allPaths.get(i).size();
+					path = allPaths.get(i);
+				}
+			}
+		}
+		else{
+			path = new Stack<GraphNode>();
+		}
 
 		/*
 		//para apagar
@@ -131,28 +146,29 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV2[2] = 110;
 		ytrajetoriaV2[3] = 120;
 		ytrajetoriaV2[4] = 130;
-		*/
+		 */
 	}
-	
-	public void calculatePath(GraphNode src, GraphNode dest, List<GraphNode> visited, List<GraphNode> path){
-		path.add(src);
-		visited.add(src);
+
+	public void calculatePath(GraphNode src, GraphNode dest){
+		path.push(src);
+		onPath.add(src);
 		if (src.equals(dest)) {
-			return;
+			if(numPaths == 0){return;}
+			allPaths.add((Stack<GraphNode>)(path.clone()));
+			numPaths--;
+			System.out.println(path);
 		}
-		List<GraphNode> shortestChildPath = null;
-		for (GraphNode child : src.getAdj()) {
-			if (!visited.contains(child)) {
-				List<GraphNode> childPath = new ArrayList<>();
-				calculatePath(child, dest, visited, childPath);
-				if (shortestChildPath == null || childPath.size() < shortestChildPath.size()) {
-					shortestChildPath = childPath;
+		else{
+			for (GraphNode child : src.getAdj()) {
+				if (!onPath.contains(child)) {
+					calculatePath(child, dest);
 				}
 			}
 		}
-		if (shortestChildPath != null) {
-			path.addAll(shortestChildPath);
-		}
+
+		path.pop();
+		onPath.remove(src);
+
 	}
 
 	public RectNetworkItem getS() {
@@ -174,7 +190,7 @@ public class VehicleAgent extends Agent{
 	public GraphNode getPosition() {
 		return position;
 	}
-	
+
 	public GraphNode getPositionEnd(){
 		return posEnd;
 	}
@@ -183,19 +199,33 @@ public class VehicleAgent extends Agent{
 		//now random depois TODO seguir caminho
 		/*java.util.Random r = new java.util.Random();
 		int pos = r.nextInt(position.getAdj().size());*/
-		
+
 		//path.next();	ISTO
-		
+
 		//nao ser igual a last se calhar só é preciso para random movement?
 		/*int iLast = position.getAdj().indexOf(lastVisited);
 		while(pos == iLast){
 			pos = r.nextInt(position.getAdj().size());
 		}*/
 		if(indexPath + 1 < path.size()){
+			System.out.println("index " + indexPath + " pathsize " + path.size());
 			indexPath++;
+			if(indexPath == path.size() - 1){
+				end = true;
+			}
+			return path.get(indexPath);
 		}
-		
-		return path.get(indexPath);
+		else{
+			if(!arrived){
+				stats.updateNumCarsArrivedDestination();
+				arrived = true;
+			}
+			GraphNode remove = new GraphNode(1, 1);
+
+			return remove;
+		}
+
+		//return position.getAdj().get(pos);
 	}
 
 	public void updateDisplayCar(){
@@ -208,9 +238,12 @@ public class VehicleAgent extends Agent{
 		if(accident == true){
 			s.setColor(Color.BLACK);
 		}
+		if(end == true){
+			s.setColor(Color.MAGENTA);
+		}
 		disp.updateDisplay();
 	}
-	
+
 	public double calcDist(GraphNode n1, GraphNode n2){
 		return Math.sqrt(Math.pow((n2.getX() - n1.getX()), 2) + Math.pow((n2.getY() - n1.getY()), 2));
 	}
@@ -227,7 +260,9 @@ public class VehicleAgent extends Agent{
 			@Override
 			protected void onTick() {  
 
+
 				//System.out.println("car " + getAID().getName()+ " position: " + position.getX() + position.getY());
+
 				String strCarPos = "" + position.getX() + position.getY() + "";
 
 				//carro ve se tem semaforo
@@ -235,21 +270,27 @@ public class VehicleAgent extends Agent{
 
 				case 0:
 					//send the cfp to all cars
-					ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
-					for(int i = 0; i < cars.size(); i++){
-						if(cars.elementAt(i).getAID() != car.getAID()){
-							cfp.addReceiver(cars.elementAt(i).getAID());
-						}
+					if(cars.size() == 1){
+						step = 2;
 					}
-					cfp.setContent("position");
-					cfp.setConversationId("position");
-					cfp.setReplyWith("cfp"+System.currentTimeMillis());
-					car.send(cfp);
-					mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
+					else{
+						ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
+						for(int i = 0; i < cars.size(); i++){
+							if(cars.elementAt(i).getAID() != car.getAID()){
+								cfp.addReceiver(cars.elementAt(i).getAID());
+							}
+						}
+						cfp.setContent("position");
+						cfp.setConversationId("position");
+						cfp.setReplyWith("cfp"+System.currentTimeMillis());
+						car.send(cfp);
+						mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
 
-					repliesCnt = 0;
-					foundCar = false;
-					step = 1;
+						repliesCnt = 0;
+						foundCar = false;
+						step = 1;
+					}
+
 					break;
 				case 1:
 					//receive all answers from cars
@@ -306,9 +347,15 @@ public class VehicleAgent extends Agent{
 
 				case 6:
 					nextPosition = car.getNextPosition();
-					encounterCar = new EncounterCar(car, cars);
-					addBehaviour(encounterCar);
-					step = 7;
+					System.out.println("nextpos");
+					if(arrived){
+						step = 8;
+					}
+					else{
+						encounterCar = new EncounterCar(car, cars);
+						addBehaviour(encounterCar);
+						step = 7;
+					}
 					break;
 				case 7:
 					if(encounterCar.done()){
@@ -322,20 +369,28 @@ public class VehicleAgent extends Agent{
 					break;
 				case 8:
 					//TODO para já andam random, depois andam pelo caminho até ao destino
-					car.lastVisited = car.position;
-					car.position = car.nextPosition;
-					double dist = calcDist(car.lastVisited, car.position);
-					stats.updateTotalDistance(dist);
-					stats.updateAvgDistance(cars.size());
-					updateDisplayCar();
-
-					step = 0;
+					if(arrived){
+						GraphNode n = new GraphNode(1, 1);
+						car.position = n;
+						updateDisplayCar();
+						step = 10;
+					}
+					else{
+						car.lastVisited = car.position;
+						car.position = car.nextPosition;
+						System.out.println("pos " + car.position.getX() + " " + car.position.getY());
+						updateDisplayCar();
+						double dist = calcDist(car.lastVisited, car.position);
+						stats.updateTotalDistance(dist);
+						stats.updateAvgDistance(cars.size());
+						step = 0;
+					}
 					repliesCnt = 0;
 					foundCar = false;
 					break;
+				case 10:
+					break;
 				}
-
-				//TODO (5)carro para o tick behavior se tiver chegado ao destino e carro tem de desaparecer (ou seja implica criar posiçoes iniciais e finas e faze lo percorrer o caminha
 			}
 		});
 

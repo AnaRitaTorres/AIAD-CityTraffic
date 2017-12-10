@@ -29,26 +29,33 @@ public class EncounterCar extends Behaviour{
 
 	@Override
 	public void action() {
-		String carNextPos = "" + car.getNextPosition().getX() + car.getNextPosition().getY() + "";
+		String carNextPos = "" + car.nextPosition.getX() + car.nextPosition.getY() + "";
 
 		switch(step){
 		case 0:
 			//send the cfp to all cars
-			ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
-			for(int i = 0; i < cars.size(); i++){
-				if(cars.elementAt(i).getAID() != car.getAID()){
-					cfp.addReceiver(cars.elementAt(i).getAID());
-				}
+			if(cars.size() == 1){
+				step = 3;
+				car.dt2 = 0;
 			}
-			cfp.setContent("position");
-			cfp.setConversationId("position");
-			cfp.setReplyWith("cfp"+System.currentTimeMillis());
-			car.send(cfp);
-			mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
+			else{
+				ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
+				for(int i = 0; i < cars.size(); i++){
+					if(cars.elementAt(i).getAID() != car.getAID()){
+						cfp.addReceiver(cars.elementAt(i).getAID());
+					}
+				}
+				cfp.setContent("position");
+				cfp.setConversationId("position");
+				cfp.setReplyWith("cfp"+System.currentTimeMillis());
+				car.send(cfp);
+				mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
 
-			repliesCnt = 0;
-			foundCar = false;
-			step = 1;
+				repliesCnt = 0;
+				foundCar = false;
+				step = 1;
+			}
+			
 			break;
 		case 1:
 			//receive all answers from cars
@@ -64,7 +71,7 @@ public class EncounterCar extends Behaviour{
 				repliesCnt++;
 				if(foundCar == false && repliesCnt == cars.size()-1){
 					step = 3;
-					car.dt = 0;
+					car.dt2 = 0;
 				}
 
 			}
@@ -73,7 +80,7 @@ public class EncounterCar extends Behaviour{
 			}
 			break;
 		case 2:
-			if(reply.getContent().equals(carNextPos)){
+			if(reply.getContent().equals(carNextPos) && !carNextPos.equals("11")){
 				step = 0;
 			}
 			else{
