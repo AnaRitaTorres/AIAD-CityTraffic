@@ -184,101 +184,94 @@ public class Launcher extends Repast3Launcher {
 		groupByDirect();
 		TransformNodes(graph.getNodes());
 		crossRoads();
-		
-		for(int i=0; i < graph.getNodes().size(); i++) {
-			if(graph.getNodes().get(i).getAdj().size() < 2) {
-				System.out.println(graph.getNodes().get(i).getX());
-				System.out.println(graph.getNodes().get(i).getY());
-			}
-		}
 	}
 	
 	
-	public void connectY(int x, int yi, int yf, int inc) {
+	public void connectY(int x, int yi, int yf, int inc, boolean right) {
 		while(yi!=yf) {
-			ConnectGraphNodes(x,yi,x,yi+inc);
+			ConnectGraphNodes(x,yi,x,yi+inc,right);
 			yi=yi+inc;
 		}
 	}
 	
-	public void connectX(int y, int xi, int xf, int inc) {
+	public void connectX(int y, int xi, int xf, int inc, boolean right) {
 		while(xi!=xf) {
-			ConnectGraphNodes(xi,y,xi+inc,y);
+			ConnectGraphNodes(xi,y,xi+inc,y, right);
 			xi=xi+inc;
 		}
 	}
 	
 	public void groupByDirect() {
-		ConnectGraphNodes(55,350,70,360);
-		ConnectGraphNodes(145,360,160,350);
-		ConnectGraphNodes(160,350,175,340);
-		ConnectGraphNodes(245,340,265,310);
-		ConnectGraphNodes(265,310,280,300);
-		ConnectGraphNodes(280,300,295,260);
-		ConnectGraphNodes(330,240,350,210);
-		ConnectGraphNodes(190,160,205,210);
-		ConnectGraphNodes(145,210,160,210);
+		ConnectGraphNodes(55,350,70,360,false);
+		ConnectGraphNodes(145,360,160,350,false);
+		ConnectGraphNodes(160,350,175,340,false);
+		ConnectGraphNodes(245,340,265,310,false);
+		ConnectGraphNodes(265,310,280,300,false);
+		ConnectGraphNodes(280,260,295,260,false);
+		ConnectGraphNodes(330,240,350,210,false);
+		ConnectGraphNodes(190,160,205,210,false);
+		ConnectGraphNodes(145,210,160,210,true);
 	}
-	
+
 	public void groupByX() {
-		connectX(50,25,205,15);
-		connectX(110,25,205,15);
-		connectX(240,25,205,15);
-		connectX(50,215,245,15);
-		connectX(50,265,280,15);
-		connectX(50,205,215,10);
-		connectX(50,245,265,20);
-		connectX(130,295,310,15);
-		connectX(130,310,350,10);
-		connectX(110,205,215,10);
-		connectX(110,215,245,15);
-		connectX(110,245,265,20);
-		connectX(110,265,280,15);
-		connectX(180,40,55,15);
-		connectX(280,40,55,15);
-		connectX(300,130,145,15);
-		connectX(350,25,55,15);
-		connectX(360,70,145,15);
-		connectX(340,175,205,15);
-		connectX(340,215,245,15);
-		connectX(340,205,215,10);
-		connectX(240,295,310,15);
-		connectX(240,310,330,10);
-		connectX(210,330,350,20);
-		connectX(240,280,295,15);
-		
+		connectX(50,25,205,15,true);
+		connectX(110,25,205,15,true);
+		connectX(240,25,205,15,true);
+		connectX(50,215,245,15,true);
+		connectX(50,265,280,15,true);
+		connectX(50,205,215,10,true);
+		connectX(50,245,265,20,true);
+		connectX(130,295,310,15,true);
+		connectX(130,310,350,10,true);
+		connectX(110,205,215,10,true);
+		connectX(110,215,245,15,true);
+		connectX(110,245,265,20,true);
+		connectX(110,265,280,15,true);
+		connectX(180,40,55,15,true);
+		connectX(280,40,55,15,false);
+		connectX(300,130,145,15,false);
+		connectX(350,25,55,15, false);
+		connectX(360,70,145,15,false);
+		connectX(340,175,205,15,false);
+		connectX(340,215,245,15,false);
+		connectX(340,205,215,10,false);
+		connectX(240,295,310,15,false);
+		connectX(240,310,330,10,false);
+		connectX(210,330,350,20,false);
+		connectX(240,280,295,15,false);
 	}
 	
 	public void groupByY() {
-		connectY(25,50,350,10);
-		connectY(40,110,180,10);
-		connectY(40,280,350,10);
-		connectY(55,110,180,10);
-		connectY(55,280,350,10);
-		connectY(70,110,360,10);
-		connectY(85,110,360,10);
-		connectY(100,50,360,10);
-		connectY(130,110,210,10);
-		connectY(130,300,360,10);
-		connectY(145,110,210,10);
-		connectY(145,300,360,10);
-		connectY(160,50,350,10);
-		connectY(175,240,340,10);
-		connectY(190,160,340,10);
-		connectY(205,210,340,10);
-		connectY(215,50,340,10);
-		connectY(230,50,340,10);
-		connectY(245,50,340,10);
-		connectY(265,50,310,10);
-		connectY(280,50,300,10);
-		connectY(295,130,260,10);
-		connectY(320,130,240,10);
-		connectY(330,130,240,10);
-		connectY(350,130,210,10);
-		connectY(205,50,110,30);
-		connectY(130,210,240,30);
-		connectY(115,110,360,10);
-			
+	
+		connectY(25,50,350,10,false);
+		connectY(40,110,180,10, true);
+		connectY(40,280,350,10,true);
+		connectY(55,110,180,10, false);
+		connectY(55,280,350,10,false);
+		connectY(70,110,360,10, true);
+		connectY(85,110,360,10,true);
+		connectY(100,50,360,10,true);
+		connectY(130,110,210,10,true);
+		connectY(130,300,360,10,true);
+		connectY(145,110,210,10,true);
+		connectY(145,300,360,10,true);
+		connectY(160,50,350,10,false);
+		connectY(175,240,340,10,true);
+		connectY(190,160,340,10,true);
+		connectY(205,210,340,10,false);
+		connectY(215,50,340,10,true);
+		connectY(230,50,340,10,true);
+		connectY(245,50,340,10,true);
+		connectY(265,50,310,10,true);
+		connectY(280,50,300,10,true);
+		connectY(295,130,260,10,false);
+		connectY(320,130,240,10,false);
+		connectY(330,130,240,10,true);
+		connectY(350,130,210,10,true);
+		connectY(205,50,110,30,true);
+		connectY(130,210,240,30,true);
+		connectY(115,110,360,10,true);
+				
 	}
 	
 	public void TransformNodes( ArrayList<GraphNode> graphNodes) {
@@ -312,14 +305,19 @@ public class Launcher extends Repast3Launcher {
 	}
 	
 	
-	public void ConnectGraphNodes(int xi, int yi, int xf, int yf) {
-			
+	public void ConnectGraphNodes(int xi, int yi, int xf, int yf, boolean right) {
+				
 		for(int i=0; i < graph.getNodes().size(); i++) {
 			if(graph.getNodes().get(i).getX()==xi && graph.getNodes().get(i).getY()==yi) {
 				for(int j=0; j < graph.getNodes().size(); j++) {
 					if(graph.getNodes().get(j).getX()==xf && graph.getNodes().get(j).getY()==yf) {
-						graph.getNodes().get(i).addAdj(graph.getNodes().get(j));
-						graph.getNodes().get(j).addAdj(graph.getNodes().get(i));
+						if(right) {
+							graph.getNodes().get(i).addAdj(graph.getNodes().get(j));	
+						}
+						else {
+							graph.getNodes().get(j).addAdj(graph.getNodes().get(i));
+						}
+						
 					}
 				}
 			}
