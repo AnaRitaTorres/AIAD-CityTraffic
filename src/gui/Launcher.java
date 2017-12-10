@@ -455,7 +455,6 @@ public class Launcher extends Repast3Launcher {
 			createTrafficLight(145,240, lightAgents);
 			createTrafficLight(160,230,lightAgents);
 			
-			System.out.println(numLights);
 			if(numLights > 10) {
 				int w=0;
 				while(w < numLights-10) {
