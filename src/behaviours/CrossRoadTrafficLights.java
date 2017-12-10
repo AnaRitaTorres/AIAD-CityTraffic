@@ -55,12 +55,12 @@ public class CrossRoadTrafficLights extends Behaviour{
 			}
 			break;
 		case 2:
-			if(reply.getContent().equals("green")) {
+			if(reply.getContent().equals("green") || reply.getContent().equals("orange")) {
 				light1.changeColor("red");
 				light1.setCurrentColor("red");
 				
 			}
-			else if(reply.getContent().equals("red") || reply.getContent().equals("orange")) {
+			else if(reply.getContent().equals("red")) {
 				light1.changeColor("green");
 				light1.setCurrentColor("green");
 			}

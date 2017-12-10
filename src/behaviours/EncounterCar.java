@@ -19,6 +19,8 @@ public class EncounterCar extends Behaviour{
 	private boolean foundCar = false;
 	private ACLMessage reply;
 	private MessageTemplate mt;
+	long begin = 0;
+	long end;
 
 	public EncounterCar(VehicleAgent car, Vector<VehicleAgent> cars) {
 		this.car = car;
@@ -28,7 +30,7 @@ public class EncounterCar extends Behaviour{
 	@Override
 	public void action() {
 		String carNextPos = "" + car.getNextPosition().getX() + car.getNextPosition().getY() + "";
-		
+
 		switch(step){
 		case 0:
 			//send the cfp to all cars
@@ -54,13 +56,17 @@ public class EncounterCar extends Behaviour{
 			if(reply != null){
 				if(reply.getContent().equals(carNextPos)){
 					foundCar = true;
+					if(begin == 0){
+						begin = System.currentTimeMillis();
+					}
 					step = 2;
 				}
 				repliesCnt++;
 				if(foundCar == false && repliesCnt == cars.size()-1){
 					step = 3;
+					car.dt = 0;
 				}
-				
+
 			}
 			else{
 				block();
@@ -72,6 +78,8 @@ public class EncounterCar extends Behaviour{
 			}
 			else{
 				step = 3;
+				end = System.currentTimeMillis();
+				car.dt2 = end - begin;
 			}
 			break;
 		}

@@ -37,6 +37,7 @@ public class TrafficLightAgent extends Agent{
 	private ArrayList<GraphNode> graphNodes;
 	private boolean haspair=false;
 	private ArrayList<TrafficLightAgent> pair = new ArrayList<TrafficLightAgent>(2);
+	private AtomicInteger i;
 
 		
 	public TrafficLightAgent(int x, int y, Vector<TrafficLightAgent> trafficLights,ArrayList<GraphNode> crossroads,ArrayList<GraphNode> graphNodes,DisplaySurface disp) {
@@ -50,6 +51,9 @@ public class TrafficLightAgent extends Agent{
 		this.trafficLights = trafficLights;
 		this.crossroads=crossroads;
 		this.graphNodes=graphNodes;
+		java.util.Random r = new java.util.Random();
+		int index = r.nextInt(3);
+		this.i = new AtomicInteger(index);
 		
 	}
 
@@ -115,8 +119,6 @@ public class TrafficLightAgent extends Agent{
 	
 	protected void setup() {
 		System.out.println("Hello! Traffic-Agent "+getAID().getName()+" is ready.");
-
-		AtomicInteger i = new AtomicInteger(0);
 
 		Vector<String> color = new Vector<String>(3);
 		color.addElement("red");

@@ -60,7 +60,6 @@ public class EncounterTrafficLight extends Behaviour{
 				}
 				else{
 					car.dt = end - begin;
-					System.out.println("DT " + car.dt);
 				}
 				step = 3;
 			}
