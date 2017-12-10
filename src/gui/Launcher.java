@@ -24,6 +24,7 @@ import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.Network2DDisplay;
 import uchicago.src.sim.gui.OvalNetworkItem;
+import uchicago.src.sim.gui.RectNetworkItem;
 import uchicago.src.sim.gui.TextDisplay;
 
 import agents.*;
@@ -46,6 +47,8 @@ public class Launcher extends Repast3Launcher {
 	private ArrayList<MyNode> nodes = new ArrayList<MyNode>();
 	private ArrayList<MyNode> lightsNodes = new ArrayList<MyNode>();
 	private ArrayList<MyNode> carsNodes = new ArrayList<MyNode>();
+	private ArrayList<MyNode> endPositionsNodes = new ArrayList<MyNode>();
+	private ArrayList<GraphNode> endPosNodes = new ArrayList<GraphNode>();
 	private ArrayList<GraphNode> crossroadNodes = new ArrayList<GraphNode>();
 	private ContainerController mainContainer;
 	private Schedule schedule;
@@ -384,9 +387,11 @@ public class Launcher extends Repast3Launcher {
 		display.setNodesVisible(false);
 		Network2DDisplay display1 = new Network2DDisplay (lightsNodes, WIDTH,HEIGHT);
 		Network2DDisplay display2 = new Network2DDisplay (carsNodes, WIDTH,HEIGHT);
+		Network2DDisplay display3 = new Network2DDisplay (endPositionsNodes, WIDTH,HEIGHT);
 		displaySurf.addDisplayableProbeable (display, "City Traffic");
 		displaySurf.addDisplayableProbeable (display2, "CityTraffic");
 		displaySurf.addDisplayableProbeable (display1, "City");
+		displaySurf.addDisplayableProbeable (display3, "City2");
 		displaySurf.addZoomable (display);
 		displaySurf.setBackground (Color.white);
 		
@@ -482,14 +487,23 @@ public class Launcher extends Repast3Launcher {
 				r = new java.util.Random();
 				int pos = r.nextInt(graph.getNodes().size());
 				GraphNode posInit = graph.getNodes().get(pos);
-				GraphNode posEnd = posInit;//TODO
+				int pos2 = r.nextInt(graph.getNodes().size());
+				while(pos == pos2 || endPosNodes.contains(graph.getNodes().get(pos2))){
+					pos2 = r.nextInt(graph.getNodes().size());
+				}
+				GraphNode posEnd = graph.getNodes().get(pos2);
+				RectNetworkItem o = new RectNetworkItem(posEnd.getX(), posEnd.getY());
+				o.setHollow(true);
+				MyNode n = new MyNode(o, graphNodes.get(i).getX(),graphNodes.get(i).getY());
+				endPositionsNodes.add(n);
+				endPosNodes.add(posEnd);
 				//55+30, 110
 				VehicleAgent vehicle = new VehicleAgent(posInit, posEnd, velocity, vehicleAgents, lightAgents, graph, carsNodes, displaySurf, stats);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
 				
 			}
-						
+			
 		}catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
