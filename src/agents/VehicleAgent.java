@@ -2,6 +2,7 @@ package agents;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -40,6 +41,8 @@ public class VehicleAgent extends Agent{
 	private RectNetworkItem s;
 	private DisplaySurface disp;
 	private Graph graph;
+	private List<GraphNode> path;
+	private int indexPath = 0;
 	private Statistics stats;
 	private ArrayList<MyNode> carsNodes;
 	private MyNode n;
@@ -72,6 +75,12 @@ public class VehicleAgent extends Agent{
 		//this.graph = graph;	//TODO é preciso tirar do construtor??
 		n = new MyNode(getS(),position.getX(), position.getY());
 		this.carsNodes.add(n);
+		
+		List<GraphNode> visited = new ArrayList<>();
+		path = new ArrayList<>();
+		calculatePath(position, posEnd, visited, path);
+		System.out.println("visited=" + visited.size());
+		System.out.println("path=" + path);
 
 		/*
 		//para apagar
@@ -124,6 +133,27 @@ public class VehicleAgent extends Agent{
 		ytrajetoriaV2[4] = 130;
 		*/
 	}
+	
+	public void calculatePath(GraphNode src, GraphNode dest, List<GraphNode> visited, List<GraphNode> path){
+		path.add(src);
+		visited.add(src);
+		if (src.equals(dest)) {
+			return;
+		}
+		List<GraphNode> shortestChildPath = null;
+		for (GraphNode child : src.getAdj()) {
+			if (!visited.contains(child)) {
+				List<GraphNode> childPath = new ArrayList<>();
+				calculatePath(child, dest, visited, childPath);
+				if (shortestChildPath == null || childPath.size() < shortestChildPath.size()) {
+					shortestChildPath = childPath;
+				}
+			}
+		}
+		if (shortestChildPath != null) {
+			path.addAll(shortestChildPath);
+		}
+	}
 
 	public RectNetworkItem getS() {
 		return s;
@@ -144,18 +174,26 @@ public class VehicleAgent extends Agent{
 	public GraphNode getPosition() {
 		return position;
 	}
+	
+	public GraphNode getPositionEnd(){
+		return posEnd;
+	}
 
 	public GraphNode getNextPosition() {
 		//now random depois TODO seguir caminho
-		java.util.Random r = new java.util.Random();
-		int pos = r.nextInt(position.getAdj().size());
+		/*java.util.Random r = new java.util.Random();
+		int pos = r.nextInt(position.getAdj().size());*/
+		
+		//path.next();	ISTO
 		
 		//nao ser igual a last se calhar só é preciso para random movement?
-		int iLast = position.getAdj().indexOf(lastVisited);
+		/*int iLast = position.getAdj().indexOf(lastVisited);
 		while(pos == iLast){
 			pos = r.nextInt(position.getAdj().size());
-		}
-		return position.getAdj().get(pos);
+		}*/
+		indexPath++;
+		
+		return path.get(indexPath);
 	}
 
 	public void updateDisplayCar(){
@@ -295,7 +333,7 @@ public class VehicleAgent extends Agent{
 					break;
 				}
 
-				//TODO (5)carro para o tick behavior se tiver chegado ao destino (ou seja implica criar posiçoes iniciais e finas e faze lo percorrer o caminha, implica implementar djkistra
+				//TODO (5)carro para o tick behavior se tiver chegado ao destino e carro tem de desaparecer (ou seja implica criar posiçoes iniciais e finas e faze lo percorrer o caminha
 			}
 		});
 
