@@ -57,8 +57,19 @@ public boolean sameCrossroad(String position){
 		
 		if(n1!= null && n2!=null) {
 			for(int i=0; i < crossroads.size(); i++) {
-				if(crossroads.get(i).getAdj().contains(n1) && crossroads.get(i).getAdj().contains(n2))
+				if(crossroads.get(i).getAdj().contains(n1) && n2.getAdj().contains(crossroads.get(i))){
 					same=true;
+				}
+				if(crossroads.get(i).getAdj().contains(n2) && n1.getAdj().contains(crossroads.get(i))) {
+					same=true;
+				}
+				if(crossroads.get(i).getAdj().contains(n1) && crossroads.get(i).getAdj().contains(n2)) {
+					same=true;
+				}
+				if(n2.getAdj().contains(crossroads.get(i)) && n1.getAdj().contains(crossroads.get(i))) {
+					same=true;
+				}
+						
 			}
 		}
 		
