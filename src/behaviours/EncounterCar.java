@@ -80,7 +80,7 @@ public class EncounterCar extends Behaviour{
 			}
 			break;
 		case 2:
-			if(reply.getContent().equals(carNextPos)){
+			if(reply.getContent().equals(carNextPos) && !carNextPos.equals("11")){
 				step = 0;
 			}
 			else{

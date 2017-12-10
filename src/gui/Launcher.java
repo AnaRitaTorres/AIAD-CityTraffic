@@ -1,4 +1,5 @@
 //TODO fazer experiencias com numero diferente de carros (e semaforos?) para por os resultados dessas estatisticas no relatorio
+//TODO se seguir caminho nao estiver a funcioanr na perfeiçao criar dois modos de movimento: random e caminho
 
 package gui;
 
@@ -397,7 +398,7 @@ public class Launcher extends Repast3Launcher {
 		displaySurf.setBackground (Color.white);
 		
 		//data
-		textDisp = new TextDisplay(390,230,0,15, Color.black);	//TODO mudar dimensoes da janela
+		textDisp = new TextDisplay(390,230,0,15, Color.black);
 		textDisp.setBoxVisible(false);
 		displayData.addDisplayableProbeable(textDisp, "City Data");
 		displayData.setBackground(Color.white);

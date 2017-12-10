@@ -23,8 +23,6 @@ import graph.GraphNode;
 @SuppressWarnings("serial")
 public class TrafficLightAgent extends Agent{
 
-	//TODO por semafors em cruzamentos e po los a comunicar para saberem qual vai estar verde para nao causar acidentes(como jp disse)
-
 	private static int IDNumber=0;
 	private int ID;
 	private String currentColor;

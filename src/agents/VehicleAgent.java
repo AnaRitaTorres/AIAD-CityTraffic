@@ -73,7 +73,7 @@ public class VehicleAgent extends Agent{
 		this.stats = stats;
 		s.setColor(Color.CYAN);
 		this.carsNodes = carsNodes;
-		//this.graph = graph;	//TODO é preciso tirar do construtor??
+		this.graph = graph;
 		n = new MyNode(getS(),position.getX(), position.getY());
 		this.carsNodes.add(n);
 		
@@ -193,6 +193,7 @@ public class VehicleAgent extends Agent{
 			pos = r.nextInt(position.getAdj().size());
 		}*/
 		if(indexPath + 1 < path.size()){
+			System.out.println("index " + indexPath + " pathsize " + path.size());
 			indexPath++;
 			return path.get(indexPath);
 		}
@@ -202,9 +203,11 @@ public class VehicleAgent extends Agent{
 				arrived = true;
 			}
 			GraphNode remove = new GraphNode(1, 1);
+
 			return remove;
 		}
 		
+		//return position.getAdj().get(pos);
 	}
 
 	public void updateDisplayCar(){
@@ -236,7 +239,9 @@ public class VehicleAgent extends Agent{
 			@Override
 			protected void onTick() {  
 
-				//System.out.println("car " + getAID().getName()+ " position: " + position.getX() + position.getY());
+				
+					//System.out.println("car " + getAID().getName()+ " position: " + position.getX() + position.getY());
+				
 				String strCarPos = "" + position.getX() + position.getY() + "";
 
 				//carro ve se tem semaforo
@@ -321,9 +326,14 @@ public class VehicleAgent extends Agent{
 
 				case 6:
 					nextPosition = car.getNextPosition();
-					encounterCar = new EncounterCar(car, cars);
-					addBehaviour(encounterCar);
-					step = 7;
+					if(arrived){
+						step = 8;
+					}
+					else{
+						encounterCar = new EncounterCar(car, cars);
+						addBehaviour(encounterCar);
+						step = 7;
+					}
 					break;
 				case 7:
 					if(encounterCar.done()){
@@ -337,13 +347,18 @@ public class VehicleAgent extends Agent{
 					break;
 				case 8:
 					//TODO para já andam random, depois andam pelo caminho até ao destino
-					car.lastVisited = car.position;
-					car.position = car.nextPosition;
-					updateDisplayCar();
-					if(car.position.getX() == 1 && car.position.getY() == 1){
+					System.out.println("arrived " + arrived);
+					if(arrived){
+						GraphNode n = new GraphNode(1, 1);
+						car.position = n;
+						updateDisplayCar();
 						step = 10;
 					}
 					else{
+						car.lastVisited = car.position;
+						car.position = car.nextPosition;
+						updateDisplayCar();
+						System.out.println("aqui");
 						double dist = calcDist(car.lastVisited, car.position);
 						stats.updateTotalDistance(dist);
 						stats.updateAvgDistance(cars.size());
@@ -353,11 +368,8 @@ public class VehicleAgent extends Agent{
 					foundCar = false;
 					break;
 				case 10:
-					
 					break;
 				}
-
-				//TODO (5)carro para o tick behavior se tiver chegado ao destino e carro tem de desaparecer (ou seja implica criar posiçoes iniciais e finas e faze lo percorrer o caminha
 			}
 		});
 
