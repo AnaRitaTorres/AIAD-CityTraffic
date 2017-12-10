@@ -18,6 +18,8 @@ public class EncounterTrafficLight extends Behaviour{
 	private int step = 0;
 	private ACLMessage reply;
 	private MessageTemplate mt;
+	long begin = 0;
+	long end;
 	
 	public EncounterTrafficLight(VehicleAgent car, AID light){
 		this.car = car;
@@ -52,9 +54,20 @@ public class EncounterTrafficLight extends Behaviour{
 		case 2:
 			//handle traffic light color
 			if(! reply.getContent().equals("red")){
+				end = System.currentTimeMillis();
+				if(begin == 0){
+					car.dt = 0;
+				}
+				else{
+					car.dt = end - begin;
+					System.out.println("DT " + car.dt);
+				}
 				step = 3;
 			}
 			else{
+				if(begin == 0){
+					begin = System.currentTimeMillis();
+				}
 				step = 0;
 			}
 			break;

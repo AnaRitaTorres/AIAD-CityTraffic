@@ -45,6 +45,7 @@ public class VehicleAgent extends Agent{
 	private MyNode n;
 	private boolean accident;
 	private int numAccidents;
+	public long dt;
 	private int repliesCnt;
 	private boolean foundCar;
 	private ACLMessage reply;
@@ -253,6 +254,8 @@ public class VehicleAgent extends Agent{
 					break;
 				case 5:
 					if(dealLight.done()){
+						stats.updateTotalTimeWaitingTrafficLight(car.dt);
+						stats.updateAvgTimeWaitingTrafficLight(cars.size());
 						step = 6;
 					}
 					else{
