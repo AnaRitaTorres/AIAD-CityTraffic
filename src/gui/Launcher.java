@@ -187,6 +187,13 @@ public class Launcher extends Repast3Launcher {
 		groupByDirect();
 		TransformNodes(graph.getNodes());
 		crossRoads();
+		
+		for(int i=0; i < graph.getNodes().size(); i++) {
+			if(graph.getNodes().get(i).getAdj().size() < 2) {
+				System.out.println(graph.getNodes().get(i).getX());
+				System.out.println(graph.getNodes().get(i).getY());
+			}
+		}
 	}
 	
 	
@@ -242,6 +249,7 @@ public class Launcher extends Repast3Launcher {
 		connectX(240,310,330,10);
 		connectX(210,330,350,20);
 		connectX(240,280,295,15);
+		
 	}
 	
 	public void groupByY() {
@@ -272,7 +280,7 @@ public class Launcher extends Repast3Launcher {
 		connectY(350,130,210,10);
 		connectY(205,50,110,30);
 		connectY(130,210,240,30);
-		connectY(115,110,240,10);
+		connectY(115,110,360,10);
 			
 	}
 	
