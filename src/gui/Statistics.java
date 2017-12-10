@@ -11,6 +11,7 @@ public class Statistics {
 	private float totalTimeWaitingTraffic = 0;
 	private float avgTimeWaitingTraffic = 0;
 	private float avgTimeNotMoving = 0;
+	private int numCarsArrivedDestination = 0;
 	
 	public int getTotalAccidents() {
 		return totalAccidents;
@@ -52,6 +53,10 @@ public class Statistics {
 		return avgTimeNotMoving;
 	}
 	
+	public int getNumCarsArrivedDestination(){
+		return numCarsArrivedDestination;
+	}
+	
 	public void updateTotalAccidents(){
 		totalAccidents ++;
 	}
@@ -90,6 +95,10 @@ public class Statistics {
 	
 	public void updateAvgTimeNotMoving(int numCars){
 		avgTimeNotMoving = (totalTimeWaitingTrafficLight + totalTimeWaitingTraffic)/(float)numCars;
+	}
+	
+	public void updateNumCarsArrivedDestination(){
+		numCarsArrivedDestination++;
 	}
 	
 }

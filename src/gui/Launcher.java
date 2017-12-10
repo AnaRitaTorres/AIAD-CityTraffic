@@ -354,16 +354,17 @@ public class Launcher extends Repast3Launcher {
 				
 				textDisp.clearLines();
 				textDisp.addLine(" ");
-				textDisp.addLine(" - Total Accidents: " + stats.getTotalAccidents());
-				textDisp.addLine(" - Avg Accidents: " + stats.getAvgAccidents());
-				textDisp.addLine(" - Total Distance: " + stats.getTotalDistance());
-				textDisp.addLine(" - Avg Distance: " + stats.getAvgDistance());
-				textDisp.addLine(" - Avg Travel Time: DO OR DELETE" /*+ stats.getAvgTravelTime()*/);
-				textDisp.addLine(" - Total Time Waiting Traffic Light: " + stats.getTotalTimeWaitingTrafficLight());
-				textDisp.addLine(" - Avg Time Waiting Traffic Light: " + stats.getAvgTimeWaitingTrafficLight());
-				textDisp.addLine(" - Total Time Waiting Traffic: " + stats.getTotalTimeWaitingTraffic());
-				textDisp.addLine(" - Avg Time Waiting Traffic: " + stats.getAvgTimeWaitingTraffic());
-				textDisp.addLine(" - Avg Time Not Moving: " + stats.getAvgTimeNotMoving());
+				textDisp.addLine("  - Total number of accidents: " + stats.getTotalAccidents());
+				textDisp.addLine("  - Average number of accidents per car: " + stats.getAvgAccidents());
+				textDisp.addLine("  - Total distance ran by cars: " + stats.getTotalDistance());
+				textDisp.addLine("  - Average distance ran per car: " + stats.getAvgDistance());
+				textDisp.addLine("  - Average travel time per car: DO OR DELETE" /*+ stats.getAvgTravelTime()*/);
+				textDisp.addLine("  - Total time waiting in a traffic light: " + stats.getTotalTimeWaitingTrafficLight());
+				textDisp.addLine("  - Average time waiting in a traffic light per car: " + stats.getAvgTimeWaitingTrafficLight());
+				textDisp.addLine("  - Total time waiting in traffic: " + stats.getTotalTimeWaitingTraffic());
+				textDisp.addLine("  - Average time waiting in traffic per car: " + stats.getAvgTimeWaitingTraffic());
+				textDisp.addLine("  - Average time stopped during travel per car: " + stats.getAvgTimeNotMoving());
+				textDisp.addLine("  - Number of cars that arrived on destination: " + stats.getNumCarsArrivedDestination());
 				textDisp.addLine(" ");
 
 				displayData.updateDisplay();
@@ -396,7 +397,7 @@ public class Launcher extends Repast3Launcher {
 		displaySurf.setBackground (Color.white);
 		
 		//data
-		textDisp = new TextDisplay(300,185,0,15, Color.black);
+		textDisp = new TextDisplay(390,230,0,15, Color.black);	//TODO mudar dimensoes da janela
 		textDisp.setBoxVisible(false);
 		displayData.addDisplayableProbeable(textDisp, "City Data");
 		displayData.setBackground(Color.white);

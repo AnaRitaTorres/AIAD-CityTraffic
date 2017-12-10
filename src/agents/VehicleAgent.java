@@ -50,6 +50,7 @@ public class VehicleAgent extends Agent{
 	private int numAccidents;
 	public long dt;
 	public long dt2;
+	private boolean arrived = false;
 	private int repliesCnt;
 	private boolean foundCar;
 	private ACLMessage reply;
@@ -193,9 +194,17 @@ public class VehicleAgent extends Agent{
 		}*/
 		if(indexPath + 1 < path.size()){
 			indexPath++;
+			return path.get(indexPath);
+		}
+		else{
+			if(!arrived){
+				stats.updateNumCarsArrivedDestination();
+				arrived = true;
+			}
+			GraphNode remove = new GraphNode(1, 1);
+			return remove;
 		}
 		
-		return path.get(indexPath);
 	}
 
 	public void updateDisplayCar(){
@@ -235,21 +244,27 @@ public class VehicleAgent extends Agent{
 
 				case 0:
 					//send the cfp to all cars
-					ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
-					for(int i = 0; i < cars.size(); i++){
-						if(cars.elementAt(i).getAID() != car.getAID()){
-							cfp.addReceiver(cars.elementAt(i).getAID());
-						}
+					if(cars.size() == 1){
+						step = 2;
 					}
-					cfp.setContent("position");
-					cfp.setConversationId("position");
-					cfp.setReplyWith("cfp"+System.currentTimeMillis());
-					car.send(cfp);
-					mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
+					else{
+						ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
+						for(int i = 0; i < cars.size(); i++){
+							if(cars.elementAt(i).getAID() != car.getAID()){
+								cfp.addReceiver(cars.elementAt(i).getAID());
+							}
+						}
+						cfp.setContent("position");
+						cfp.setConversationId("position");
+						cfp.setReplyWith("cfp"+System.currentTimeMillis());
+						car.send(cfp);
+						mt = MessageTemplate.and(MessageTemplate.MatchConversationId("position"), MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));			
 
-					repliesCnt = 0;
-					foundCar = false;
-					step = 1;
+						repliesCnt = 0;
+						foundCar = false;
+						step = 1;
+					}
+					
 					break;
 				case 1:
 					//receive all answers from cars
@@ -324,14 +339,21 @@ public class VehicleAgent extends Agent{
 					//TODO para já andam random, depois andam pelo caminho até ao destino
 					car.lastVisited = car.position;
 					car.position = car.nextPosition;
-					double dist = calcDist(car.lastVisited, car.position);
-					stats.updateTotalDistance(dist);
-					stats.updateAvgDistance(cars.size());
 					updateDisplayCar();
-
-					step = 0;
+					if(car.position.getX() == 1 && car.position.getY() == 1){
+						step = 10;
+					}
+					else{
+						double dist = calcDist(car.lastVisited, car.position);
+						stats.updateTotalDistance(dist);
+						stats.updateAvgDistance(cars.size());
+						step = 0;
+					}
 					repliesCnt = 0;
 					foundCar = false;
+					break;
+				case 10:
+					
 					break;
 				}
 
