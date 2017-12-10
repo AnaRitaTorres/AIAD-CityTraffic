@@ -96,57 +96,6 @@ public class VehicleAgent extends Agent{
 		else{
 			path = new Stack<GraphNode>();
 		}
-
-		/*
-		//para apagar
-		xtrajetoriaV1[0] = 70+30;
-		xtrajetoriaV1[1] = 85+30;
-		xtrajetoriaV1[2] = 100+30;
-		xtrajetoriaV1[3] = 115+30;
-		xtrajetoriaV1[4] = 130+30;
-		xtrajetoriaV1[5] = 145+30;
-		xtrajetoriaV1[6] = 160+30;
-
-		ytrajetoriaV1[0] = 110;
-		ytrajetoriaV1[1] = 110;
-		ytrajetoriaV1[2] = 110;
-		ytrajetoriaV1[3] = 110;
-		ytrajetoriaV1[4] = 110;
-		ytrajetoriaV1[5] = 110;
-		ytrajetoriaV1[6] = 110;
-
-		/*xtrajetoriaV2[0] = 100;
-		xtrajetoriaV2[1] = 115;
-		xtrajetoriaV2[2] = 130;
-		xtrajetoriaV2[3] = 145;
-		xtrajetoriaV2[4] = 160;
-		xtrajetoriaV2[5] = 175;
-		xtrajetoriaV2[6] = 190;
-
-		ytrajetoriaV2[0] = 110;
-		ytrajetoriaV2[1] = 110;
-		ytrajetoriaV2[2] = 110;
-		ytrajetoriaV2[3] = 110;
-		ytrajetoriaV2[4] = 110;
-		ytrajetoriaV2[5] = 110;
-		ytrajetoriaV2[6] = 110;
-
-		xtrajetoriaV2[0] = 100+60;
-		xtrajetoriaV2[1] = 100+60;
-		xtrajetoriaV2[2] = 100+60;
-		xtrajetoriaV2[3] = 100+60;
-		xtrajetoriaV2[4] = 100+60;
-		//xtrajetoriaV2[5] = 100;
-		//xtrajetoriaV2[6] = 100;
-
-		//ytrajetoriaV2[0] = 70;
-		//ytrajetoriaV2[1] = 80;
-		ytrajetoriaV2[0] = 90;
-		ytrajetoriaV2[1] = 100;
-		ytrajetoriaV2[2] = 110;
-		ytrajetoriaV2[3] = 120;
-		ytrajetoriaV2[4] = 130;
-		 */
 	}
 
 	public void calculatePath(GraphNode src, GraphNode dest){
@@ -156,7 +105,6 @@ public class VehicleAgent extends Agent{
 			if(numPaths == 0){return;}
 			allPaths.add((Stack<GraphNode>)(path.clone()));
 			numPaths--;
-			System.out.println(path);
 		}
 		else{
 			for (GraphNode child : src.getAdj()) {
@@ -196,19 +144,8 @@ public class VehicleAgent extends Agent{
 	}
 
 	public GraphNode getNextPosition() {
-		//now random depois TODO seguir caminho
-		/*java.util.Random r = new java.util.Random();
-		int pos = r.nextInt(position.getAdj().size());*/
-
-		//path.next();	ISTO
-
-		//nao ser igual a last se calhar só é preciso para random movement?
-		/*int iLast = position.getAdj().indexOf(lastVisited);
-		while(pos == iLast){
-			pos = r.nextInt(position.getAdj().size());
-		}*/
+		
 		if(indexPath + 1 < path.size()){
-			System.out.println("index " + indexPath + " pathsize " + path.size());
 			indexPath++;
 			if(indexPath == path.size() - 1){
 				end = true;
@@ -224,8 +161,6 @@ public class VehicleAgent extends Agent{
 
 			return remove;
 		}
-
-		//return position.getAdj().get(pos);
 	}
 
 	public void updateDisplayCar(){
@@ -259,9 +194,6 @@ public class VehicleAgent extends Agent{
 
 			@Override
 			protected void onTick() {  
-
-
-				//System.out.println("car " + getAID().getName()+ " position: " + position.getX() + position.getY());
 
 				String strCarPos = "" + position.getX() + position.getY() + "";
 
@@ -347,7 +279,6 @@ public class VehicleAgent extends Agent{
 
 				case 6:
 					nextPosition = car.getNextPosition();
-					System.out.println("nextpos");
 					if(arrived){
 						step = 8;
 					}
@@ -368,7 +299,6 @@ public class VehicleAgent extends Agent{
 					}
 					break;
 				case 8:
-					//TODO para já andam random, depois andam pelo caminho até ao destino
 					if(arrived){
 						GraphNode n = new GraphNode(1, 1);
 						car.position = n;
@@ -378,7 +308,6 @@ public class VehicleAgent extends Agent{
 					else{
 						car.lastVisited = car.position;
 						car.position = car.nextPosition;
-						System.out.println("pos " + car.position.getX() + " " + car.position.getY());
 						updateDisplayCar();
 						double dist = calcDist(car.lastVisited, car.position);
 						stats.updateTotalDistance(dist);

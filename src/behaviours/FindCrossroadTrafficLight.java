@@ -119,7 +119,6 @@ public boolean sameCrossroad(String position){
 						}
 							
 					}
-					//myAgent.addBehaviour(new CrossRoadTrafficLights(light,reply.getSender()));
 				}
 				repliesCnt++;
 				if(same || repliesCnt== lights.size()){

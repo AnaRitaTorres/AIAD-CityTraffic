@@ -5,7 +5,6 @@ public class Statistics {
 	private float avgAccidents = 0;
 	private double totalDistance = 0;
 	private double avgDistance = 0;
-	private float avgTravelTime = 0;	//TODO later or not at all se nao houver tempo
 	private float totalTimeWaitingTrafficLight = 0;
 	private float avgTimeWaitingTrafficLight = 0;
 	private float totalTimeWaitingTraffic = 0;
@@ -27,10 +26,6 @@ public class Statistics {
 	
 	public double getAvgDistance() {
 		return avgDistance;
-	}
-	
-	public float getAvgTravelTime() {
-		return avgTravelTime;
 	}
 	
 	public float getTotalTimeWaitingTrafficLight() {
@@ -72,8 +67,6 @@ public class Statistics {
 	public void updateAvgDistance(int numCars){
 		avgDistance = totalDistance/(float)numCars;
 	}
-	
-	//update avgTravelTime
 	
 	public void updateTotalTimeWaitingTrafficLight(long time){
 		totalTimeWaitingTrafficLight = totalTimeWaitingTrafficLight + time;

@@ -1,6 +1,3 @@
-//TODO fazer experiencias com numero diferente de carros (e semaforos?) para por os resultados dessas estatisticas no relatorio
-//TODO se seguir caminho nao estiver a funcioanr na perfeiçao criar dois modos de movimento: random e caminho
-
 package gui;
 
 import java.util.Vector;
@@ -61,7 +58,6 @@ public class Launcher extends Repast3Launcher {
 	private int numVehicles = N_VEHICLES;
 	private int numLights = N_LIGHTS;
 	private String file = "map1.txt";
-	public Vector<RadioAgent> radioAgents;
 	public Vector<VehicleAgent> vehicleAgents;
 	public Vector<TrafficLightAgent> lightAgents;
 	Vector<Color> semColor = new Vector<Color>(3);
@@ -359,7 +355,6 @@ public class Launcher extends Repast3Launcher {
 				textDisp.addLine("  - Average number of accidents per car: " + stats.getAvgAccidents());
 				textDisp.addLine("  - Total distance ran by cars: " + stats.getTotalDistance());
 				textDisp.addLine("  - Average distance ran per car: " + stats.getAvgDistance());
-				textDisp.addLine("  - Average travel time per car: DO OR DELETE" /*+ stats.getAvgTravelTime()*/);
 				textDisp.addLine("  - Total time waiting in a traffic light: " + stats.getTotalTimeWaitingTrafficLight());
 				textDisp.addLine("  - Average time waiting in a traffic light per car: " + stats.getAvgTimeWaitingTrafficLight());
 				textDisp.addLine("  - Total time waiting in traffic: " + stats.getTotalTimeWaitingTraffic());
@@ -433,18 +428,10 @@ public class Launcher extends Repast3Launcher {
 	
 	private void launchAgents() {
 		
-		radioAgents= new Vector<RadioAgent>();
 		vehicleAgents= new Vector<VehicleAgent>();
 		lightAgents= new Vector<TrafficLightAgent>();
 				
 		try {
-			
-			//create radios
-			for(int i=0; i < numRadios;i++) {
-				RadioAgent radio = new RadioAgent();
-				radioAgents.add(radio);
-				mainContainer.acceptNewAgent("Radio" + i, radio).start();			
-			}
 			
 			createTrafficLight(40,340,lightAgents);
 			createTrafficLight(25,350,lightAgents);
@@ -499,7 +486,6 @@ public class Launcher extends Repast3Launcher {
 				MyNode n = new MyNode(o, graphNodes.get(i).getX(),graphNodes.get(i).getY());
 				endPositionsNodes.add(n);
 				endPosNodes.add(posEnd);
-				//55+30, 110
 				VehicleAgent vehicle = new VehicleAgent(posInit, posEnd, velocity, vehicleAgents, lightAgents, graph, carsNodes, displaySurf, stats);
 				vehicleAgents.add(vehicle);
 				mainContainer.acceptNewAgent("Vehicle" + i, vehicle).start();
@@ -516,7 +502,7 @@ public class Launcher extends Repast3Launcher {
 		boolean runMode = !BATCH_MODE; 
 		
 		SimInit init = new SimInit();
-		init.setNumRuns(1);   // works only in batch mode
+		init.setNumRuns(1); 
 		init.loadModel(new Launcher(runMode), null, runMode);
 		
 		
